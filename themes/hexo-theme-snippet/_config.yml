@@ -99,7 +99,7 @@ arch_config:
 
 ## 标签云设置
 tagcloud:
-  tag3d: false
+  tag3d: true
   textColour: '#444'
   outlineMethod: 'block'
   outlineColour: '#FFDAB9'
@@ -161,18 +161,18 @@ declaration:
 reward:
   alipay: ''
   wepay: ''
-  tip: 赞赏是不耍流氓的鼓励
+  tip: ''
 
 ## 主题评论
 
 ## Valine评论
 valine:
-   enable: true
-   appId: xOKV9J4UeQAtVkvnJC7Kq2Jn-gzGzoHsz
-   appKey: erIpQac4azoCmgfBB7Dl9maa
+   enable: false
+   appId: ''
+   appKey: ''
    placeholder: 说点什么吧
-   notify: false
-   verify: false
+   notify: true
+   verify: true
    avatar: mm
    meta: nick,mail
    pageSize: 10
@@ -186,7 +186,7 @@ changyan:
 ### 来必力
 livere:
   enable: false
-  livere_uid: MTAyMC8zMzA1MS85NjEz
+  livere_uid:
 
 ## Gitalk评论
 gitalk:
@@ -202,8 +202,8 @@ gitalk:
 ### Disqus评论
 disqus:
   enable: false
-  shortname: snippet
-  count: false
+  shortname: abnerxu
+  count: true
 
 ### gitment评论(长期不更新，不建议使用)
 gitment:
@@ -217,7 +217,7 @@ gitment:
 ### 友言评论(服务不稳定)
 uyan:
   enable: false
-  uyan_id: 1966422
+  uyan_id:
 
 
 ## 网站访客统计
@@ -228,10 +228,19 @@ visit_counter:
 ## 网站访问统计分析
 
 ### 网盟CNZZ统计
-cnzz_analytics: 1263868967
+cnzz_analytics:
 
 ### 百度统计
-baidu_analytics:
+baidu_analytics: <script>
+                 var _hmt = _hmt || [];
+                 (function() {
+                   var hm = document.createElement("script");
+                   hm.src = "https://hm.baidu.com/hm.js?886fd097c19864e89f3b6825128f9011";
+                   var s = document.getElementsByTagName("script")[0];
+                   s.parentNode.insertBefore(hm, s);
+                 })();
+                 </script>
+
 
 ### 谷歌统计
 google_analytics:
@@ -246,6 +255,6 @@ baidu_site_verification:
 baidu_push: false
 
 #网站主题配置
-since: 2017
+since: 2019
 robot: 'all' ### 控制搜索引擎的抓取和索引编制行为，默认为all
 version: 1.2.1
