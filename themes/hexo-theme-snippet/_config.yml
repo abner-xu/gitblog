@@ -8,11 +8,11 @@ menu:
 - page: home
   url: /
   icon:
-- page: 前端
-  url: /categories/前端/
-  icon:
 - page: 后端
   url: /categories/后端/
+  icon:
+- page: 前端
+  url: /categories/前端/
   icon:
 - page: 工具
   url: /categories/工具/
@@ -231,7 +231,7 @@ visit_counter:
 cnzz_analytics:
 
 ### 百度统计
-baidu_analytics: <script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?312e8b385d973dd9c15c283aa84ea6a8";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s)})();</script>
+baidu_analytics: 312e8b385d973dd9c15c283aa84ea6a8
 
 
 ### 谷歌统计
@@ -244,7 +244,7 @@ tencent_analytics:
 baidu_site_verification:
 
 ### 百度自动推送
-baidu_push: false
+baidu_push: true
 
 #网站主题配置
 since: 2019
