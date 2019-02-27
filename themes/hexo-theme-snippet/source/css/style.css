@@ -868,6 +868,9 @@ pre {
 .sidebar .widget .category-list-count {
   margin-left: 4px;
 }
+.sidebar .widget .category-list-child {
+  margin-left: 8%;
+}
 .sidebar .widget .archive-list-count:before,
 .sidebar .widget .category-list-count:before {
   content: "(";
