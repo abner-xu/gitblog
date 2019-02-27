@@ -1,7 +1,7 @@
 ---
 title: Ubuntu开机优化
 categories:
-  - 后端
+  - 工具
   - Linux
 tags:
   - Ubuntu
