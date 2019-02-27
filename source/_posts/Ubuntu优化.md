@@ -7,7 +7,7 @@ tags:
   - Ubuntu
 comments: true
 toc: true
-date: 2019-02-25 22:06:52
+date: 2017-02-25 22:06:52
 ---
 #### 安装openssh-server
 -   sudo apt-get install openssh-server vim git

@@ -7,7 +7,7 @@ tags:
   - Git命令
 comments: true
 toc: true
-date: 2019-02-26 13:49:56
+date: 2018-02-26 13:49:56
 ---
 ### 查看、添加、提交、删除、找回，重置修改文件
     git help <command> # 显示command的help
