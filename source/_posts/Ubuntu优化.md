@@ -1,5 +1,5 @@
 ---
-title: Ubuntu优化
+title: Ubuntu开机优化
 categories:
   - 后端
   - Linux
