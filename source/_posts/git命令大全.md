@@ -44,11 +44,6 @@ date: 2018-02-26 13:49:56
     git log -p -2 # 查看最近两次详细修改内容的diff
     git log --stat #查看提交统计信息
 
-### tig
-    Mac上可以使用tig代替diff和log，brew install tig
-
-## Git 本地分支管理
-
 ### 查看、切换、创建和删除分支
     git branch -r # 查看远程分支
     git branch <new_branch> # 创建新的分支
@@ -66,6 +61,8 @@ date: 2018-02-26 13:49:56
     git merge <branch> # 将branch分支合并到当前分支
     git merge origin/master --no-ff # 不要Fast-Foward合并，这样可以生成merge提交
     git rebase master <branch> # 将master rebase到branch，相当于： git co <branch> && git rebase master && git co master && git merge <branch>
+### 同步远程分支目录到本地
+    git remote update origin --prune
 
 
 ### Git补丁管理(方便在多台机器上开发同步时用)

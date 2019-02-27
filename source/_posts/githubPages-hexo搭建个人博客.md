@@ -17,7 +17,7 @@ date: 2017-01-25 22:07:58
 sudo npm config set registry http://registry.npm.taobao.org
 npm install -g cnpm --registry=https://registry.npm.taobao.org
 ```
-2. Permission denied
+2. MACOS Permission denied
 ```
 sudo chown -R $(whoami):admin /usr/local/lib/node_modules/
 ```
@@ -25,7 +25,7 @@ sudo chown -R $(whoami):admin /usr/local/lib/node_modules/
 ```
 cnpm install -g hexo-cli
 ```
-4. ~work/nodepro/ 新建日志博客,并给项目起名称
+4. 选定磁盘路 新建日志博客,并给项目起名称
 ```
 hexo init abner-xu.github.io
 ```
@@ -53,13 +53,13 @@ deploy:
 # hexo关键配置
 ```
 # Site 
-title: Dududzai’s Blog 
+title:  博客标题 
 #网站的标题 subtitle: life is struggle 
 #副标题 description: life is struggle 
 #描述 author: examble 
 #作者信息 avatar: /images/avatar.png #头像，图片位置在相应主题目录下的images 
 language: zh-Hans #中文简体 
-email: 85268837@qq.com 
+email: xxxx@qq.com 
 timezone:  
 # Extensions 
 theme: next #配置主题，这里使用next主题 stylus:   
