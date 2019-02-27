@@ -1,5 +1,5 @@
 ---
-title: Centos7优化
+title: Centos7开机优化
 categories:
   - 后端
   - Linux
@@ -123,14 +123,14 @@ yum -y install mysql-server 
 
 #设置密码和远程访问
 grep "password" /var/log/mysqld.log      //查看默认密码
-set password=password("J>u.6tyx,f,8");
+set password=password("xxxx");
 FLUSH PRIVILEGES;
 
 
 use mysql;
 set global validate_password_policy=0;
-update user set authentication_string = password('J>u.6tyx,f,8'), password_expired = 'N', password_last_changed = now() where user = 'root';
-GRANT ALL ON *.* TO root@'localhost'  IDENTIFIED BY 'J>u.6tyx,f,8' WITH GRANT OPTION; 
+update user set authentication_string = password('xxxx'), password_expired = 'N', password_last_changed = now() where user = 'root';
+GRANT ALL ON *.* TO root@'localhost'  IDENTIFIED BY 'xxxx' WITH GRANT OPTION; 
 update user set host = '%' where user ='root';
 FLUSH PRIVILEGES;
 ```
