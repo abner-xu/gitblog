@@ -231,15 +231,7 @@ visit_counter:
 cnzz_analytics:
 
 ### 百度统计
-baidu_analytics: <script>
-                 var _hmt = _hmt || [];
-                 (function() {
-                   var hm = document.createElement("script");
-                   hm.src = "https://hm.baidu.com/hm.js?886fd097c19864e89f3b6825128f9011";
-                   var s = document.getElementsByTagName("script")[0];
-                   s.parentNode.insertBefore(hm, s);
-                 })();
-                 </script>
+baidu_analytics: <script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?312e8b385d973dd9c15c283aa84ea6a8";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s)})();</script>
 
 
 ### 谷歌统计
