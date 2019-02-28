@@ -72,6 +72,9 @@ social:
  - name: 邮箱
    icon: envelope-o
    href: mailto:abner510@126.com
+ - name: RSS
+   icon: feed
+   href: /sitemap.xml
 # - name: 联系QQ
 #   icon: qq
 #   href: /
@@ -81,9 +84,7 @@ social:
 # - name: QQ群
 #   icon: users
 #   href: /
-# - name: RSS
-#   icon: feed
-#   href: /atom.xml
+
 
 ## 文章分类设置
 cate_config:
@@ -235,7 +236,7 @@ baidu_analytics: 312e8b385d973dd9c15c283aa84ea6a8
 
 
 ### 谷歌统计
-google_analytics: UA-135350716-1
+google_analytics: 
 
 ### 腾讯分析
 tencent_analytics:

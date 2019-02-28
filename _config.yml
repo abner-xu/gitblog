@@ -5,8 +5,8 @@
 # Site
 title: XuChen的博客
 subtitle: 徐晨的博客
-description: XuChen的技术博客
-keywords: XuChen的技术博客，关注后端技术发展，docker，golang，redis，MySQL；
+description: XuChen的技术博客，专注Web技术发展
+keywords: docker、Golang、Redis、MySQL、Web面试；
 author: xuchen
 language: zh-CN
 email: abner510@126.com
