@@ -3,3 +3,4 @@
 
 引用主题 https://github.com/shenliyang/hexo-theme-snippet  
 部署 cnpm install --save hexo-deployer-git    
+sitemap cnpm install hexo-generator-sitemap --save

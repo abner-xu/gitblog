@@ -99,7 +99,7 @@ arch_config:
 
 ## 标签云设置
 tagcloud:
-  tag3d: true
+  tag3d: false
   textColour: '#444'
   outlineMethod: 'block'
   outlineColour: '#FFDAB9'
@@ -235,7 +235,7 @@ baidu_analytics: 312e8b385d973dd9c15c283aa84ea6a8
 
 
 ### 谷歌统计
-google_analytics:
+google_analytics: UA-135350716-1
 
 ### 腾讯分析
 tencent_analytics:
@@ -244,7 +244,7 @@ tencent_analytics:
 baidu_site_verification:
 
 ### 百度自动推送
-baidu_push: true
+baidu_push: false
 
 #网站主题配置
 since: 2019
