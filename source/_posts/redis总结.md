@@ -76,20 +76,20 @@ Redis采用的是定期删除+惰性删策略工作机制。
 
 # Redis主从复制(3.0开始支持)原理
 ## 1  全量同步
-  1.	当启动一个slave node的时候，它会发送一个PSYNC命令给master
-  2.	如果这是slave node重现链接master，master会将缺少的数据发送给slave，如果是第一次链接master，则会触发一次full resynchronization,开始 full resynchronization的时候，master启动一个后台线程，先将现有数据生成一个零时的rdb文件，生成文件后，master会将这个rdb文件发送给slave，slave会先把这个rdb文件存放到本地磁盘，然后在加载到内存，然后master会将生成rdb这段时间内接收到的在内存中的数据发送给slave，slave也会接收这份数据。
-  3.	slave如果跟master网络故障，断开了，当重新连接上以后，master发现有多个slave都来重新连接，master会生成一个rdb文件，将这个文件同时发送个多个slave node
-  ![full_sync](https://ws3.sinaimg.cn/large/0078bOVFgy1g0mm2zwx3qj30mn0dzjrv.jpg)
+    1.	当启动一个slave node的时候，它会发送一个PSYNC命令给master
+    2.	如果这是slave node重现链接master，master会将缺少的数据发送给slave，如果是第一次链接master，则会触发一次full resynchronization,开始 full resynchronization的时候，master启动一个后台线程，先将现有数据生成一个零时的rdb文件，生成文件后，master会将这个rdb文件发送给slave，slave会先把这个rdb文件存放到本地磁盘，然后在加载到内存，然后master会将生成rdb这段时间内接收到的在内存中的数据发送给slave，slave也会接收这份数据。
+    3.	slave如果跟master网络故障，断开了，当重新连接上以后，master发现有多个slave都来重新连接，master会生成一个rdb文件，将这个文件同时发送个多个slave node
+    ![full_sync](https://ws3.sinaimg.cn/large/0078bOVFgy1g0mm2zwx3qj30mn0dzjrv.jpg)
 ## 2  主从复制的断点续传
-  1.	redis从2.8开始就支持断点续传功能，即当slave与master断开后，重新连接时，会继续从上一次断开的点继续传送数据，而不是full resynchronization。
-  2.	master会在内存中创建一个backlog，master和slave都会保存一个offset,slave还有一个master id,offset就是保存在backlog中的，如果slave和master网络断开，重新连接后slave会让master从replica offset开始续传。但是如果没有找到offset，则会触发full resynchronization。
+    1.	redis从2.8开始就支持断点续传功能，即当slave与master断开后，重新连接时，会继续从上一次断开的点继续传送数据，而不是full resynchronization。
+    2.	master会在内存中创建一个backlog，master和slave都会保存一个offset,slave还有一个master id,offset就是保存在backlog中的，如果slave和master网络断开，重新连接后slave会让master从replica offset开始续传。但是如果没有找到offset，则会触发full resynchronization。
 ## 3  无磁盘化复制
-  1.	master在内存中直接创建rdb,然后直接发送给slave,不会存入本地磁盘
-  2.	参数配置  
-      repl-diskless-sync  
-      repl-diskless-sync-delay, 等待一定时长在复制，因为要等更多的slave重新连接
+    1.	master在内存中直接创建rdb,然后直接发送给slave,不会存入本地磁盘
+    2.	参数配置  
+        repl-diskless-sync  
+        repl-diskless-sync-delay, 等待一定时长在复制，因为要等更多的slave重新连接
 ## 4  过期key处理
-  1. slave不会有过期Key,只有master有过期key,如果master过期了一个可以或者通过LRU算法淘汰了一个key，那么master会模拟发送一个del命令给slave
+    1. slave不会有过期Key,只有master有过期key,如果master过期了一个可以或者通过LRU算法淘汰了一个key，那么master会模拟发送一个del命令给slave
 
 
 
