@@ -3,8 +3,6 @@ title: mysql总结
 categories:
   - 后端
   - 面试
-tags:
-  - 面试知识
 comments: true
 toc: true
 date: 2019-03-01 15:23:09

@@ -3,8 +3,6 @@ title: redis总结
 categories:
   - 后端
   - 面试
-tags:
-  - 面试知识
 comments: true
 toc: true
 date: 2019-02-27 20:49:03

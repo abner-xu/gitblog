@@ -3,8 +3,6 @@ title: nginx总结
 categories:
   - 后端
   - 面试
-tags:
-  - 面试知识
 comments: true
 toc: true
 date: 2019-03-01 15:47:07
