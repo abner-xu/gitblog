@@ -2,6 +2,8 @@
 title: mysql总结
 categories:
   - 后端
+  - MYSQL
+tags:
   - 面试
 comments: true
 toc: true

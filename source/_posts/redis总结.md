@@ -2,6 +2,8 @@
 title: redis总结
 categories:
   - 后端
+  - Redis
+tags:
   - 面试
 comments: true
 toc: true
