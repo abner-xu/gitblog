@@ -2,7 +2,7 @@
 title: redis总结
 categories:
   - 后端
-  - Redis
+  - 面试
 tags:
   - 面试知识
 comments: true
