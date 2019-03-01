@@ -98,9 +98,13 @@ Redis采用的是定期删除+惰性删策略工作机制。
 ## 4  过期key处理
     1. slave不会有过期Key,只有master有过期key,如果master过期了一个可以或者通过LRU算法淘汰了一个key，那么master会模拟发送一个del命令给slave
 
-
-
-
+# Redis-Cluster集群
+<img src="https://ws4.sinaimg.cn/large/0078bOVFgy1g0natm1efxj30dr0fut9k.jpg" width=256 height=256 />
+1.  所有的redis节点彼此互联(PING-PONG机制),内部使用二进制协议优化传输速度和带宽。
+2.  节点的fail是通过集群中超过半数的节点检测失效时才生效。
+3.  客户端与redis节点直连,不需要中间proxy层.客户端不需要连接集群所有节点,连接集群中任何一个可用节点即可。
+4.  redis-cluster把所有的物理节点映射到[0-16383]slot上（不一定是平均分配）,cluster 负责维护node<->slot<->value。
+5.  Redis集群预分好16384个桶，当需要在 Redis 集群中放置一个 key-value 时，根据 CRC16(key) mod 16384的值，决定将一个key放到哪个桶中。
 
 # Redis和数据库双写一致性问题
 
