@@ -17,6 +17,14 @@ date: 2019-02-27 20:49:03
 
 我们的redis-client在操作的时候，会产生具有不同事件类型的socket。在服务端，有一段I/0多路复用程序，将其置入队列之中。然后，文件事件分派器，依次去队列中取，转发到不同的事件处理器中。
 
+# Redis基础数据
+1. String,Hash,List,Set,SortedSet
+1. Pub/Sub
+2. HyperLogLog(2.8.9版本新增):用来做基数统计的算法，HyperLogLog 的优点是，在输入元素的数量或者体积非常非常大时，计算基数所需的空间总是固定 的、并且是很小的。使用场景最常见的就是计算网站UV等，对数据精度要求不高
+3. Geo（3.2版本新增）：GEO(地理位置)的支持，主要是对经纬度一个位置计算等特性
+![data-struct](https://ws2.sinaimg.cn/large/0078bOVFgy1g0n97yi9czj30a504hjri.jpg)
+![data-struct](https://ws4.sinaimg.cn/large/0078bOVFgy1g0n991tb0hj30rp0cqmyi.jpg)
+
 # Redis的过期策略以及内存淘汰机制
 
 ## 1　三种过期策略
@@ -62,14 +70,15 @@ Redis采用的是定期删除+惰性删策略工作机制。
       1.  主进程开启一个 Redis forks（子进程）.
       2.  子进程开始将数据写到临时RDB文件中。
       3.  当子进程完成写RDB文件，用新文件替换老文件。
+      4.  bgsave的原理是什么？你给出两个词汇就可以了，fork和cow。fork是指redis通过创建子进程来进行bgsave操作，cow指的是copy on write，子进程创建后，父子进程共享数据段，父进程继续提供读写服务，写脏的页面数据会逐渐和子进程分离开来。
 
-      ![fork](https://ws4.sinaimg.cn/large/0078bOVFgy1g0mlshrku0j30gn053gm7.jpg)
+![fork](https://ws4.sinaimg.cn/large/0078bOVFgy1g0mlshrku0j30gn053gm7.jpg)
 
 ## 2  AOF（特点：AOF增量持久化）
 
     AOF持久化以日志的形式记录服务器所处理的每一个写、删除操作，查询操作不会记录，以文本的方式记录，可以打开文件看到详细的操作记录。 
 
-    ![aof](https://ws3.sinaimg.cn/large/0078bOVFgy1g0mltf2mfsj30hj037aan.jpg)
+![aof](https://ws3.sinaimg.cn/large/0078bOVFgy1g0mltf2mfsj30hj037aan.jpg)
 
 
 # Redis主从复制(3.0开始支持)原理
@@ -77,7 +86,7 @@ Redis采用的是定期删除+惰性删策略工作机制。
     1.	当启动一个slave node的时候，它会发送一个PSYNC命令给master
     2.	如果这是slave node重现链接master，master会将缺少的数据发送给slave，如果是第一次链接master，则会触发一次full resynchronization,开始 full resynchronization的时候，master启动一个后台线程，先将现有数据生成一个零时的rdb文件，生成文件后，master会将这个rdb文件发送给slave，slave会先把这个rdb文件存放到本地磁盘，然后在加载到内存，然后master会将生成rdb这段时间内接收到的在内存中的数据发送给slave，slave也会接收这份数据。
     3.	slave如果跟master网络故障，断开了，当重新连接上以后，master发现有多个slave都来重新连接，master会生成一个rdb文件，将这个文件同时发送个多个slave node
-    ![full_sync](https://ws3.sinaimg.cn/large/0078bOVFgy1g0mm2zwx3qj30mn0dzjrv.jpg)
+![full_sync](https://ws3.sinaimg.cn/large/0078bOVFgy1g0mm2zwx3qj30mn0dzjrv.jpg)
 ## 2  主从复制的断点续传
     1.	redis从2.8开始就支持断点续传功能，即当slave与master断开后，重新连接时，会继续从上一次断开的点继续传送数据，而不是full resynchronization。
     2.	master会在内存中创建一个backlog，master和slave都会保存一个offset,slave还有一个master id,offset就是保存在backlog中的，如果slave和master网络断开，重新连接后slave会让master从replica offset开始续传。但是如果没有找到offset，则会触发full resynchronization。
@@ -184,3 +193,16 @@ Redis采用的是定期删除+惰性删策略工作机制。
 3.  Master调用BGREWRITEAOF重写AOF文件，AOF在重写的时候会占大量的CPU和内存资源，导致服务load过高，出现短暂服务暂停现象。
 4.  Redis主从复制的性能问题，为了主从复制的速度和连接的稳定性，Slave和Master最好在同一个局域网内
 
+# Redis新特性
+1. Redis Module
+    1.  任何C/C++程序现在都可以运行在Redis上
+    2.  Modules是用一种本地的方式来扩展Redis的新用例和功能
+    3.  使用现有的或者添加新的数据结构
+    4.  享受简单，无限可扩展性和高可用性的同时保持着redis的本机的速度
+2. Redis Search
+
+    高性能的全文搜索引擎（Faster, in-memory, highly available full text search），可作为Redis Module运行在Redis上。但是它与其他Redis搜索库不同的是，它不使用Redis内部数据结构，例如：集合、排序集（ps.后面会写一篇基于Redis的数据结构来设计搜索引擎），Redis原声的搜索还是有很大的局限性，简单的分词搜索是可以满足，但是应用到复杂的场景就不太适合。
+
+3. Redis ML
+
+    机器学习模型服务器
