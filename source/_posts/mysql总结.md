@@ -49,6 +49,7 @@ date: 2018-08-24 15:23:09
 - 行级锁：操作对象是数据表中的一行。是MVCC技术用的比较多的，但在MYISAM用不了，行级锁用mysql的储存引擎实现而不是mysql服务器。但行级锁对系统开销较大，处理高并发较好。
 
 
+
 # 事物是如何通过日志实现的
 
 1.  事务日志是通过redo(重做日志)和innodb的存储引擎日志缓冲（Innodb log buffer）来实现的，
@@ -91,6 +92,13 @@ or update 可以根据条件来完成行锁锁定,并且 id 是有索引键的�
 如果 id 不是索引键那么InnoDB将完成表锁,,并发将无从谈起
 
 坑：InnoDB的行锁是实现在索引上的，而不是锁在物理行记录上。潜台词是，如果访问没有命中索引，也无法使用行锁，将要退化为表锁。InnoDB务必建好索引，否则锁粒度较大，会影响并发。
+
+# 悲观锁和乐观锁
+- 乐观锁（Optimistic Concurrency Control，OCC）：假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。  
+典型的例子就是表锁
+
+- 悲观锁（Pessimistic Concurrency Control，PCC）：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。  
+典型的例子就是行锁   select * from LostUpdate where id =1 for update
 
 # mysql的索引方法btree和hash的区别
 ## hash
