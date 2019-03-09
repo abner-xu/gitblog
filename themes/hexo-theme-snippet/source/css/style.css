@@ -1601,3 +1601,27 @@ pre .javascript .function {
     margin-bottom: 10px;
   }
 }
+
+.cover-img-container{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 10002;
+  /*text-align: center;*/
+  background-color: #000;
+  overflow-y: scroll;
+}
+
+.cover-img{
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+.no-scroll{
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}

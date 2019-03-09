@@ -1,6 +1,12 @@
 /*!========================================================================
  *  hexo-theme-snippet: app.js v1.0.0
  * ======================================================================== */
+//引入jquery文件
+var script=document.createElement("script");
+script.type="text/javascript";
+script.src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.min.js";
+document.getElementsByTagName('head')[0].appendChild(script);
+
 window.onload = function() {
     var $body = document.body,
         $mnav = document.getElementById("mnav"), //获取导航三角图标
@@ -112,5 +118,32 @@ window.onload = function() {
 	        }
 	    });
 	};
+	//图片点击放大
+    function createImgEventFullScreen() {
+        var imgs = $(".post-body").find("img");
+        console.log(imgs);
+        for(var i = 0;i < imgs.length;i++) {
+            // $(imgs[i]).click(createCover(imgs[i]));
+            imgs[i].onclick= function(e) {
+                var src = e.srcElement.currentSrc;
+                createCover(src)
+            }
+        }
+
+        function createCover (src) {
+            console.log(src);
+            var cover = $("<div id='fullScreenCover' class='cover-img-container'><img class='cover-img' src='"+src+"'/></div>");
+            $("#fullScreenCover").remove();
+            $("body").append(cover);
+            $("body").addClass("no-scroll");
+            $("#fullScreenCover").click(function(){
+                $("#fullScreenCover").remove();
+                $("body").removeClass("no-scroll");
+            })
+        }
+    }
+    setTimeout(function(){
+        createImgEventFullScreen();
+    },1000)
 
 };
