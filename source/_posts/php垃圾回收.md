@@ -1,0 +1,216 @@
+---
+title: php垃圾回收引发的一些底层了解
+categories:
+  - 后端
+  - PHP
+tags:
+  - GC垃圾
+comments: true
+toc: true
+date: 2019-03-09 13:47:23
+---
+# 底层的运行原理和机制
+## 四层体系架构图
+![底层](https://ws1.sinaimg.cn/large/0078bOVFgy1g0wp6w9yegj30ee0epdi4.jpg)
+
+# PHP执行的几个阶段
+![阶段](https://ws3.sinaimg.cn/large/0078bOVFgy1g0whssv186j30u01ev0w1.jpg)
+
+> PHP 是一门托管型语言，在 PHP 编程中，程序员不需要手工处理内存资源的分配与释放（使用 C 编写 PHP 或 Zend 扩展除外），这就意味着 PHP 本身实现了垃圾回收机制（Garbage Collection）。在[PHP官方网站](http://php.net/manual/zh/features.gc.php)可以看到对垃圾回收机制的介绍。
+ 
+# 引用计数基本知识
+PHP在内核中是通过zval这个结构体来存储变量的，在Zend/zend.h文件中找到了其定义：
+PHP5定义如下
+```$xslt
+struct _zval_struct {
+     union {
+          long lval;
+          double dval;
+          struct {
+               char *val;
+               int len;
+          } str;
+          HashTable *ht;
+          zend_object_value obj;
+          zend_ast *ast;
+     } value;
+     zend_uint refcount__gc;
+     zend_uchar type;
+     zend_uchar is_ref__gc;
+};
+```
+PHP7定义如下
+```$xslt
+struct _zval_struct {
+    union {
+        zend_long         lval;             /* long value */
+        double            dval;             /* double value */
+        zend_refcounted  *counted;
+        zend_string      *str;
+        zend_array       *arr;
+        zend_object      *obj;
+        zend_resource    *res;
+        zend_reference   *ref;
+        zend_ast_ref     *ast;
+        zval             *zv;
+        void             *ptr;
+        zend_class_entry *ce;
+        zend_function    *func;
+        struct {
+            uint32_t w1;
+            uint32_t w2;
+        } ww;
+    } value;
+    union {
+        struct {
+            ZEND_ENDIAN_LOHI_4(
+                zend_uchar    type,         /* active type */
+                zend_uchar    type_flags,
+                zend_uchar    const_flags,
+                zend_uchar    reserved)     /* call info for EX(This) */
+        } v;
+        uint32_t type_info;
+    } u1;
+    union {
+        uint32_t     var_flags;
+        uint32_t     next;                 /* hash collision chain */
+        uint32_t     cache_slot;           /* literal cache slot */
+        uint32_t     lineno;               /* line number (for ast nodes) */
+        uint32_t     num_args;             /* arguments number for EX(This) */
+        uint32_t     fe_pos;               /* foreach position */
+        uint32_t     fe_iter_idx;          /* foreach iterator index */
+    } u2;
+};
+
+```
+我们定义一个PHP变量如下：
+```$xslt
+$var = "laruence";
+$var_dup = $var;
+unset($var);
+```
+1.  第一行代码创建了一个字符串变量，申请了一个大小为9字节的内存，保存了字符串”laruence”和一个NULL(\0)的结尾。
+2.  第二行定义了一个新的字符串变量，并将变量var的值”复制”给这个新的变量。
+3.  第三行unset了变量var
+这样的代码在我们平时的脚本中是很常见的，如果PHP对于每一个变量赋值都重新分配内存，copy数据的话，那么上面的这段代码公要申请18个字节的内存空间，而我们也很容易的看出来，上面的代码其实根本没有必要申请俩份空间，PHP的开发者也看出来了：
+
+PHP中的变量是用一个存储在symbol_table中的符号名，对应一个zval来实现的，比如对于上面的第一行代码，会在symbol_table中存储一个值”var”, 对应的有一个指针指向一个zval结构，变量值”laruence”保存在这个zval中，所以不难想象，对于上面的代码来说，我们完全可以让”var”和”var_dup”对应的指针都指向同一个zval就可以了。
+
+PHP也是这样做的，这个时候就需要介绍过zval结构中的refcount字段了。
+
+refcount,顾名思义，记录了当前的zval被引用的计数。
+
+> 不准确但却通俗的说：
+  refcount：多少个变量是一样的用了相同的值，这个数值就是多少。
+  is_ref：bool类型，当refcount大于2的时候，其中一个变量用了地址&的形式进行赋值，好了，它就变成1了。
+  
+在 PHP 中可以通过 xdebug 扩展中提供的方法来查看变量的计数变化： 
+
+**第一步：查看内部结构**
+```$xslt
+$name = "这是一段内存测试";
+ xdebug_debug_zval('name');
+会得到
+name:(refcount=1, is_ref=0),string '这是一段内存测试' (length=18)
+```
+**第二步：查看内部结构**
+```$xslt
+$name = "这是一段内存测试";
+$temp_name = $name;
+xdebug_debug_zval('name');
+会得到
+name:(refcount=2, is_ref=0),string '这是一段内存测试' (length=18)
+看到了吧，refcount＋1了。
+```
+**第三步：引用赋值**
+```$xslt
+$name = "这是一段内存测试";
+$temp_name = &$name;
+xdebug_debug_zval('name');
+会得到
+name:(refcount=2, is_ref=0),string '这是一段内存测试' (length=18)
+看到了吧，refcount＋1了。
+引用赋值会导致zval通过is_ref来标记是否存在引用的情况。
+```
+**第四步：数组型的变量**
+```$xslt
+$name = ['a'=>'这是一段', 'b'=>'内存测试'];
+xdebug_debug_zval('name');
+会得到
+name:
+(refcount=1, is_ref=0),
+array (size=2)
+  'a' => (refcount=1, is_ref=0),string '这是一段' (length=9)
+  'b' => (refcount=1, is_ref=0),string '内存测试' (length=9)
+还挺好理解的，对于数组来看是一个整体，对于内部kv来看又是分别独立的整体，各自都维护着一套zval的refount和is_ref。
+```
+**第五步：销毁变量**
+```$xslt
+$name = "这是一段内存测试";
+$temp_name = $name;
+xdebug_debug_zval('name');
+unset($temp_name);
+xdebug_debug_zval('name');
+会得到
+name:(refcount=2, is_ref=0),string '这是一段内存测试' (length=18)
+name:(refcount=1, is_ref=0),string '这是一段内存测试' (length=18)
+refcount计数减1，说明unset并非一定会释放内存，当有两个变量指向的时候，并非会释放变量占用的内存，只是refcount减1.
+```
+
+# PHP的内存管理机制
+
+通过上面的案例，知道了zval的原理以后，接下来通过PHP来看一下内存管理机制是怎么样的
+
+## 外在的内存变换
+
+代码示例A：
+
+```$xslt
+//获取内存方法，加上true返回实际内存，不加则返回表现内存
+var_dump(memory_get_usage());
+$name = "这是一段内存测试";
+var_dump(memory_get_usage());
+unset($name);
+var_dump(memory_get_usage());
+```
+
+会得到：
+
+    int 1593248
+    int 1593384
+    int 1593248
+    
+大致过程：定义变量->内存增加->清除变量->内存恢复
+
+## 潜在的内存变化
+当执行：$name="这是一段内存测试"; 的时候，内存的分配做了2件事情：
+
+1.  为变量名分配内存，存入符号表
+2.  为变量分配内存
+
+代码示例B：
+```$xslt
+var_dump(memory_get_usage());
+for($i=0;$i<100;$i++)
+{
+    $a = "test".$i;
+    $$a = "hello";    
+}
+var_dump(memory_get_usage());
+for($i=0;$i<100;$i++)
+{
+    $a = "test".$i;
+    unset($$a);    
+}
+var_dump(memory_get_usage());
+```
+
+会得到：
+
+    int 1596864
+    int 1612080
+    int 1597680
+
+这里可以发现内存并没有全部收回来
+
+这里由于PHP核心数据Hashtable来说，由于未知性，定义的时候不可能一次性分配足够的内存块，所以初始分配的内存使用完成以后，进行扩容，而HashTable只扩容不减少，所以就出现了上面的情况：当存入100个变量的时候，符号表不够用了就进行一次扩容，当unset的时候只释放了"<font color=red>为变量值分配的内存</font>"，而"<font color=blue>为变量名分配的内存</font>"是在符号表的，符号表并没有缩减，所以没有
