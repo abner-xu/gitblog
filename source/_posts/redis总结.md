@@ -99,12 +99,43 @@ Redis采用的是定期删除+惰性删策略工作机制。
     1. slave不会有过期Key,只有master有过期key,如果master过期了一个可以或者通过LRU算法淘汰了一个key，那么master会模拟发送一个del命令给slave
 
 # Redis-Cluster集群
-<img src="https://ws4.sinaimg.cn/large/0078bOVFgy1g0natm1efxj30dr0fut9k.jpg" width=256 height=256 />
+<div align=center><img src="https://ws4.sinaimg.cn/large/0078bOVFgy1g0natm1efxj30dr0fut9k.jpg" width=256 height=256 /></div>
+
 1.  所有的redis节点彼此互联(PING-PONG机制),内部使用二进制协议优化传输速度和带宽。
 2.  节点的fail是通过集群中超过半数的节点检测失效时才生效。
 3.  客户端与redis节点直连,不需要中间proxy层.客户端不需要连接集群所有节点,连接集群中任何一个可用节点即可。
 4.  redis-cluster把所有的物理节点映射到[0-16383]slot上（不一定是平均分配）,cluster 负责维护node<->slot<->value。
 5.  Redis集群预分好16384个桶，当需要在 Redis 集群中放置一个 key-value 时，根据 CRC16(key) mod 16384的值，决定将一个key放到哪个桶中。
+
+# Redis哨兵
+<div align=center>
+<img src="https://ws3.sinaimg.cn/large/0078bOVFgy1g0y43vh0ilj30ay07g3z3.jpg" />
+
+在Server1 掉线后：
+
+<img src="https://ws3.sinaimg.cn/large/0078bOVFgy1g0y43vh0ilj30ay07g3z3.jpg" />
+
+升级Server2 为新的主服务器：
+
+<img src="https://ws1.sinaimg.cn/large/0078bOVFgy1g0y477tgrvj30as082wfb.jpg" />
+</div>
+
+## Sentinel的作用：
+1.  Master 状态监测
+2.  如果Master 异常，则会进行Master-slave 转换，将其中一个Slave作为Master，将之前的Master作为Slave 
+3.  Master-Slave切换后，master_redis.conf、slave_redis.conf和sentinel.conf的内容都会发生改变，即master_redis.conf中会多一行slaveof的配置，sentinel.conf的监控目标会随之调换 
+
+## Sentinel的工作方式:
+1.  每个Sentinel以每秒钟一次的频率向它所知的Master，Slave以及其他 Sentinel 实例发送一个 PING 命令 
+2.  如果一个实例（instance）距离最后一次有效回复 PING 命令的时间超过 down-after-milliseconds 选项所指定的值， 则这个实例会被 Sentinel 标记为主观下线。 
+3.  如果一个Master被标记为主观下线，则正在监视这个Master的所有 Sentinel 要以每秒一次的频率确认Master的确进入了主观下线状态。 
+4.  当有足够数量的 Sentinel（大于等于配置文件指定的值）在指定的时间范围内确认Master的确进入了主观下线状态， 则Master会被标记为客观下线 
+5.  在一般情况下， 每个 Sentinel 会以每 10 秒一次的频率向它已知的所有Master，Slave发送 INFO 命令 
+6.  当Master被 Sentinel 标记为客观下线时，Sentinel 向下线的 Master 的所有 Slave 发送 INFO 命令的频率会从 10 秒一次改为每秒一次 
+7.  若没有足够数量的 Sentinel 同意 Master 已经下线， Master 的客观下线状态就会被移除。 
+8.  若 Master 重新向 Sentinel 的 PING 命令返回有效回复， Master 的主观下线状态就会被移除。
+
+
 
 # Redis和数据库双写一致性问题
 
