@@ -4,7 +4,8 @@ categories:
   - 后端
   - PHP
 tags:
-  - GC垃圾
+  - PHPGC垃圾
+  - 面试
 comments: true
 toc: true
 date: 2019-03-09 13:47:23
@@ -17,7 +18,7 @@ Zend引擎：Zend整体用纯C实现，是PHP的内核部分，它将php代码�
 
 Extensions：围绕着Zend引擎，extensions通过组件式的方式提供各种基础服务，我们常见的各种内置函数(如array 系列)、标准库等都是通过extension来实现，用户也可以根据需要实现自己的extension以达到功能扩展、性能优化等目的(如贴吧正在使用的 PHP中间层、富文本解析就是extension的典型应用)。
 
-Sapi：Sapi全称是[Server Application Programming Interface](http://www.kmnk03.com/hxpfk/pfgm/145.html)，也就是服务端应用编程接口，Sapi通过一系列钩子函数，使得PHP可以和外围交互数据，这是PHP非常优雅和成功的一个设计，通过 sapi成功的将PHP本身和上层应用解耦隔离，PHP可以不再考虑如何针对不同应用进行兼容，而应用本身也可以针对自己的特点实现不同的处理方式。
+Sapi：Sapi全称是Server Application Programming Interface，也就是服务端应用编程接口，Sapi通过一系列钩子函数，使得PHP可以和外围交互数据，这是PHP非常优雅和成功的一个设计，通过 sapi成功的将PHP本身和上层应用解耦隔离，PHP可以不再考虑如何针对不同应用进行兼容，而应用本身也可以针对自己的特点实现不同的处理方式。
 
 上层应用：这就是我们平时编写的PHP程序，通过不同的sapi方式得到各种各样的应用模式，如通过webserver实现web应用、在命令行下以脚本方式运行等等。
 
