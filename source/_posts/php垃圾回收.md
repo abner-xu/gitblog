@@ -13,6 +13,15 @@ date: 2019-03-09 13:47:23
 ## 四层体系架构图
 ![底层](https://ws1.sinaimg.cn/large/0078bOVFgy1g0wp6w9yegj30ee0epdi4.jpg)
 
+Zend引擎：Zend整体用纯C实现，是PHP的内核部分，它将php代码翻译(词法、语法解析等一系列编译过程)为可执行opcode的 处理并实现相应的处理方法、实现了基本的数据结构(如hashtable、oo)、内存分配及管理、提供了相应的api方法供外部调用，是一切的核心，所 有的外围功能均围绕Zend实现。
+
+Extensions：围绕着Zend引擎，extensions通过组件式的方式提供各种基础服务，我们常见的各种内置函数(如array 系列)、标准库等都是通过extension来实现，用户也可以根据需要实现自己的extension以达到功能扩展、性能优化等目的(如贴吧正在使用的 PHP中间层、富文本解析就是extension的典型应用)。
+
+Sapi：Sapi全称是[Server Application Programming Interface](http://www.kmnk03.com/hxpfk/pfgm/145.html)，也就是服务端应用编程接口，Sapi通过一系列钩子函数，使得PHP可以和外围交互数据，这是PHP非常优雅和成功的一个设计，通过 sapi成功的将PHP本身和上层应用解耦隔离，PHP可以不再考虑如何针对不同应用进行兼容，而应用本身也可以针对自己的特点实现不同的处理方式。
+
+上层应用：这就是我们平时编写的PHP程序，通过不同的sapi方式得到各种各样的应用模式，如通过webserver实现web应用、在命令行下以脚本方式运行等等。
+
+
 # PHP执行的几个阶段
 ![阶段](https://ws3.sinaimg.cn/large/0078bOVFgy1g0whssv186j30u01ev0w1.jpg)
 
@@ -213,4 +222,62 @@ var_dump(memory_get_usage());
 
 这里可以发现内存并没有全部收回来
 
-这里由于PHP核心数据Hashtable来说，由于未知性，定义的时候不可能一次性分配足够的内存块，所以初始分配的内存使用完成以后，进行扩容，而HashTable只扩容不减少，所以就出现了上面的情况：当存入100个变量的时候，符号表不够用了就进行一次扩容，当unset的时候只释放了"<font color=red>为变量值分配的内存</font>"，而"<font color=blue>为变量名分配的内存</font>"是在符号表的，符号表并没有缩减，所以没有
+这里由于PHP核心数据Hashtable来说，由于未知性，定义的时候不可能一次性分配足够的内存块，所以初始分配的内存使用完成以后，进行扩容，而HashTable只扩容不减少，所以就出现了上面的情况：当存入100个变量的时候，符号表不够用了就进行一次扩容，当unset的时候只释放了"<font color=red>为变量值分配的内存</font>"，而"<font color=blue>为变量名分配的内存</font>"是在符号表的，符号表并没有缩减，所以没有收回来的内存是被符号表占去了
+
+# 潜在的内存申请与释放设计
+
+php和C语言一样，也是需要进行内存申请，只不过这些操作都封装在底层了，php使用者无感知。
+
+首先我们要打破一个思维：php不像C语言那样，只有你显示的调用内存分配API才会有相关的内存分配。也就是说，在PHP中，我们看不到内存分配。
+
+比如说
+```php
+$a="laruence";
+```
+隐式的内存分配点就有：
+1. 为变量名分配内存，存入符号表
+2. 为变量值分配内存
+
+所以不能看表象
+
+别怀疑php的unset确实能是否内存（当然还要结合引用和计数），导致这个释放不是C语言意义上的释放，不是交回给OS，对于PHP来说，它自身提供了一套和C语言对内存分配相似的内存管理API
+```php
+emalloc(size_t size);
+efree(void *ptr);
+ecalloc(size_t nmemb, size_t size);
+erealloc(void *ptr, size_t size);
+estrdup(const char *s);
+estrndup(const char *s, unsigned int length);
+```
+这些API和C的API意义对应， 在PHP内部都是通过这些API来管理内存的。
+
+当我们调用emalloc申请内存的时候，PHP并不是简单的向OS要内存， 而是会像OS要一个大块的内存, 然后把其中的一块分配给申请者，这样当再有逻辑来申请内存的时候， 就不再需要向OS申请内存了， 避免了频繁的系统调用。
+
+比如如下的例子:
+```php
+var_dump(memory_get_usage(TRUE)); //注意获取的是real_size
+$a = "laruence";
+var_dump(memory_get_usage(TRUE));
+unset($a);
+var_dump(memory_get_usage(TRUE));
+//输出
+int(262144)
+int(262144)
+int(262144)
+```
+也就是我们在定义变量$a的时候, PHP并没有向系统申请新内存.
+
+同样的, 在我们调用efree释放内存的时候, PHP也不会把内存还给OS, 而会把这块内存, 归入自己维护的空闲内存列表. 而对于小块内存来说, 更可能的是, 把它放到内存缓存列表中去(后记, 某些版本的PHP, 比如我验证过的PHP7.2, 在调用get_memory_usage()的时候, 不会减去内存缓存列表中的可用内存块大小, 导致看起来, unset以后内存不变).
+
+# php中垃圾是如何定义的？
+首先我们需要定义一下“垃圾”的概念，GC负责清理的垃圾是指变量的容器zval还存在，但是又没有任何变量名指向此zval。因此GC判断是否为垃圾的一个重要标准是有没有变量名指向变量容器zval。
+
+假设我们有一段PHP代码，使用了一个临时变量$tmp存储了一个字符串，在处理完字符串之后，就不需要这个$tmp变量了，$tmp变量对于我们来说可以算是一个“垃圾”了，但是对于GC来说，$tmp其实并不是一个垃圾，$tmp变量对我们没有意义，但是这个变量实际还存在，$tmp符号依然指向它所对应的zval，GC会认为PHP代码中可能还会使用到此变量，所以不会将其定义为垃圾。
+
+那么如果我们在PHP代码中使用完$tmp后，调用unset删除这个变量，那么$tmp是不是就成为一个垃圾了呢。很可惜，GC仍然不认为$tmp是一个垃圾，因为$tmp在unset之后，refcount减少1变成了0(这里假设没有别的变量和$tmp指向相同的zval),这个时候GC会直接将$tmp对应的zval的内存空间释放，$tmp和其对应的zval就根本不存在了。此时的$tmp也不是新的GC所要对付的那种“垃圾”。
+
+# PHP垃圾回收的相关配置
+可以通过修改配置文件 php.ini 中的 zend.enable_gc 来打开或关闭 PHP 的垃圾回收机制，也可以通过调用 gc_enable() 或 gc_disable() 打开或关闭 PHP 的垃圾回收机制。
+
+在 PHP5.3 中即使关闭了垃圾回收机制，PHP 仍然会记录可能根到根缓冲区，只是当根缓冲区满额时，不会自动运行垃圾回收，当然，任何时候您都可以通过手工调用 gc_collect_cycles() 函数强制执行内存回收。
+
