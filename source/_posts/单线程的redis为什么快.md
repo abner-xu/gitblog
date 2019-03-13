@@ -30,7 +30,11 @@ Redis性能如此高的原因，我总结了如下几点：
 # 字符串(重点掌握)
 Redis 是用 C 语言开发完成的，但在 Redis 字符串中，并没有使用 C 语言中的字符串，而是用一种称为 SDS（Simple Dynamic String）的结构体来保存字符串。
 
-<div align=center><img src="https://ws1.sinaimg.cn/large/0078bOVFgy1g0xzlkq5x1j309w06iaag.jpg"></div>
+<div align=center>
+
+<img src="https://ws1.sinaimg.cn/large/0078bOVFgy1g0xzlkq5x1j309w06iaag.jpg"/>
+
+</div>
 
 ```c++
 struct sdshdr {
@@ -133,7 +137,9 @@ typedef struct zskiplist {
    int level;
  } zskiplist;
 ```
-<div align=center><img src=https://ws2.sinaimg.cn/large/0078bOVFgy1g0y2zae71yj30e8064405.jpg></div>
+<div align="center">
+<img src="https://ws2.sinaimg.cn/large/0078bOVFgy1g0y2zae71yj30e8064405.jpg"/>
+</div>
 
 前进指针：用于从表头向表尾方向遍历。
 
@@ -150,7 +156,9 @@ typedef struct zskiplist {
 
 ziplist 是由一系列特殊编码的连续内存块组成的顺序型的数据结构，ziplist 中可以包含多个 entry 节点，每个节点可以存放整数或者字符串。
 
-<div align=center><img src=https://ws1.sinaimg.cn/large/0078bOVFgy1g0y37uuzoqj30u00dcwnf.jpg></div>
+<div align=center>
+<img src="https://ws1.sinaimg.cn/large/0078bOVFgy1g0y37uuzoqj30u00dcwnf.jpg"/>
+</div>
 
 # 编码转化（掌握）
 Redis 使用对象（redisObject）来表示数据库中的键值，当我们在 Redis 中创建一个键值对时，至少创建两个对象，一个对象是用做键值对的键对象，另一个是键值对的值对象。
@@ -172,7 +180,9 @@ typedef struct redisObject{
 其中 type 字段记录了对象的类型，包含字符串对象、列表对象、哈希对象、集合对象、有序集合对象。  
 ptr 指针字段指向对象底层实现的数据结构，而这些数据结构是由 encoding 字段决定的，每种对象至少有两种数据编码：
 
-<div align=center><img src=https://ws1.sinaimg.cn/large/0078bOVFgy1g0y3ppam19j30u00h37ct.jpg></div>
+<div align=center>
+<img src="https://ws1.sinaimg.cn/large/0078bOVFgy1g0y3ppam19j30u00h37ct.jpg">
+</div>
 可以通过 object encoding key 来查看对象所使用
 
 ## String 对象的编码转化
