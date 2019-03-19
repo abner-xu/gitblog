@@ -9,7 +9,7 @@ comments: true
 toc: true
 date: 2019-02-27 20:49:03
 ---
-# Redis为什么那么快
+# 1. Redis为什么那么快
 
 1. 纯内存操作
 2. 单线程操作，避免了频繁的上下文切换
@@ -17,7 +17,9 @@ date: 2019-02-27 20:49:03
 
 我们的redis-client在操作的时候，会产生具有不同事件类型的socket。在服务端，有一段I/0多路复用程序，将其置入队列之中。然后，文件事件分派器，依次去队列中取，转发到不同的事件处理器中。
 
-# Redis基础数据
+--------------------
+
+# 2. Redis基础数据
 1. String,Hash,List,Set,SortedSet
 1. Pub/Sub
 2. HyperLogLog(2.8.9版本新增):用来做基数统计的算法，HyperLogLog 的优点是，在输入元素的数量或者体积非常非常大时，计算基数所需的空间总是固定 的、并且是很小的。使用场景最常见的就是计算网站UV等，对数据精度要求不高
@@ -25,9 +27,11 @@ date: 2019-02-27 20:49:03
 ![data-struct](https://ws2.sinaimg.cn/large/0078bOVFgy1g0n97yi9czj30a504hjri.jpg)
 ![data-struct](https://ws4.sinaimg.cn/large/0078bOVFgy1g0n991tb0hj30rp0cqmyi.jpg)
 
-# Redis的过期策略以及内存淘汰机制
+--------------------
 
-## 1　三种过期策略
+# 3. Redis的过期策略以及内存淘汰机制
+
+## 3.1　三种过期策略
 
     定时删除：在设置键的过期时间的同时，创建一个定时器(timer)，让定时器在键的过期时间来临时，立即执行对键的删除操作；
 
@@ -45,7 +49,7 @@ Redis采用的是定期删除+惰性删策略工作机制。
 
 惰性删策略延伸出来的问题就是，redis缓存淘汰机制
 
-## 2　Redis(3.0版本)6种缓存淘汰机制
+## 3.2　Redis(3.0版本)6种缓存淘汰机制
 
     1） no-enviction(驱逐)：禁止驱逐数据（不删除数据策略，达到最大的内存限制时，如果有更多的数据写入，返回错误给客户端）
     2）allkeys-lru：所有key通用，优先删除最少使用的key（less recently used,LRU算法）
@@ -60,9 +64,11 @@ Redis采用的是定期删除+惰性删策略工作机制。
 
 假如要让 Redis 根据 TTL 来筛选需要删除的key, 请使用volatile-ttl策略。
 
-# Redis持久化原理
+--------------------
 
-## 1  快照（特点：bgsave做镜像全量持久化）
+# 4. Redis持久化原理
+
+## 4.1  快照（特点：bgsave做镜像全量持久化）
 
     缺省情况情况下，Redis把数据快照存放在磁盘上的二进制文件中，文件名为dump.rdb。你可以配置Redis的持久化策略，例如数据集中每N秒钟有超过M次更新，就将数据写入磁盘；或者你可以手工调用命令SAVE或BGSAVE。
 
@@ -74,31 +80,34 @@ Redis采用的是定期删除+惰性删策略工作机制。
 
 ![fork](https://ws4.sinaimg.cn/large/0078bOVFgy1g0mlshrku0j30gn053gm7.jpg)
 
-## 2  AOF（特点：AOF增量持久化）
+## 4.2  AOF（特点：AOF增量持久化）
 
     AOF持久化以日志的形式记录服务器所处理的每一个写、删除操作，查询操作不会记录，以文本的方式记录，可以打开文件看到详细的操作记录。 
 
 ![aof](https://ws3.sinaimg.cn/large/0078bOVFgy1g0mltf2mfsj30hj037aan.jpg)
 
+--------------------
 
-# Redis主从复制(3.0开始支持)原理
-## 1  全量同步
+# 5. Redis主从复制(3.0开始支持)原理
+## 5.1  全量同步
     1.	当启动一个slave node的时候，它会发送一个PSYNC命令给master
     2.	如果这是slave node重现链接master，master会将缺少的数据发送给slave，如果是第一次链接master，则会触发一次full resynchronization,开始 full resynchronization的时候，master启动一个后台线程，先将现有数据生成一个零时的rdb文件，生成文件后，master会将这个rdb文件发送给slave，slave会先把这个rdb文件存放到本地磁盘，然后在加载到内存，然后master会将生成rdb这段时间内接收到的在内存中的数据发送给slave，slave也会接收这份数据。
     3.	slave如果跟master网络故障，断开了，当重新连接上以后，master发现有多个slave都来重新连接，master会生成一个rdb文件，将这个文件同时发送个多个slave node
 ![full_sync](https://ws3.sinaimg.cn/large/0078bOVFgy1g0mm2zwx3qj30mn0dzjrv.jpg)
-## 2  主从复制的断点续传
+## 5.2  主从复制的断点续传
     1.	redis从2.8开始就支持断点续传功能，即当slave与master断开后，重新连接时，会继续从上一次断开的点继续传送数据，而不是full resynchronization。
     2.	master会在内存中创建一个backlog，master和slave都会保存一个offset,slave还有一个master id,offset就是保存在backlog中的，如果slave和master网络断开，重新连接后slave会让master从replica offset开始续传。但是如果没有找到offset，则会触发full resynchronization。
-## 3  无磁盘化复制
+## 5.3  无磁盘化复制
     1.	master在内存中直接创建rdb,然后直接发送给slave,不会存入本地磁盘
     2.	参数配置  
         repl-diskless-sync  
         repl-diskless-sync-delay, 等待一定时长在复制，因为要等更多的slave重新连接
-## 4  过期key处理
+## 5.4  过期key处理
     1. slave不会有过期Key,只有master有过期key,如果master过期了一个可以或者通过LRU算法淘汰了一个key，那么master会模拟发送一个del命令给slave
 
-# Redis-Cluster集群
+--------------------
+
+# 6. Redis-Cluster集群
 <div align=center><img src="https://ws4.sinaimg.cn/large/0078bOVFgy1g0natm1efxj30dr0fut9k.jpg" width=256 height=256 /></div>
 
 1.  所有的redis节点彼此互联(PING-PONG机制),内部使用二进制协议优化传输速度和带宽。
@@ -107,7 +116,9 @@ Redis采用的是定期删除+惰性删策略工作机制。
 4.  redis-cluster把所有的物理节点映射到[0-16383]slot上（不一定是平均分配）,cluster 负责维护node<->slot<->value。
 5.  Redis集群预分好16384个桶，当需要在 Redis 集群中放置一个 key-value 时，根据 CRC16(key) mod 16384的值，决定将一个key放到哪个桶中。
 
-# Redis哨兵
+--------------------
+
+# 7. Redis哨兵
 <div align=center>
 <img src="https://ws3.sinaimg.cn/large/0078bOVFgy1g0y43vh0ilj30ay07g3z3.jpg" />
 
@@ -120,12 +131,12 @@ Redis采用的是定期删除+惰性删策略工作机制。
 <img src="https://ws1.sinaimg.cn/large/0078bOVFgy1g0y477tgrvj30as082wfb.jpg" />
 </div>
 
-## Sentinel的作用：
+## 7.1 Sentinel的作用：
 1.  Master 状态监测
 2.  如果Master 异常，则会进行Master-slave 转换，将其中一个Slave作为Master，将之前的Master作为Slave 
 3.  Master-Slave切换后，master_redis.conf、slave_redis.conf和sentinel.conf的内容都会发生改变，即master_redis.conf中会多一行slaveof的配置，sentinel.conf的监控目标会随之调换 
 
-## Sentinel的工作方式:
+## 7.2 Sentinel的工作方式:
 1.  每个Sentinel以每秒钟一次的频率向它所知的Master，Slave以及其他 Sentinel 实例发送一个 PING 命令 
 2.  如果一个实例（instance）距离最后一次有效回复 PING 命令的时间超过 down-after-milliseconds 选项所指定的值， 则这个实例会被 Sentinel 标记为主观下线。 
 3.  如果一个Master被标记为主观下线，则正在监视这个Master的所有 Sentinel 要以每秒一次的频率确认Master的确进入了主观下线状态。 
@@ -135,9 +146,9 @@ Redis采用的是定期删除+惰性删策略工作机制。
 7.  若没有足够数量的 Sentinel 同意 Master 已经下线， Master 的客观下线状态就会被移除。 
 8.  若 Master 重新向 Sentinel 的 PING 命令返回有效回复， Master 的主观下线状态就会被移除。
 
+--------------------
 
-
-# Redis和数据库双写一致性问题
+# 8. Redis和数据库双写一致性问题
 
 一致性问题是分布式系统常见问题，可以分为最终一致性和强一致性。所以弄清诉求
 数据库强一致性，不放缓存，我们所做的一切只是保证最终一致性，另外无法完全避免，讨论三种更新策略：
@@ -146,7 +157,7 @@ Redis采用的是定期删除+惰性删策略工作机制。
     2. 先删除缓存，再更新数据库
     3. 先更新数据库，再删除缓存
 
-## 1 先更新数据库，再更新缓存
+## 8.1 先更新数据库，再更新缓存
 
 这套方案，大家是普遍反对的，为什么呢？有如下两点原因：
 
@@ -164,7 +175,7 @@ Redis采用的是定期删除+惰性删策略工作机制。
     1）如果是写数据库场景比较多，读数据库场景比较少业务需求。"先更新数据库，再更新缓存"这种方案会导致，数据压根还没读到，缓存就被频繁的更新浪费性能
     2）如果写入数据库是经过复杂计算以后再更新数据库，那么每次写入数据库后更新缓存，性能存在浪费
 
-## 2 先删除缓存，再更新数据库 
+## 8.2 先删除缓存，再更新数据库 
 
 该方案会导致不一致的原因：同时有一个请求A进行更新操作，另一个请求B进行查询操作。那么就会出现以下情形：
 
@@ -188,7 +199,7 @@ Redis采用的是定期删除+惰性删策略工作机制。
 
 解决方案：采用延迟双删策略。先删除缓存，再删除数据库，进程休眠1秒再次删除缓存
 
-## 3  先更新数据库，再删除缓存
+## 8.3  先更新数据库，再删除缓存
 
     这种情况不存在并发问题么？
     不是的。假设这会有两个请求，一个请求A做查询操作，一个请求B做更新操作，那么会有如下情形产生：
@@ -201,7 +212,9 @@ Redis采用的是定期删除+惰性删策略工作机制。
 
 解决方案：发生上述情况有一个先天性条件，就是6.1中步骤（3）的写数据库操作比步骤（2）的读数据库操作耗时更短，才有可能使得步骤（4）先于步骤（5）。可是，大家想想，数据库的读操作的速度远快于写操作的（不然做读写分离干嘛，做读写分离的意义就是因为读操作比较快，耗资源少），因此步骤（3）耗时比步骤（2）更短，这一情形很难出现。  首先，给缓存设有效时间是一种方案。其次，采用策略2（先删除缓存，再更新数据库）里给出的异步延时删除策略，保证读请求完成以后，再进行删除操作。
 
-# 如何解决redis的并发竞争key问题
+--------------------
+
+# 9 如何解决redis的并发竞争key问题
 
 分析:这个问题大致就是，同时有多个子系统去set一个key。这个时候要注意什么呢？大家思考过么。需要说明一下，博主提前百度了一下，发现答案基本都是推荐用redis事务机制。博主不推荐使用redis的事务机制。因为我们的生产环境，基本都是redis集群环境，做了数据分片操作。你一个事务中有涉及到多个key操作的时候，这多个key不一定都存储在同一个redis-server上。因此，redis的事务机制，十分鸡肋。
 
@@ -221,14 +234,18 @@ Redis采用的是定期删除+惰性删策略工作机制。
     那么，假设这会系统B先抢到锁，将key1设置为{valueB 3:05}。接下来系统A抢到锁，发现自己的valueA的时间戳早于缓存中的时间戳，那就不做set操作了。以此类推。  
     或者使用队列，将set操作进行串联即可
 
-# redis常见性能问题和解决方案
+--------------------
+
+# 10. redis常见性能问题和解决方案
 
 1.  Master写内存快照，save命令调度rdbSave函数，会阻塞主线程的工作，当快照比较大时对性能影响是非常大的，会间断性暂停服务，所以Master最好不要写内存快照。
 2.  Master AOF持久化，如果不重写AOF文件，这个持久化方式对性能的影响是最小的，但是AOF文件会不断增大，AOF文件过大会影响Master重启的恢复速度。Master最好不要做任何持久化工作，包括内存快照和AOF日志文件，特别是不要启用内存快照做持久化,如果数据比较关键，某个Slave开启AOF备份数据，策略为每秒同步一次。
 3.  Master调用BGREWRITEAOF重写AOF文件，AOF在重写的时候会占大量的CPU和内存资源，导致服务load过高，出现短暂服务暂停现象。
 4.  Redis主从复制的性能问题，为了主从复制的速度和连接的稳定性，Slave和Master最好在同一个局域网内
 
-# Redis新特性
+--------------------
+
+# 11. Redis新特性
 1. Redis Module
     1.  任何C/C++程序现在都可以运行在Redis上
     2.  Modules是用一种本地的方式来扩展Redis的新用例和功能
