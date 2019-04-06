@@ -265,3 +265,20 @@ $ chown -R www-data:www-data /var/www/html
     -   说明：，host的值就是在指定的MySQL容器的名称。 redis,memcaced等类似
 
 
+#### 常用操作
+批量删除容器
+```
+docker rm $(docker ps -a -q)
+```
+批量删除镜像
+```
+docker rmi $(docker images -q)
+```
+删除挂载目录 
+```
+docker volume rm $(docker volume ls -qf dangling=true)
+```
+查看所有容器IP
+```
+docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)    
+```
