@@ -439,13 +439,95 @@ func (e Employee) doSome(){
 ## 4.2 基于指针方法
 `func (e *Employee) doSome(){}` 当调用一个函数时，会对其每一个参数值进行拷贝，如果一个函数需要更新一个变量，或者 函数的其中一个参数实在太大我们希望能够避免进行这种默认的拷贝，这种情况下我们就需 要用到指针了。**对应到我们这里用来更新接收器的对象的方法，当这个接受者变量本身比较 大时，我们就可以用其指针而不是对象来声明方法**，一般情况下都使用指针即可
 
+例子一：
+```go
+func main() {
+	p:=person{name:"张三"}
+	p.modify() //值接收者，修改无效
+	fmt.Println(p.String())
+}
+
+type person struct {
+	name string
+}
+func (p person) String() string{
+	return "the person name is "+p.name
+}
+func (p person) modify(){
+	p.name = "李四"
+}
+```
+使用值类型接收者定义的方法，在调用的时候，使用的其实是值接收者的一个副本，所以对该值的任何操作，不会影响原来的类型变量。
+
+例子二：
+```go
+func main() {
+	p:=person{name:"张三"}
+	p.modify() //值接收者，修改无效
+	fmt.Println(p.String())
+}
+
+type person struct {
+	name string
+}
+func (p *person) String() string{
+	return "the person name is "+p.name
+}
+func (p *person) modify(){
+	p.name = "李四"
+}
+```
+使用一个指针作为接收者，那么就会其作用了，因为指针接收者传递的是一个指向原值指针的副本，指针的副本，指向的还是原来类型的值，所以修改时，同时也会影响原来类型变量的值。
+
+
 ## 4.3 方法值和方法表达式
 ```
-
+p.funName => 方法值
+p.funName() => 方法表达式
 ```
 
 ---
 # 5 接口
+## 5.1 接口方法集
+```go
+type ReadWriter interface{
+    Read(p	[]byte)	(n	int,	err	error) 
+    Writer(p	[]byte)	(n	int,	err	error) 
+}
+```
+## 5.2 多态的实现
+```go
+func main() {
+	var a animal
+	var c cat
+	a=c
+	a.printInfo() //使用另外一个类型赋值
+	var d dog
+	a=d
+	a.printInfo()
+}
+
+type animal interface {
+	printInfo()
+}
+
+type cat int
+type dog int
+
+func (c cat) printInfo(){
+	fmt.Println("a cat")
+}
+
+func (d dog) printInfo(){
+	fmt.Println("a dog")
+}
+//out
+a cat
+a dog
+```
+以上例子演示了一个多态。我们定义了一个接口animal,然后定义了两种类型cat和dog实现了接口animal。在使用的时候，分别把类型cat的值c、类型dog的值d赋值给接口animal的值a,然后分别执行a的printInfo方法，可以看到不同的输出。
+
+## 5.3 接口做为参数值，可以表示泛型
 
 ---
 # 6 Goroutines和Channels
