@@ -89,4 +89,5 @@ deploy:
   repository:
     github: git@github.com:abner-xu/abner-xu.github.io.git
     gitee: git@gitee.com:abner510/gitblog.git
+    message: Abner-xu updated：{{now("YYYY-MM-DD HH:mm:ss")}} by PC
   branch: master
