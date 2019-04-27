@@ -61,6 +61,8 @@ tag_map:
 
 sitemap:
     path: sitemap.xml
+baidusitemap:
+    path: baidusitemap.xml
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
@@ -84,5 +86,8 @@ theme: hexo-theme-snippet
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: git@github.com:abner-xu/abner-xu.github.io.git
+  repository:
+    github: git@github.com:abner-xu/abner-xu.github.io.git
+    gitee: git@gitee.com:abner510/gitblog.git
+    message: Abner-xu updated：{{now("YYYY-MM-DD HH:mm:ss")}} by PC
   branch: master
