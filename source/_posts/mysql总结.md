@@ -11,7 +11,7 @@ date: 2018-08-24 15:23:09
 ---
 # MySQL复制原理及流程
 
-![主从复制](https://ws1.sinaimg.cn/large/0078bOVFgy1g0nbwnv9noj30g607i3zy.jpg)
+![主从复制](http://ws1.sinaimg.cn/large/0078bOVFgy1g0nbwnv9noj30g607i3zy.jpg)
 
 1.  mysql启动以后会存在2个进程，一个是sqlThred进程一个IOThred进程
 2.  在Slave 服务器上执行sart slave命令开启主从复制开关，开始进行主从复制
@@ -150,12 +150,12 @@ select * from t where name=”shenjian”;
 
 为了保持知识体系的完整性，简单介绍下几种树。
 ## 二叉搜索树
-![二叉搜索树](https://ws1.sinaimg.cn/large/0078bOVFgy1g0obvlcqw9j307h05gjr6.jpg)  
+![二叉搜索树](http://ws1.sinaimg.cn/large/0078bOVFgy1g0obvlcqw9j307h05gjr6.jpg)  
 二叉搜索树，如上图，是最为大家所熟知的一种数据结构，就不展开介绍了，它为什么不适合用作数据库索引？  
 (1)当数据量大的时候，树的高度会比较高，数据量大的时候，查询会比较慢；  
 (2)每个节点只存储一个记录，可能导致一次查询有很多次磁盘IO；
 ## B树
-![B树](https://ws2.sinaimg.cn/large/0078bOVFgy1g0obx5x6lsj30hx05ia9y.jpg)  
+![B树](http://ws2.sinaimg.cn/large/0078bOVFgy1g0obx5x6lsj30hx05ia9y.jpg)  
 B树，如上图，它的特点是：  
 (1)不再是二叉搜索，而是m叉搜索；  
 (2)叶子节点，非叶子节点，都存储数据；  
@@ -175,11 +175,11 @@ B树被作为实现索引的数据结构被创造出来，是因为它能够完�
 2.  每个节点可以存储j个记录，如果将节点大小设置为页大小，例如4K，能够充分的利用预读的特性，极大减少磁盘IO；
 
 ## B+树
-![B+树](https://ws1.sinaimg.cn/large/0078bOVFgy1g0oc9sjwr8j30ox052mx3.jpg)
+![B+树](http://ws1.sinaimg.cn/large/0078bOVFgy1g0oc9sjwr8j30ox052mx3.jpg)
 B树的插入及平衡化操作和2-3树很相似，这里就不介绍了。下面是往B树中依次插入
 
 6 10 4 14 5 11 15 3 2 12 1 7 8 8 6 3 6 21 5 15 15 6 32 23 45 65 7 8 6 5 4
-![动画演示](https://ws1.sinaimg.cn/large/0078bOVFgy1g0r4g7fuy3g30qm06d4qq.gif)
+![动画演示](http://ws1.sinaimg.cn/large/0078bOVFgy1g0r4g7fuy3g30qm06d4qq.gif)
 B+树，如上图，仍是m叉搜索树，在B树的基础上，做了一些改进：
 
 1.  非叶子节点不再存储数据，数据只存储在同一层的叶子节点上；（画外音：B+树中根到每一个节点的路径长度一样，而B树不是这样。）

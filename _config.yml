@@ -86,8 +86,5 @@ theme: hexo-theme-snippet
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository:
-    github: git@github.com:abner-xu/abner-xu.github.io.git
-    gitee: git@gitee.com:abner510/gitblog.git
-    message: Abner-xu updated：{{now("YYYY-MM-DD HH:mm:ss")}} by PC
+  repository: git@github.com:abner-xu/abner-xu.github.io.git
   branch: master

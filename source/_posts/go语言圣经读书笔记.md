@@ -535,7 +535,7 @@ a dog
 ---
 # 7 包和工具
 ## 包初始化顺序
-![](http://ww1.sinaimg.cn/large/007lnJOlgy1g27rnzthjhj31ma0pc4jp.jpg)
+![包加载顺序](http://ww1.sinaimg.cn/large/007lnJOlgy1g27rnzthjhj31ma0pc4jp.jpg)
 ---
 # 8 测试
 
