@@ -156,7 +156,7 @@ declaration:
   enable: true
   title: '转载声明'
   tip: |-
-      商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">abner-xu</a>
+      文章内容来自网络摘抄整理,商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">abner-xu</a>
 
 ## 文章打赏
 reward:
