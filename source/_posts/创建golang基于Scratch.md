@@ -1,8 +1,11 @@
 ---
-layout: 创建golang基于Scratch
 title: 基于Scratch创建最小且安全的golang docker镜像
 date: 2019-05-18 10:40:58
-tags:
+categories:
+  - 后端
+  - golang
+comments: true
+toc: true
 ---
 # golang打包镜像对比
 从docker官方下载了镜像以后，发现一个运行go的环境需要779M,我得项目才3~4M，这是不可以接受的
