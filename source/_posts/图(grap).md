@@ -16,17 +16,17 @@ tags:
 2.	边（Edge）:图中连接这些顶点的线
 ## 无向图
 如果一个图结构中所有的边都没有方向性，这称为无向图。
-![image](https://ws4.sinaimg.cn/large/0078bOVFgy1g09pwiwsnsj30aj059gls.jpg)
+![image](http://ws4.sinaimg.cn/large/0078bOVFgy1g09pwiwsnsj30aj059gls.jpg)
 ## 有向图
 如果一个图结构，边是有方向性的，这称为有向图
-![image](https://ws1.sinaimg.cn/large/0078bOVFgy1g09px7nkq0j30aj05hglt.jpg)
+![image](http://ws1.sinaimg.cn/large/0078bOVFgy1g09px7nkq0j30aj05hglt.jpg)
 ## 权
 在实际应用中图的边往往需要表示成为某种数值，这个数值便是该边的权。无向图中加权值，则称为无向带权图。有向图中加权值，则称为有向带权图。 
 
-![image](https://ws1.sinaimg.cn/large/0078bOVFgy1g09qdd0weej308106s757.jpg)
-![image](https://ws4.sinaimg.cn/large/0078bOVFgy1g09qdur88pj308k06oab2.jpg)
+![image](http://ws1.sinaimg.cn/large/0078bOVFgy1g09qdd0weej308106s757.jpg)
+![image](http://ws4.sinaimg.cn/large/0078bOVFgy1g09qdur88pj308k06oab2.jpg)
 ## 邻接矩阵表示
-![image](https://ws3.sinaimg.cn/large/0078bOVFgy1g09qevjil0j308105rt9g.jpg)
+![image](http://ws3.sinaimg.cn/large/0078bOVFgy1g09qevjil0j308105rt9g.jpg)
 ## 代码实现
 ```
 package graph;
