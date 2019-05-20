@@ -186,7 +186,7 @@ changyan:
 
 ### 来必力
 livere:
-  enable: true
+  enable: false
   livere_uid: MTAyMC80Mjg2MC8xOTQwNw==
 
 ## Gitalk评论
