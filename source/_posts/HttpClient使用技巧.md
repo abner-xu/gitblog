@@ -7,7 +7,8 @@ tags:
   - JAVA类库技巧
 comments: true
 toc: true
-date: 2018-7-26 13:53:24
+abbrlink: bd2a17b6
+date: 2018-07-26 13:53:24
 ---
 
 ## 1. 规范背景

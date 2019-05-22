@@ -2,11 +2,12 @@
 title: etcd基础学习
 categories:
   - 后端
-  - golang
+  - Golang
 tags:
   - etcd
 comments: true
 toc: true
+abbrlink: 45da6cc3
 date: 2019-03-23 22:21:13
 ---
 

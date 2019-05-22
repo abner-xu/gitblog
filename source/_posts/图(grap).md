@@ -1,6 +1,5 @@
 ---
 title: 图(grap)
-date: 2019-02-20 20:51:25
 comments: true
 toc: true
 categories:
@@ -8,6 +7,8 @@ categories:
   - 数据结构
 tags:
   - 数据结构算法
+abbrlink: b14b48cc
+date: 2019-02-20 20:51:25
 ---
 # 图结构
 图(Graph)结构也是一种非线性数据结构，并且每个数据元素之间可以任意关联

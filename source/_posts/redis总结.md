@@ -7,6 +7,7 @@ tags:
   - 面试
 comments: true
 toc: true
+abbrlink: 90bec65a
 date: 2019-02-27 20:49:03
 ---
 # 1. Redis为什么那么快

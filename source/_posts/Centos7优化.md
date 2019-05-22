@@ -6,8 +6,9 @@ categories:
 tags:
   - Centos
 comments: false
-date: 2017-2-13 22:01:12
 toc: true
+abbrlink: 2382fff3
+date: 2017-02-13 22:01:12
 ---
 ## 1.替换源
 ```

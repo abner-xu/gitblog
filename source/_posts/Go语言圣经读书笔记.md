@@ -2,11 +2,12 @@
 title: go语言圣经读书笔记
 categories:
   - 后端
-  - golang
+  - Golang
 tags:
   - book
 comments: true
 toc: true
+abbrlink: 5ab8d1b4
 date: 2019-04-12 13:18:41
 ---
 
