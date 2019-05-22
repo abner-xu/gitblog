@@ -3,8 +3,6 @@ title: golang的pprof使用技巧
 categories:
   - 后端
   - Golang
-tags:
-  - pprof
 comments: true
 toc: true
 abbrlink: 874ecf74

@@ -3,8 +3,6 @@ title: go相对路径问题
 categories:
   - 后端
   - Golang
-tags:
-  - book
 comments: true
 toc: true
 abbrlink: '14630e88'

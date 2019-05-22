@@ -3,8 +3,6 @@ title: go modules 详解
 categories:
   - 后端
   - Golang
-tags:
-  - go mod
 comments: true
 toc: true
 abbrlink: 4a3656eb
