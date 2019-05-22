@@ -7,6 +7,7 @@ tags:
   - go mod
 comments: true
 toc: true
+abbrlink: 4a3656eb
 date: 2019-05-22 10:05:09
 ---
 # go mod的介绍

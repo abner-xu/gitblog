@@ -7,6 +7,7 @@ tags:
   - Ubuntu
 comments: true
 toc: true
+abbrlink: 39bddb70
 date: 2017-02-25 22:06:52
 ---
 #### 安装openssh-server

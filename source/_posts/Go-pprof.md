@@ -7,6 +7,7 @@ tags:
   - pprof
 comments: true
 toc: true
+abbrlink: 874ecf74
 date: 2019-02-26 23:12:01
 ---
 # 1.安装易用的pprof

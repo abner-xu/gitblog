@@ -1,13 +1,14 @@
 ---
 title: Docker搭建可一键部署的多域名LNMP环境
-date: 2017-12-25 21:49:58
 comments: true
 toc: true
-categories: 
+categories:
   - 工具
   - Docker
 tags:
   - Docker
+abbrlink: fe0f28d
+date: 2017-12-25 21:49:58
 ---
 # Docker搭建可一键部署的多域名LNMP环境
 

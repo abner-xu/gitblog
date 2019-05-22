@@ -7,6 +7,7 @@ tags:
   - Git命令
 comments: true
 toc: true
+abbrlink: 986d5faf
 date: 2018-02-26 13:49:56
 ---
 ### 查看、添加、提交、删除、找回，重置修改文件

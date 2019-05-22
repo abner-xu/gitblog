@@ -5,6 +5,7 @@ categories:
   - Golang
 comments: true
 toc: true
+abbrlink: f7e9703f
 date: 2019-05-18 10:40:58
 ---
 # golang打包镜像对比
