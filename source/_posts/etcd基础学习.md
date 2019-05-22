@@ -2,7 +2,7 @@
 title: etcd基础学习
 categories:
   - 后端
-  - golang
+  - Golang
 tags:
   - etcd
 comments: true

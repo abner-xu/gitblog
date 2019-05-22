@@ -2,7 +2,7 @@
 title: go语言圣经读书笔记
 categories:
   - 后端
-  - golang
+  - Golang
 tags:
   - book
 comments: true

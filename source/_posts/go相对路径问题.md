@@ -2,7 +2,7 @@
 title: go相对路径问题
 categories:
   - 后端
-  - golang
+  - Golang
 tags:
   - book
 comments: true
