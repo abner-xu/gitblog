@@ -282,4 +282,7 @@ docker volume rm $(docker volume ls -qf dangling=true)
 查看所有容器IP
 ```
 docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)    
+
+shell别名用法
+alias docker-ips='docker inspect --format='"'"'{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'"'"' $(docker ps -aq)'
 ```
