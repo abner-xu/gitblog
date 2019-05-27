@@ -45,9 +45,10 @@ $ git commit -am "First commit"
 $ git push -u origin master
 ```
 
---
+---
 
 # go mudules 版本规则
+
 go modules 是一个版本化依赖管理系统，版本需要遵循一些规则，比如版本号需要遵循以下格式：
 ```code
 vX.Y.Z-pre.0.yyyymmddhhmmss-abcdefabcdef
@@ -60,7 +61,9 @@ vX.Y.Z 是我们仓库打的标签版本，也就是 go modules 是根据仓库�
 也就是版本号 + 时间戳 +hash，我们自己指定版本时只需要指定版本号即可，没有版本 tag 的则需要找到对应 commit 的时间和 hash 值。
 
 还有一个重要的规则是，版本 0 和 1，最好需要有不同的依赖路径，如：v1.0.0 和 v2.0.0 是有不同的依赖路径，下面会详细介绍一下这个版本规则。
---
+
+---
+
 # 发布版本
 了解了 go modules 的版本规则后，现在我们发布一下该项目的版本：
 ```code
@@ -73,7 +76,7 @@ $ git checkout -b v1
 $ git push -u origin v1
 ```
 
---
+---
 
 # 升级版本
 ```code
@@ -136,7 +139,7 @@ func main() {
 ```
 然后执行`go mod tidy`，go mod 会自动更新到v2.0.0版本
 
---
+---
 
 # go modules 命令大全
 ```shell 
@@ -157,10 +160,13 @@ why         explain why packages or modules are needed (解释为什么需要依
 
 go mod init [module]可以创建一个go.mod，只有一行信息module。
 ```
---
+---
+
 # goland支持go mod
 ![go mode](http://ww1.sinaimg.cn/large/aaba1596ly1g39dvp55v3j20li09f0tq.jpg)
---
+
+---
+
 # go 翻墙
 
 swag安装为例
@@ -190,7 +196,9 @@ echo ...
 pause
 ```
 git bash上用goget.bat url就行了~
---
+
+---
+
 # 自建GOPROXY server
 项目地址 https://github.com/gomods/athens
 Athens可以用来在公司内部建立自己的私有go mod服务器，或者在公网建立一个对外公开的GOPROXY server。
