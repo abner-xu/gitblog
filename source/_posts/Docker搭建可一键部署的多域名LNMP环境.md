@@ -279,6 +279,14 @@ docker rmi $(docker images -q)
 ```
 docker volume rm $(docker volume ls -qf dangling=true)
 ```
+删除所有关闭的容器
+```
+docker ps -a | grep Exit | cut -d ' ' -f 1 | xargs docker rm
+```
+删除所有dangling镜像（即无tag的镜像）
+```
+docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
+```
 查看所有容器IP
 ```
 docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)    
