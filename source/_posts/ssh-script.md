@@ -5,6 +5,7 @@ categories:
   - shell
 comments: true
 toc: true
+abbrlink: '92032e60'
 date: 2019-05-28 22:15:11
 ---
 # main.sh
