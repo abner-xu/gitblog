@@ -141,7 +141,7 @@ build:
   args:
     - buildno=1
     - password=secret
-```    
+```
 
 --- 
 ## command
@@ -198,7 +198,7 @@ expose提供container之间的端口访问，不会暴露给主机使用。同do
 expose:
  - "3000"
  - "8000"
-``` 
+```
 
 ---
 
@@ -223,7 +223,7 @@ volumes_from:
  - service_name:ro
  - container:container_name
  - container:container_name:rw
-``` 
+```
 > container:container_name格式仅支持version 2。
 
 ---
@@ -259,7 +259,7 @@ external_links:
  - redis_1
  - project_db_1:mysql
  - project_db_1:postgresql
-``` 
+```
 > 注意，external_links链接的服务与当前服务必须是同一个网络环境。
 
 --- 
@@ -271,7 +271,7 @@ external_links:
 extra_hosts:
  - "somehost:162.242.195.82"
  - "otherhost:50.31.209.229"
-``` 
+```
 将会在/etc/hosts创建记录：
 
 ```
@@ -287,7 +287,7 @@ extra_hosts:
 extends:
   file: common.yml
   service: webapp
-```  
+```
 > service必须有，file可选。service是需要继承的服务，例如web、database。
 
 ---
@@ -300,7 +300,7 @@ net: "bridge"
 net: "none"
 net: "container:[name or id]"
 net: "host"
-````
+```
 
 ---
 
