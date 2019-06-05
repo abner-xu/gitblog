@@ -91,7 +91,7 @@ Commands:
 # docker-compose.yml参考
 每个docker-compose.yml必须定义image或者build中的一个，其它的是可选的。
 
-### image
+## image
 指定镜像tag或者ID。示例：
 ```
 image: redis
@@ -102,7 +102,7 @@ image: a4bc65fd
 ```
 > 注意，在version 1里同时使用image和build是不允许的，version 2则可以，如果同时指定了两者，会将build出来的镜像打上名为image标签。
 
-### build
+## build
 
 用来指定一个包含Dockerfile文件的路径。一般是当前目录.。Fig将build并生成一个随机命名的镜像。
 
@@ -144,7 +144,7 @@ build:
 ```    
 
 --- 
-### command
+## command
 用来覆盖缺省命令。示例：
 
 ```
@@ -158,7 +158,7 @@ command: [bundle, exec, thin, -p, 3000]
 
 --- 
 
-### links
+## links
 用于链接另一容器服务，如需要使用到另一容器的mysql服务。可以给出服务名和别名；也可以仅给出服务名，这样别名将和服务名相同。同docker run --link。示例：
 
 ```
@@ -178,7 +178,7 @@ links:
 
 ---
 
-### ports
+## ports
 用于暴露端口。同docker run -p。示例：
 
 ```
@@ -191,7 +191,7 @@ ports:
 
 ---
 
-### expose
+## expose
 expose提供container之间的端口访问，不会暴露给主机使用。同docker run --expose。
 
 ```
@@ -202,7 +202,7 @@ expose:
 
 ---
 
-### volumes
+## volumes
 挂载数据卷。同docker run -v。示例：
 
 ```
@@ -214,7 +214,7 @@ volumes:
 
 ---
 
-### volumes_from
+## volumes_from
 挂载数据卷容器，挂载是容器。同docker run --volumes-from。示例：
 
 ```
@@ -228,7 +228,7 @@ volumes_from:
 
 ---
 
-### environment
+## environment
 添加环境变量。同docker run -e。可以是数组或者字典格式：
 
 ```
@@ -243,7 +243,7 @@ environment:
 
 ---
 
-### depends_on
+## depends_on
 用于指定服务依赖，一般是mysql、redis等。
 指定了依赖，将会优先于服务创建并启动依赖。
 
@@ -251,7 +251,7 @@ environment:
 
 ---
 
-### external_links
+## external_links
 链接搭配docker-compose.yml文件或者Compose之外定义的服务，通常是提供共享或公共服务。格式与links相似：
 
 ```
@@ -264,7 +264,7 @@ external_links:
 
 --- 
 
-### extra_hosts
+## extra_hosts
 添加主机名映射。
 
 ```
@@ -280,7 +280,7 @@ extra_hosts:
 ```
 --- 
 
-### extends
+## extends
 继承自当前yml文件或者其它文件中定义的服务，可以选择性的覆盖原有配置。
 
 ```
@@ -292,7 +292,7 @@ extends:
 
 ---
 
-### net
+## net
 设置网络模式。同docker的--net参数。
 
 ```
@@ -304,7 +304,7 @@ net: "host"
 
 ---
 
-### dns
+## dns
 自定义dns服务器。
 
 ```
@@ -316,7 +316,7 @@ dns:
 
 ---
 
-### 其他
+## 其他
 `cpu_shares, cpu_quota, cpuset, domainname, hostname, ipc, mac_address, mem_limit, memswap_limit, privileged, read_only, restart, shm_size, stdin_open, tty, user, working_dir`
 这些命令都是单个值，含义请参考docker run
 ```
