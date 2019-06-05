@@ -317,7 +317,15 @@ dns:
 ---
 
 ## 其他
-`cpu_shares, cpu_quota, cpuset, domainname, hostname, ipc, mac_address, mem_limit, memswap_limit, privileged, read_only, restart, shm_size, stdin_open, tty, user, working_dir`
+```
+cpu_shares, 
+cpu_quota,
+cpuset, 
+domainname,
+hostname, ipc, mac_address, mem_limit, 
+memswap_limit, privileged, read_only, restart, shm_size, 
+stdin_open, tty, user, working_dir
+```
 这些命令都是单个值，含义请参考docker run
 ```
 cpu_shares: 73
