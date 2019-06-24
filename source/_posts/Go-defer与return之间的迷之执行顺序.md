@@ -5,6 +5,7 @@ categories:
   - Golang
 comments: true
 toc: true
+abbrlink: 8ec4b9d8
 date: 2019-06-24 17:02:04
 ---
 偶然间发现了一个有意思的地方：在使用`defer`时，匿名返回值的函数和命名返回值的函数的返回结果是不一样的。具体见如下代码:
