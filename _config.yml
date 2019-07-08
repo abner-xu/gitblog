@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: XuChen的博客
-subtitle: 徐晨的博客
+title: Abner的博客
+subtitle: XuChen的博客
 description: XuChen的技术博客，专注Web技术发展
 keywords: docker、Golang、Redis、MySQL、Web面试；
-author: xuchen
+author: abner
 language: zh-CN
 email: abner510@126.com
 timezone:
