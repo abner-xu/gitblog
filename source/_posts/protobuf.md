@@ -5,6 +5,7 @@ categories:
   - Golang
 comments: true
 toc: true
+abbrlink: 99fac5be
 date: 2019-07-12 09:52:39
 ---
 
