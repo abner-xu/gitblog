@@ -1,11 +1,11 @@
 ---
-title: go相对路径问题
+title: Go相对路径问题
 categories:
   - 后端
   - Golang
 comments: true
 toc: true
-abbrlink: '14630e88'
+abbrlink: e9f5e83
 date: 2019-05-10 10:44:58
 ---
 
