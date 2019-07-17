@@ -206,4 +206,3 @@ Athens可以用来在公司内部建立自己的私有go mod服务器，或者�
 # 可用镜像
 - 阿里云：https://mirrors.aliyun.com/goproxy/
 - go代理：https://goproxy.io
-- athens：
