@@ -81,11 +81,10 @@ Docker 1.10以下请看：https://yq.aliyun.com/articles/29941。
 
 ##### 1.5 安装容器和镜像
 ```shell
-cd /home/server
-docker-compose up -d #mysql初始化不成功
+docker-compose up -d
 ```
 
-##### 1.6 virtualbox挂载目录到ubuntu
+##### 1.6 windows下基于virtualbox挂载目录到ubuntu
 1.  安装增强工具
 2. 配置共享目录  
 ![image](http://ww3.sinaimg.cn/large/0060lm7Tly1fnjv29wde7j309a06sa9y.jpg)
