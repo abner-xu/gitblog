@@ -118,6 +118,10 @@ docker /root/www   vboxsf rw,gid=100,uid=1000,auto 0 0
 6. 若走的桥接网卡，正常连接即可
 ---
 
+
+--- 
+#以下部分属于扩展
+
 #### 2.目录说明
 #### 2.1 大致框架
 ![image](http://ww4.sinaimg.cn/large/0060lm7Tly1fnigj751vsj30ku0au74g.jpg)
