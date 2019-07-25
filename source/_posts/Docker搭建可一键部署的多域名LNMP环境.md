@@ -172,7 +172,7 @@ server {
     }
 
     location ~ ^/.+\.php(/|$) {
-        fastcgi_pass xc_php56_1:9000;  
+        fastcgi_pass [容器的ip或者名称]:9000;  
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_read_timeout 600; 
@@ -180,7 +180,6 @@ server {
 }
 
 ```
-==xc_php56_1:9000这里填写容器的名称==
 
 #### 2.3 站点部署
 本文有默认加了两个站点：www.site1.com（同localhost）和www.site2.com。  
