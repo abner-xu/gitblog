@@ -1,5 +1,5 @@
 ---
-title: go语言圣经读书笔记
+title: Go语言圣经读书笔记
 categories:
   - 后端
   - Golang
@@ -7,10 +7,9 @@ tags:
   - book
 comments: true
 toc: true
-abbrlink: 5ab8d1b4
+abbrlink: d56d6105
 date: 2019-04-12 13:18:41
 ---
-
 # 1 基本数据类型
 
 ## 1.1 整型
