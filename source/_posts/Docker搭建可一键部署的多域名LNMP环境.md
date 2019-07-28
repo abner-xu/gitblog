@@ -81,11 +81,10 @@ Docker 1.10以下请看：https://yq.aliyun.com/articles/29941。
 
 ##### 1.5 安装容器和镜像
 ```shell
-cd /home/server
-docker-compose up -d #mysql初始化不成功
+docker-compose up -d
 ```
 
-##### 1.6 virtualbox挂载目录到ubuntu
+##### 1.6 windows下基于virtualbox挂载目录到ubuntu
 1.  安装增强工具
 2. 配置共享目录  
 ![image](http://ww3.sinaimg.cn/large/0060lm7Tly1fnjv29wde7j309a06sa9y.jpg)
@@ -118,6 +117,10 @@ docker /root/www   vboxsf rw,gid=100,uid=1000,auto 0 0
 ![image](http://ww4.sinaimg.cn/large/0060lm7Tly1fnm8mdsa3wj30i8079wej.jpg)
 6. 若走的桥接网卡，正常连接即可
 ---
+
+
+--- 
+# 以下部分属于扩展
 
 #### 2.目录说明
 #### 2.1 大致框架
@@ -173,7 +176,7 @@ server {
     }
 
     location ~ ^/.+\.php(/|$) {
-        fastcgi_pass xc_php56_1:9000;  
+        fastcgi_pass [容器的ip或者名称]:9000;  
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_read_timeout 600; 
@@ -181,7 +184,6 @@ server {
 }
 
 ```
-==xc_php56_1:9000这里填写容器的名称==
 
 #### 2.3 站点部署
 本文有默认加了两个站点：www.site1.com（同localhost）和www.site2.com。  
