@@ -204,5 +204,6 @@ git bash上用goget.bat url就行了~
 Athens可以用来在公司内部建立自己的私有go mod服务器，或者在公网建立一个对外公开的GOPROXY server。
 
 # 可用镜像
-- 阿里云：https://mirrors.aliyun.com/goproxy/
-- go代理：https://goproxy.io
+- 阿里云:https://mirrors.aliyun.com/goproxy/
+- go代理:https://goproxy.io
+- go代理:https://goproxy.cn
