@@ -87,7 +87,13 @@ theme: hexo-theme-snippet
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
+#deploy:
+#  type: git
+#  repository: git@github.com:abner-xu/abner-xu.github.io.git
+#  branch: master
+
 deploy:
   type: git
-  repository: git@github.com:abner-xu/abner-xu.github.io.git
-  branch: master
+  repo:
+    github: git@github.com:abner-xu/abner-xu.github.io.git,master
+    #gitee: git@gitee.com:abner510/abner-xu.github.io.git,master
