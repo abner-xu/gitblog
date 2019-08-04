@@ -11,19 +11,24 @@ abbrlink: bae9a0d2
 date: 2019-08-04 22:48:46
 ---
 # 历史
+
 RabbitMQ是一个Erlang开发的AMQP（Advanced Message Queuing Protocol ）的开源实现。AMQP 的出现其实也是应了广大人民群众的需求，虽然在同步消息通讯的世界里有很多公开标准（如 Cobar）的 IIOP ，或者是 SOAP 等），但是在异步消息处理中却不是这样，只有大企业有一些商业实现（如微软的 MSMQ ，IBM 的 WebSphere MQ 等），因此，在 2006 年的 6 月，Cisco 、Red Hat、iMatix 等联合制定了 AMQP 的公开标准。
 
 
 # 系统架构
+
 ![](http://ww1.sinaimg.cn/large/aaba1596gy1g5o1fntjmwj20dw09fjsa.jpg)
 
 ## RabbitMQ Server
+
 也叫Broker Server.它的角色就是维护一条从Producer到Consumer的路线，保证数据能够按照指定的方式传输。虽然这个保证也不是100%的保证，但是对于普通的应用来说这已经足够了。当然对于商业系统来说，可以再做一层数据一致性的guard，就可以彻底保证系统的一致性了。
 
 ## Client P
+
 也叫Producer，数据的发送方。Create messages and publish (send) them to a Broker Server (RabbitMQ)。一个Message有两个部分：payload（有效载荷）和label（标签）。payload顾名思义就是传输的数据。label是exchange的名字或者说是一个tag，它描述了payload，而且RabbitMQ也是通过这个label来决定把这个Message发给哪个Consumer。AMQP仅仅描述了label，而RabbitMQ决定了如何使用这个label的规则。
 
 ## Client C
+
 也叫Consumer，数据的接收方。Consumers attach to a Broker Server (RabbitMQ) and subscribe to a queue。把queue比作是一个有名字的邮箱。当有Message到达某个邮箱后，RabbitMQ把它发送给它的某个订阅者即Consumer。当然可能会把同一个Message发送给很多的Consumer。在这个Message中，只有payload，label已经被删掉了。对于Consumer来说，它是不知道谁发送的这个信息的,就是协议本身不支持。当然了,如果Producer发送的payload包含了Producer的信息就另当别论了。
 
 对于一个数据从Producer到Consumer的正确传递，还有三个概念需要明确：exchanges, queues and bindings。
@@ -35,9 +40,11 @@ RabbitMQ是一个Erlang开发的AMQP（Advanced Message Queuing Protocol ）的�
 还有几个概念是上述图中没有标明的，那就是Connection（连接）和Channel（通道，频道）。
 
 ## Connection
+
 就是一个TCP的连接。Producer和Consumer都是通过TCP连接到RabbitMQ Server的。以后我们可以看到，程序的起始处就是建立这个TCP连接。
 
 ## Channel
+
 信道。它建立在上述的TCP连接中。数据流动都是在Channel中进行的。也就是说，一般情况是程序起始建立TCP连接，第二步就是建立这个Channel。
 
 那么，为什么使用Channel，而不是直接使用TCP连接？
@@ -59,6 +66,7 @@ RabbitMQ是一个Erlang开发的AMQP（Advanced Message Queuing Protocol ）的�
 # 基本概念
 
 ## Queue
+
 Queue（队列）是RabbitMQ的内部对象，用于存储消息，如下图表示。
 
 <div align=center>![](http://ww1.sinaimg.cn/large/aaba1596gy1g5o1vhguqaj203l02j0bo.jpg)</div>
@@ -72,6 +80,7 @@ RabbitMQ中的消息都只能存储在Queue中，生产者（下图中的P）生
 <div align=center>![](http://ww1.sinaimg.cn/large/aaba1596gy1g5o1wj76uoj2098033wef.jpg)</div>
 
 ## Message ack(应答)
+
 在实际应用中，可能会发生消费者收到Queue中的消息，但没有处理完成就宕机（或出现其他意外）的情况，这种情况下就可能会导致消息丢失。为了避免这种情况发生，我们可以要求消费者在消费完消息后发送一个回执给RabbitMQ，RabbitMQ收到消息回执（Message acknowledgment）后才将该消息从Queue中移除。
 
 如果RabbitMQ没有收到回执并检测到消费者的RabbitMQ连接断开，则RabbitMQ会将该消息发送给其他消费者（如果存在多个消费者）进行处理。这里不存在timeout，一个消费者处理消息时间再长也不会导致该消息被发送给其他消费者，除非它的RabbitMQ连接断开。
@@ -81,20 +90,25 @@ RabbitMQ中的消息都只能存储在Queue中，生产者（下图中的P）生
 另外publish message 是没有ACK的。
 
 ## Message durability(持久化)
+
 如果我们希望即使在RabbitMQ服务重启的情况下，也不会丢失消息，我们可以将Queue与Message都设置为可持久化的（durable），这样可以保证绝大部分情况下我们的RabbitMQ消息不会丢失。但依然解决不了小概率丢失事件的发生（比如RabbitMQ服务器已经接收到生产者的消息，但还没来得及持久化该消息时RabbitMQ服务器就断电了），如果我们需要对这种小概率事件也要管理起来，那么我们要用到事务。由于这里仅为RabbitMQ的简单介绍，所以这里将不讲解RabbitMQ相关的事务。
 
 ## Prefetch count(类似平均分配)
+
 前面我们讲到如果有多个消费者同时订阅同一个Queue中的消息，Queue中的消息会被平摊给多个消费者。这时如果每个消息的处理时间不同，就有可能会导致某些消费者一直在忙，而另外一些消费者很快就处理完手头工作并一直空闲的情况。我们可以通过设置Prefetch count来限制Queue每次发送给每个消费者的消息数，比如我们设置prefetchCount=1，则Queue每次给每个消费者发送一条消息；消费者处理完这条消息后Queue会再给该消费者发送一条消息。
 <div align=center>![](http://ww1.sinaimg.cn/large/aaba1596gy1g5o2fqreroj20b0033q2x.jpg)</div>
 
 ## Exchange（交换器）
-在上一节我们看到生产者将消息投递到Queue中，实际上这在RabbitMQ中这种事情永远都不会发生。实际的情况是，生产者将消息发送到Exchange（交换器，下图中的X），由Exchange将消息路由到一个或多个Queue中（或者丢弃）。
-<div align=center>![](http://ww1.sinaimg.cn/large/aaba1596gy1g5o2ir7qy9j2098032746.jpg)</div>
-Exchange是按照什么逻辑将消息路由到Queue的？这个将在Binding一节中介绍。
 
+在上一节我们看到生产者将消息投递到Queue中，实际上这在RabbitMQ中这种事情永远都不会发生。实际的情况是，生产者将消息发送到Exchange（交换器，下图中的X），由Exchange将消息路由到一个或多个Queue中（或者丢弃）。
+
+<div align=center>![](http://ww1.sinaimg.cn/large/aaba1596gy1g5o2ir7qy9j2098032746.jpg)</div>
+
+Exchange是按照什么逻辑将消息路由到Queue的？这个将在Binding一节中介绍。
 RabbitMQ中的Exchange有四种类型，不同的类型有着不同的路由策略，这将在Exchange Types一节介绍。
 
-## Routing Key(路由key)
+## Routing Key
+
 生产者在将消息发送给Exchange的时候，一般会指定一个Routing Key，来指定这个消息的路由规则，而这个Routing Key需要与Exchange Type及Binding key联合使用才能最终生效。
 
 在Exchange Type与Binding key固定的情况下（在正常使用时一般这些内容都是固定配置好的），我们的生产者就可以在发送消息给Exchange时，通过指定Routing Key来决定消息流向哪里。
@@ -102,10 +116,13 @@ RabbitMQ中的Exchange有四种类型，不同的类型有着不同的路由策�
 RabbitMQ为Routing Key设定的长度限制为 `255` bytes。
 
 ## Binding
+
 RabbitMQ中通过Binding将Exchange与Queue关联起来，这样RabbitMQ就知道如何正确地将消息路由到指定的Queue了。
+
 <div align=center>![](http://ww1.sinaimg.cn/large/aaba1596gy1g5o2otg7h5j208y02imx2.jpg)</div>
 
 ## Binding key
+
 在绑定（Binding）Exchange与Queue的同时，一般会指定一个Binding key。消费者将消息发送给Exchange时，一般会指定一个Routing Key。当Binding key与Routing Key相匹配时，消息将会被路由到对应的Queue中。这个将在Exchange Types章节会列举实际的例子加以说明。
 
 在绑定多个Queue到同一个Exchange的时候，这些Binding允许使用相同的Binding key。
@@ -117,16 +134,23 @@ Binding key并不是在所有情况下都生效，它依赖于Exchange Type，�
 RabbitMQ常用的Exchange Type有fanout、direct、topic、headers这四种（AMQP规范里还提到两种Exchange Type，分别为system与自定义，这里不予以描述），下面分别进行介绍。
 
 ### fanout
+
 fanout类型的Exchange路由规则非常简单，它会把所有发送到该Exchange的消息路由到所有与它绑定的Queue中。
+
 <div align=center>![](http://ww1.sinaimg.cn/large/aaba1596gy1g5o2wehh0vj209504gaa2.jpg)</div>
+
 上图中，生产者（P）发送到Exchange（X）的所有消息都会路由到图中的两个Queue，并最终被两个消费者（C1与C2）消费。
 
 ### direct
+
 direct类型的Exchange路由规则也很简单，它会把消息路由到那些Binding key与Routing key完全匹配的Queue中。
+
 <div align=center>![](http://ww1.sinaimg.cn/large/aaba1596gy1g5o2wxukdbj20br04r0sv.jpg)</div>
+
 以上图的配置为例，我们以routingKey="error"发送消息到Exchange，则消息会路由到Queue1（amqp.gen-S9b…，这是由RabbitMQ自动生成的Queue名称）和Queue2（amqp.gen-Agl…）；如果我们以Routing Key="info"或routingKey="warning"来发送消息，则消息只会路由到Queue2。如果我们以其他Routing Key发送消息，则消息不会路由到这两个Queue中。
 
 ### topic
+
 前面讲到direct类型的Exchange路由规则是完全匹配Binding Key与Routing Key，但这种严格的匹配方式在很多情况下不能满足实际业务需求。topic类型的Exchange在匹配规则上进行了扩展，它与direct类型的Exchage相似，也是将消息路由到Binding Key与Routing Key相匹配的Queue中，但这里的匹配规则有些不同，它约定：
 
 Routing Key为一个句点号“.”分隔的字符串（我们将被句点号". "分隔开的每一段独立的字符串称为一个单词），如"stock.usd.nyse"、"nyse.vmw"、"quick.orange.rabbit"。Binding Key与Routing Key一样也是句点号“. ”分隔的字符串。
@@ -138,6 +162,7 @@ Binding Key中可以存在两种特殊字符"*"与"#"，用于做模糊匹配，
 以上图中的配置为例，routingKey=”quick.orange.rabbit”的消息会同时路由到Q1与Q2，routingKey=”lazy.orange.fox”的消息会路由到Q1，routingKey=”lazy.brown.fox”的消息会路由到Q2，routingKey=”lazy.pink.rabbit”的消息会路由到Q2（只会投递给Q2一次，虽然这个routingKey与Q2的两个bindingKey都匹配）；routingKey=”quick.brown.fox”、routingKey=”orange”、routingKey=”quick.orange.male.rabbit”的消息将会被丢弃，因为它们没有匹配任何bindingKey。
 
 ### headers
+
 headers类型的Exchange不依赖于Routing Key与Binding Key的匹配规则来路由消息，而是根据发送的消息内容中的headers属性进行匹配。
 
 在绑定Queue与Exchange时指定一组键值对；当消息发送到Exchange时，RabbitMQ会取到该消息的headers（也是一个键值对的形式），对比其中的键值对是否完全匹配Queue与Exchange绑定时指定的键值对。如果完全匹配则消息会路由到该Queue，否则不会路由到该Queue。
