@@ -1,5 +1,5 @@
 ---
-title: Go-字符串高效拼接(一)
+title: Go-字符串高效拼
 categories:
   - 后端
   - Golang
