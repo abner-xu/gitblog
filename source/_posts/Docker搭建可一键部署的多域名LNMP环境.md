@@ -22,7 +22,7 @@ date: 2017-12-25 21:49:58
 1. 所有配置文件可在host中直接修改
 1. 所有日志文件可在host中直接查看
 1. 内置完整PHP扩展安装命令
-1. 本站实际使用，确保100%可行
+1. 实际使用，确保100%可行
 1. 实现一次配置，可在任何支持Docker系统使用
 
 ---
@@ -104,13 +104,13 @@ sudo mount -t vboxsf docker /home/abner/server
 4.1 开机自动挂载（centos7）
 ==[virbox自动挂载不能勾选]==
 ```shell
-mkdir /root/www && chmod -R 777 /root/www
-mount -t vboxsf docker /root/www   #手动挂载
+mkdir /home/abner/server && chmod -R 777 /home/abner/server
+mount -t vboxsf docker /home/abner/server   #手动挂载
 ## 此时如果提示/sbin/mount.vboxsf: mounting failed with the error: No such device，说明内核模块vboxsf未加载，可通过lsmod | grep vboxsf查看（无结果说明未加载）。
 modprobe vboxsf #加载vboxsf模块
 #自动挂载
 sudo vim /etc/fstab
-docker /root/www   vboxsf rw,gid=100,uid=1000,auto 0 0
+docker /home/abner/server   vboxsf rw,gid=100,uid=1000,auto 0 0
 ```
 
 5.若走的端口转发按图如下配置  

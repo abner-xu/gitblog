@@ -1,5 +1,5 @@
 ---
-title: Go-字符串高效拼接
+title: Go-字符串高效拼接(一)
 categories:
   - 后端
   - Golang
@@ -172,5 +172,4 @@ Showing top 15 nodes out of 89
 以上的TOP可能还不是太直观，如果大家看火焰图的话，就会更清晰。性能最好的是`+`号拼接、Join拼接，最慢的是fmt拼接，这里的builder和buffer拼接差不多，并没有发挥出其能力。
 
 # 疑问
-从整个性能的测试和分析来看，我们期待的builder并没有发挥出来，这是不是意味着builder不实用了呢？还不如+号和Join拼接呢？继续接着分析，
-https://www.flysnow.org/2018/11/05/golang-concat-strings-performance-analysis.html#%E6%8B%BC%E6%8E%A5%E5%87%BD%E6%95%B0%E6%94%B9%E9%80%A0
+从整个性能的测试和分析来看，我们期待的builder并没有发挥出来，这是不是意味着builder不实用了呢？还不如+号和Join拼接呢？继续接着分析，请看文章二
