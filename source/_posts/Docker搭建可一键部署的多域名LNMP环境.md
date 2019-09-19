@@ -132,7 +132,7 @@ sudo vim /etc/fstab
 docker /root/server   vboxsf rw,gid=100,uid=1000,auto 0 0
 ```
 
-5.若走的端口转发按图如下配置  
+5.若走的端口转发按图如下配置
 ![image](http://ww4.sinaimg.cn/large/0060lm7Tly1fnm8mdsa3wj30i8079wej.jpg)
 6. 若走的桥接网卡，正常连接即可
 ---
