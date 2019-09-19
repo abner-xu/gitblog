@@ -86,6 +86,7 @@ docker-compose up -d
 
 ##### 1.6 如果是windows下基于virtualbox挂载目录到linux
 1.  安装增强工具(centos7版本)
+![增强工具](http://ww1.sinaimg.cn/large/aaba1596gy1g74n03vgqfj20ma08hdg3.jpg)
 ```json
 yum install -y gcc gcc-devel gcc-c++ gcc-c++-devel make kernel kernel-devel bzip2 vim wget  
 sudo reboot  #重启
@@ -93,8 +94,10 @@ ln -s /usr/src/kernels/3.10.0（注意内核版本号自动补全） /usr/src/li
 #点击虚拟机设备->安装增强
 mount /dev/cdrom /mnt  #挂载增强光盘到系统，提示只读不用管
 cd /mnt &&  ./VBoxLinuxAdditions.run
-
 ```
+
+
+
 2. 配置共享目录  
 ![image](http://ww3.sinaimg.cn/large/0060lm7Tly1fnjv29wde7j309a06sa9y.jpg)
 3. 手动挂载
