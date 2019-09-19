@@ -31,7 +31,7 @@ date: 2017-12-25 21:49:58
 
 
 ##### 1.1 docker(https://docs.docker.com/engine/installation/)
-1.  Centos7安装
+1.  Centos7安装方法
     ```shell
     sudo yum install -y yum-utils device-mapper-persistent-data lvm2
     sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
@@ -39,7 +39,7 @@ date: 2017-12-25 21:49:58
     sudo yum -y install docker-ce
     sudo service docker start
     ```
-2.  Ubuntu安装
+2.  Ubuntu安装方法
     ```shell
     sudo apt-get update
     sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
@@ -48,7 +48,7 @@ date: 2017-12-25 21:49:58
     sudo apt-get -y update
     sudo apt-get -y install docker-ce
     ```
-##### 1.2 docker-compose(https://docs.docker.com/compose/install/)
+##### 1.2 [docker-compose安装](https://docs.docker.com/compose/install/)
     ```shell
     sudo curl -L https://get.daocloud.io/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
@@ -85,7 +85,7 @@ docker-compose up -d
 ```
 
 ##### 1.6 如果是windows下基于virtualbox挂载目录到linux
-1.  安装增强工具(centos7版本)
+1.6.1  安装增强工具(centos7版本)
 ![增强工具](http://ww1.sinaimg.cn/large/aaba1596gy1g74n03vgqfj20ma08hdg3.jpg)
 ```json
 yum install -y gcc gcc-devel gcc-c++ gcc-c++-devel make kernel kernel-devel bzip2 vim wget  
@@ -98,22 +98,22 @@ cd /mnt &&  ./VBoxLinuxAdditions.run
 
 
 
-2. 配置共享目录  
+1.6.2 配置共享目录  
 ![image](http://ww3.sinaimg.cn/large/0060lm7Tly1fnjv29wde7j309a06sa9y.jpg)
-3. 手动挂载
-3.1 ubuntu
+1.6.3 手动挂载
+1.6.3.1 ubuntu
 ```
 sudo mkdir /home/abner/server  && chmod -R 777 /home/abner/server 
 sudo mount -t vboxsf docker /home/abner/server   #手动挂载 （这里挂载的目录最好不要和共享文件夹名称一样）
 ```
-3.2 centos7
+1.6.3.2 centos7
 ```
 sudo mkdir /root/server  && chmod -R 777 /root/server 
 sudo mount -t vboxsf docker /root/server
 ```
 
-4. 开机自动挂载
-4.1 ubuntu
+1.6.4 开机自动挂载
+1.6.4.1 ubuntu
 ```shell
 sudo vim /etc/rc.local
 ##exit 0 前增加如下命令
@@ -121,16 +121,15 @@ sleep 1
 sudo mount -t vboxsf docker /home/abner/server
 ```
 
-4.2 centos7
+1.6.4.2 centos7
 ==[virbox自动挂载不能勾选]==
 ```shell
-mkdir /home/abner/server && chmod -R 777 /home/abner/server
-mount -t vboxsf docker /home/abner/server   #手动挂载
-## 此时如果提示/sbin/mount.vboxsf: mounting failed with the error: No such device，说明内核模块vboxsf未加载，可通过lsmod | grep vboxsf查看（无结果说明未加载）。
-modprobe vboxsf #加载vboxsf模块
+mkdir /root/server && chmod -R 777 /root/server
+mount -t vboxsf docker /root/server   #手动挂载
+## 此时如果提示/sbin/mount.vboxsf: mounting failed with the error: No such device，说明内核模块vboxsf未加载，可通过lsmod | grep vboxsf查看（无结果说明未加载）。执行 `modprobe vboxsf` #加载vboxsf模块
 #自动挂载
 sudo vim /etc/fstab
-docker /home/abner/server   vboxsf rw,gid=100,uid=1000,auto 0 0
+docker /root/server   vboxsf rw,gid=100,uid=1000,auto 0 0
 ```
 
 5.若走的端口转发按图如下配置  
