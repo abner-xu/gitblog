@@ -12,7 +12,7 @@ date: 2017-12-25 21:49:58
 ---
 # Docker搭建可一键部署的多域名LNMP环境
 
-#### 特点
+## 特点
 1. 完全开源
 1. 支持多版本PHP切换（PHP5.4、PHP5.6、PHP7.2...)
 1. 支持绑定任意多个域名
@@ -27,11 +27,11 @@ date: 2017-12-25 21:49:58
 
 ---
 
-#### 1.安装步骤
+## 安装步骤
 
 
-##### 1.1 docker(https://docs.docker.com/engine/installation/)
-1.  Centos7安装方法
+## 1 docker(https://docs.docker.com/engine/installation/)
+### 1.  Centos7安装方法
     ```shell
     sudo yum install -y yum-utils device-mapper-persistent-data lvm2
     sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
@@ -39,7 +39,7 @@ date: 2017-12-25 21:49:58
     sudo yum -y install docker-ce
     sudo service docker start
     ```
-2.  Ubuntu安装方法
+### 2.  Ubuntu安装方法
     ```shell
     sudo apt-get update
     sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
@@ -48,12 +48,12 @@ date: 2017-12-25 21:49:58
     sudo apt-get -y update
     sudo apt-get -y install docker-ce
     ```
-##### 1.2 [docker-compose安装](https://docs.docker.com/compose/install/)
+## 2 [docker-compose安装](https://docs.docker.com/compose/install/)
     ```shell
     sudo curl -L https://get.daocloud.io/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     ```
-##### 1.3查看版本，加入到docker组
+## 3 查看版本，加入到docker组
 ```shell
 $ docker -v
 $ docker-compose -v
@@ -61,9 +61,9 @@ $ sudo gpasswd -a ${USER} docker
 ```
 就不用每次启动Docker都得加sudo了，注意，执行gpasswd命令之后要重新登陆才有效。
 
-##### 1.4 使用国内镜像仓库
-1. 首先注册一个阿里云账号，然后访问阿里云的[Docker镜像仓库](https://cr.console.aliyun.com/)，能找到加速器地址。
-2. 对于Docker 1.10+，打开配置文件 /etc/docker/daemon.json（没有时新建该文件）：
+## 4 使用国内镜像仓库
+## 4.1 首先注册一个阿里云账号，然后访问阿里云的[Docker镜像仓库](https://cr.console.aliyun.com/)，能找到加速器地址。
+## 4.2 对于Docker 1.10+，打开配置文件 /etc/docker/daemon.json（没有时新建该文件）：
 ```shell
 sudo mkdir -p /etc/docker
 sudo tee /etc/docker/daemon.json <<-'EOF'
@@ -79,13 +79,13 @@ systemctl enable docker
 ```
 Docker 1.10以下请看：https://yq.aliyun.com/articles/29941。
 
-##### 1.5 安装容器和镜像
+## 5 安装容器和镜像
 ```shell
 docker-compose up -d
 ```
 
-##### 1.6 如果是windows下基于virtualbox挂载目录到linux
-1.6.1  安装增强工具(centos7版本)
+## 6 如果是windows下基于virtualbox挂载目录到linux
+### 6.1  安装增强工具(centos7版本)
 ![增强工具](http://ww1.sinaimg.cn/large/aaba1596gy1g74n03vgqfj20ma08hdg3.jpg)
 ```json
 yum install -y gcc gcc-devel gcc-c++ gcc-c++-devel make kernel kernel-devel bzip2 vim wget  
@@ -98,22 +98,22 @@ cd /mnt &&  ./VBoxLinuxAdditions.run
 
 
 
-1.6.2 配置共享目录  
+### 6.2 配置共享目录  
 ![image](http://ww3.sinaimg.cn/large/0060lm7Tly1fnjv29wde7j309a06sa9y.jpg)
-1.6.3 手动挂载
-1.6.3.1 ubuntu
+### 6.3 手动挂载
+#### 6.3.1 ubuntu
 ```
 sudo mkdir /home/abner/server  && chmod -R 777 /home/abner/server 
 sudo mount -t vboxsf docker /home/abner/server   #手动挂载 （这里挂载的目录最好不要和共享文件夹名称一样）
 ```
-1.6.3.2 centos7
+#### 6.3.2 centos7
 ```
 sudo mkdir /root/server  && chmod -R 777 /root/server 
 sudo mount -t vboxsf docker /root/server
 ```
 
-1.6.4 开机自动挂载
-1.6.4.1 ubuntu
+#### 6.4 开机自动挂载
+##### 6.4.1 ubuntu
 ```shell
 sudo vim /etc/rc.local
 ##exit 0 前增加如下命令
@@ -121,7 +121,7 @@ sleep 1
 sudo mount -t vboxsf docker /home/abner/server
 ```
 
-1.6.4.2 centos7
+##### 6.4.2 centos7
 ==[virbox自动挂载不能勾选]==
 ```shell
 mkdir /root/server && chmod -R 777 /root/server
@@ -132,16 +132,16 @@ sudo vim /etc/fstab
 docker /root/server   vboxsf rw,gid=100,uid=1000,auto 0 0
 ```
 
-5.若走的端口转发按图如下配置
+### 6.5 若走的端口转发按图如下配置
 ![image](http://ww4.sinaimg.cn/large/0060lm7Tly1fnm8mdsa3wj30i8079wej.jpg)
-6. 若走的桥接网卡，正常连接即可
+### 6.6 若走的桥接网卡，正常连接即可
 ---
 
 
 --- 
 # 以下部分属于知识扩展
 
-#### 2.目录说明
+## 2.目录说明
 #### 2.1 大致框架
 ![image](http://ww4.sinaimg.cn/large/0060lm7Tly1fnigj751vsj30ku0au74g.jpg)
 #### 2.2 目录结构
