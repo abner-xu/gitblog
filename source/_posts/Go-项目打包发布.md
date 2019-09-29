@@ -29,7 +29,7 @@ golang     alpine      bbab7aea1231        7 weeks ago         269MB
 FROM        golang:alpine AS builder
 MAINTAINER  Chen Xu <abner510@126.com>
 RUN         apk update && apk add --no-cache git ca-certificates tzdata && update-ca-certificates && adduser -D -g '' appuser
-ENV         GOPROXY https://goproxy.io
+ENV         GOPROXY https://mirrors.aliyun.com/goproxy/
 ENV         GO111MODULE on
 WORKDIR     /go/cache
 ADD         go.mod .
