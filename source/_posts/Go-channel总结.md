@@ -45,15 +45,15 @@ close(ch) | 	panic | 成功 | panic
 
 # 使用for range读channel
 
-## 场景
+- 场景
 
 当需要不断从channel读取数据时。
 
-## 原理
+- 原理
 
 使用for-range读取channel，这样既安全又便利，当channel关闭时，for循环会自动退出，无需主动监测channel是否关闭，可以防止读取已经关闭的channel，造成读到数据为通道所存储的数据类型的零值。
 
-## 用法
+- 用法
 ```go
 for x := range ch{
     fmt.Println(x)
@@ -62,10 +62,11 @@ for x := range ch{
 
 # 使用v,ok := <-ch + select操作判断channel是否关闭
 
-## 场景
+- 场景
 
  `v,ok := <-ch + select`操作判断channel是否关闭
-## 原理
+
+- 原理
 
 ok的结果和含义：
 ```
@@ -120,7 +121,7 @@ func main() {
 
 最后ok为false的时候，只有情况2，此时channel必然已经关闭，我们便可以在select中用ok判断channel是否已经关闭。
 
-## 用法
+- 用法
 ```go
 func main() {
 	ch := make(chan int, 1)
@@ -153,11 +154,11 @@ func main() {
 ```
 
 # 使用select处理多个channel
-## 场景
+- 场景
 需要对多个通道进行同时处理，但只处理最先发生的channel时
-## 原理
+- 原理
 `select`可以同时监控多个通道的情况，只处理未阻塞的case。**当通道为nil时，对应的case永远为阻塞，无论读写。特殊关注：普通情况下，对nil的通道写操作是要panic的。**
-## 用法
+- 用法
 ```go
 // 分配job时，如果收到关闭的通知则退出，不分配job
 func (h *Handler) handle(job *Job) {
@@ -170,16 +171,16 @@ func (h *Handler) handle(job *Job) {
 }
 ```
 # 使用channel的声明控制读写权限
-## 场景
+- 场景
 协程对某个通道只读或只写时
 
-目的：
-- 使代码更易读、更易维护，
-- 防止只读协程对通道进行写数据，但通道已关闭，造成panic。
+	目的：
+	- 使代码更易读、更易维护，
+	- 防止只读协程对通道进行写数据，但通道已关闭，造成panic。
 
-## 用法
-- 如果协程对某个channel只有写操作，则这个channel声明为只写。
-- 如果协程对某个channel只有读操作，则这个channe声明为只读。
+- 用法
+	- 如果协程对某个channel只有写操作，则这个channel声明为只写。
+	- 如果协程对某个channel只有读操作，则这个channe声明为只读。
 
 ```go
 // 只有generator进行对outCh进行写操作，返回声明
@@ -203,11 +204,11 @@ func consumer(inCh <-chan int) {
 }
 ```
 # 使用缓冲channel增强并发
-## 场景
+- 场景
 异步
-## 原理
+- 原理
 有缓冲通道可供多个协程同时处理，在一定程度可提高并发性。
-## 用法
+- 用法
 ```go
 // 无缓冲
 ch1 := make(chan int)
@@ -238,11 +239,11 @@ func do(inCh <-chan int, outCh chan<- int) {
 ```
 
 # 为操作加上超时
-## 场景
+- 场景
 异步
-## 原理
+- 原理
 使用`select`和`time.After`，看操作和定时器哪个先返回，处理先完成的，就达到了超时控制的效果
-## 用法
+- 用法
 ```go
 
 func doWithTimeOut(timeout time.Duration) (int, error) {
@@ -264,11 +265,11 @@ func do() <-chan int {
 ```
 
 # 使用`close(ch)`关闭所有下游协程
-## 场景
+- 场景
 退出时，显示通知所有协程退出
-## 原理
+- 原理
 所有读ch的协程都会收到close(ch)的信号
-## 用法
+- 用法
 ```go
 
 func (h *Handler) Stop() {
@@ -291,11 +292,11 @@ func (h *Handler) loop() error {
 ```
 
 # 使用chan struct{}作为信号channel
-## 场景
+- 场景
 使用channel传递信号，而不是传递数据时
-## 原理
+- 原理
 没数据需要传递时，传递空struct
-## 用法
+- 用法
 ```go
 // 上例中的Handler.stopCh就是一个例子，stopCh并不需要传递任何数据
 // 只是要给所有协程发送退出的信号
@@ -306,11 +307,11 @@ type Handler struct {
 ```
 
 # 使用channel传递结构体的指针而非结构体
-## 场景
+- 场景
 使用channel传递结构体数据时
-## 原理
+- 原理
 channel本质上传递的是数据的拷贝，拷贝的数据越小传输效率越高，传递结构体指针，比传递结构体更高效
-## 用法
+- 用法
 ```go
 reqCh chan *Request
 
@@ -319,11 +320,11 @@ reqCh chan Request
 ```
 
 # 使用channel传递channel
-## 场景
+- 场景
 使用场景有点多，通常是用来获取结果。
-## 原理
+- 原理
 channel可以用来传递变量，channel自身也是变量，可以传递自己。
-## 用法
+- 用法
 ```go
 
 package main
