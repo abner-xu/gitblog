@@ -1,5 +1,5 @@
 ---
-title: GO-深入解析Slice底层实现
+title: Go-深入解析Slice底层实现
 categories:
   - 后端
   - Golang
