@@ -9,7 +9,7 @@ abbrlink: c0bd8c31
 date: 2019-08-28 23:23:53
 ---
 
-> 本文收集来源：https://www.flysnow.org
+
 
 # 日志使用
 o语言为我们提供了标准的log包，来跟踪日志的记录。下面我们看看日志包log的使用
@@ -266,3 +266,5 @@ func (t *multiWriter) Write(p []byte) (n int, err error) {
 }
 ```
 这里我们通过定义了多个Logger来区分不同的日志级别，使用比较麻烦，针对这种情况，可以使用第三方的log框架，也可以自定包装定义，直接通过不同级别的方法来记录不同级别的日志，还可以设置记录日志的级别等。
+
+> 本文收集来源：https://www.flysnow.org

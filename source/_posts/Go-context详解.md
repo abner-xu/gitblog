@@ -11,7 +11,7 @@ abbrlink: 5f8522f1
 date: 2019-11-06 13:31:17
 ---
 
-> 文章来源：https://mojotv.cn/2019/06/26/golang-context
+
 
 # 背景
 
@@ -244,3 +244,5 @@ func main() {
     f(ctx, favContextKey("color"))
 }
 ```
+
+> 文章来源：https://mojotv.cn/2019/06/26/golang-context
