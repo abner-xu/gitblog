@@ -135,7 +135,7 @@ FLUSH PRIVILEGES;
 > 如果容器需要访问物理机ip，先查看容器的ip地址，直接配置host为物理机mysql,ip即可
 
 ## 12.SSR
-### ssr按照
+### ssr安装
 ```shell
 yum -y install wget
 wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh
