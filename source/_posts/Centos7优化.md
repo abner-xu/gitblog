@@ -133,3 +133,27 @@ update user set host = '%' where user ='root';
 FLUSH PRIVILEGES;
 ```
 > 如果容器需要访问物理机ip，先查看容器的ip地址，直接配置host为物理机mysql,ip即可
+
+## SSR部署
+```shell
+yum -y install wget
+wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh
+chmod +x ssr.sh
+./ssr.sh
+```
+## BBR加速
+```shell
+wget -N --no-check-certificate "https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh"
+chmod +x tcp.sh
+./tcp.sh
+
+
+
+接下来按照流程安装，推荐使用 BBRplus 或 BBR 魔改版进行加速：
+安装内核；
+重启 VPS；
+运行 ./tcp.sh 脚本；
+使用对应内核的加速。
+
+```
+
