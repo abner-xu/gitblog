@@ -134,19 +134,19 @@ FLUSH PRIVILEGES;
 ```
 > 如果容器需要访问物理机ip，先查看容器的ip地址，直接配置host为物理机mysql,ip即可
 
-## SSR部署
+## SSR
+### ssr按照
 ```shell
 yum -y install wget
 wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh
 chmod +x ssr.sh
 ./ssr.sh
 ```
-## BBR加速
+### bbr加速
 ```shell
 wget -N --no-check-certificate "https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh"
 chmod +x tcp.sh
 ./tcp.sh
-
 
 
 接下来按照流程安装，推荐使用 BBRplus 或 BBR 魔改版进行加速：
@@ -156,4 +156,9 @@ chmod +x tcp.sh
 使用对应内核的加速。
 
 ```
+### SSR客户端下载
+- Windows客户端：[下载地址](https://github.com/shadowsocksr-backup/shadowsocksr-csharp/releases)
+- Mac客户端：[下载地址](https://github.com/shadowsocksr-backup/ShadowsocksX-NG/releases)
+- 安卓客户端：[下载地址](https://github.com/shadowsocksr-backup/shadowsocksr-android/releases)
+- iPhone客户端：需要切换北美账号商店，ssr或者potatso Lite客户端等
 
