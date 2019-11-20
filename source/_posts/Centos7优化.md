@@ -147,4 +147,5 @@ chmod +x ssr.sh
 - Mac客户端：[下载地址](https://github.com/shadowsocksr-backup/ShadowsocksX-NG/releases)
 - 安卓客户端：[下载地址](https://github.com/shadowsocksr-backup/shadowsocksr-android/releases)
 - iPhone客户端：需要切换北美账号商店，ssr或者potatso Lite客户端等
+- docker搭建：[地址](https://www.51it.wang/ll/1137)
 
