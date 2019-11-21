@@ -1,10 +1,8 @@
 ---
 title: Go-channel总结
 categories:
-  - 分类1
-  - 分类2
-tags:
-  - 标签1
+  - 后端
+  - Golang
 comments: true
 toc: true
 abbrlink: a9a93a3c

@@ -1,11 +1,11 @@
 ---
-title: Go-深入解析Slice底层实现
+title: Go-深入解析slice底层实现
 categories:
   - 后端
   - Golang
 comments: true
 toc: true
-abbrlink: 8541af30
+abbrlink: ac6e81ab
 date: 2019-10-14 14:43:44
 ---
 
