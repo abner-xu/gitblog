@@ -327,12 +327,12 @@ function main(){
 		;;
 
 		"q"|"quit")
-            exit
-        ;;
+      exit
+    ;;
 
-        *)
-            echo "Input error!!"
-        ;;
+    *)
+      echo "Input error!!"
+    ;;
 
 		esac
 	done
