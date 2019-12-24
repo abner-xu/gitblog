@@ -292,10 +292,10 @@ $ chown -R www-data:www-data /var/www/html
 #!/bin/bash
 
 function getVersionNum(){
-        version=`cat /proc/version`
-        cut=${version%%(*}
-        dd=${cut:14}
-        return $dd
+    version=`cat /proc/version`
+    cut=${version%%(*}
+    dd=${cut:14}
+    return $dd
 }
 
 function main(){
