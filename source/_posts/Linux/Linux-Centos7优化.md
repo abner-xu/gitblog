@@ -34,7 +34,7 @@ mount -t vboxsf docker /root/www   #手动挂载
 ### 此时如果提示/sbin/mount.vboxsf: mounting failed with the error: No such device，说明内核模块vboxsf未加载，可通过lsmod | grep vboxsf查看（无结果说明未加载）。
 modprobe vboxsf #加载vboxsf模块
 #自动挂载
-/etc/fstab
+vim /etc/fstab
 docker /root/www   vboxsf rw,gid=100,uid=1000,auto /0 0
 ```
 
