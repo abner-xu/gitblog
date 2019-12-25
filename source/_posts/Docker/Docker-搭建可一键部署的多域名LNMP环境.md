@@ -370,3 +370,11 @@ docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAdd
 shell别名用法
 alias docker-ips='docker inspect --format='"'"'{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'"'"' $(docker ps -aq)'
 ```
+别名配置
+```
+alias docker-ips='docker inspect --format='"'"'{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'"'"' $(docker ps -aq)'
+alias ztth='docker-compose -f /root/docker/ztth.yml up -d'
+alias ztth-rs='docker-compose -f /root/docker/ztth.yml restart'
+alias ztth-rm='docker-compose -f /root/docker/ztth.yml stop && docker-compose -f /root/docker/ztth.yml rm'
+alias ztth-ps='docker-compose -f /root/docker/ztth.yml ps'
+```
