@@ -13,7 +13,7 @@ date: 2019-03-09 13:47:23
 ---
 # 底层的运行原理和机制
 ## 四层体系架构图
-![底层](http://ws1.sinaimg.cn/large/0078bOVFgy1g0wp6w9yegj30ee0epdi4.jpg)
+![底层](http://ww1.sinaimg.cn/large/0078bOVFgy1g0wp6w9yegj30ee0epdi4.jpg)
 
 Zend引擎：Zend整体用纯C实现，是PHP的内核部分，它将php代码翻译(词法、语法解析等一系列编译过程)为可执行opcode的 处理并实现相应的处理方法、实现了基本的数据结构(如hashtable、oo)、内存分配及管理、提供了相应的api方法供外部调用，是一切的核心，所 有的外围功能均围绕Zend实现。
 

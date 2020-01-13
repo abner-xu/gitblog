@@ -37,7 +37,7 @@ Redis 是用 C 语言开发完成的，但在 Redis 字符串中，并没有使�
 
 <div align=center>
 
-<img src="http://ws1.sinaimg.cn/large/0078bOVFgy1g0xzlkq5x1j309w06iaag.jpg"/>
+<img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0xzlkq5x1j309w06iaag.jpg"/>
 
 </div>
 
@@ -167,7 +167,7 @@ typedef struct zskiplist {
 ziplist 是由一系列特殊编码的连续内存块组成的顺序型的数据结构，ziplist 中可以包含多个 entry 节点，每个节点可以存放整数或者字符串。
 
 <div align=center>
-<img src="http://ws1.sinaimg.cn/large/0078bOVFgy1g0y37uuzoqj30u00dcwnf.jpg"/>
+<img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y37uuzoqj30u00dcwnf.jpg"/>
 </div>
 
 -------------------
@@ -193,7 +193,7 @@ typedef struct redisObject{
 ptr 指针字段指向对象底层实现的数据结构，而这些数据结构是由 encoding 字段决定的，每种对象至少有两种数据编码：
 
 <div align=center>
-<img src="http://ws1.sinaimg.cn/large/0078bOVFgy1g0y3ppam19j30u00h37ct.jpg">
+<img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y3ppam19j30u00h37ct.jpg">
 </div>
 可以通过 object encoding key 来查看对象所使用
 

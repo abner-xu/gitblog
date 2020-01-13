@@ -129,7 +129,7 @@ Redis采用的是定期删除+惰性删策略工作机制。
 
 升级Server2 为新的主服务器：
 
-<img src="http://ws1.sinaimg.cn/large/0078bOVFgy1g0y477tgrvj30as082wfb.jpg" />
+<img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y477tgrvj30as082wfb.jpg" />
 </div>
 
 ## 7.1 Sentinel的作用：
