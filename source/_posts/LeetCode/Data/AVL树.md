@@ -386,7 +386,7 @@ func (this *AVLTree) print(tree *AVLTreeNode, key int, direction int) {
 			} else {
 				post = "left"
 			}
-			fmt.Printf("%2d is %2d's %6s child\n", tree.Value, key, post)
+			fmt.Printf("%2d is %2d's %6s child,height=%2d\n", tree.Value, key, post, tree.Height)
 		}
 		this.print(tree.Left, tree.Value, -1)
 		this.print(tree.Right, tree.Value, 1)
