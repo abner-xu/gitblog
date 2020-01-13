@@ -59,5 +59,339 @@ RL是与LR的对称情况！RL恢复平衡的旋转方法如下：
 
 # 完整代码
 ```go
+package tree
+
+import (
+	"fmt"
+)
+
+type AVLTreeNode struct {
+	Value       int
+	Height      int
+	Left, Right *AVLTreeNode
+}
+
+type AVLTree struct {
+	Root *AVLTreeNode
+}
+
+/**
+数据大小比较工具
+*/
+func (this *AVLTree) max(x, y int) int {
+	if x > y {
+		return x
+	} else {
+		return y
+	}
+}
+
+/**
+数据大小比较工具
+*/
+func (this *AVLTree) min(x, y int) int {
+	if x > y {
+		return y
+	} else {
+		return x
+	}
+}
+
+/**
+数据大小比较工具
+*/
+func (this *AVLTree) height(tree *AVLTreeNode) int {
+	if tree != nil {
+		return tree.Height
+	}
+	return 0
+}
+
+/**
+中序遍历
+*/
+func (this *AVLTree) InOrder(current *AVLTreeNode) {
+	if current != nil {
+		this.InOrder(current.Left)
+		fmt.Printf("%d,", current.Value)
+		this.InOrder(current.Right)
+	}
+}
+
+/**
+前序遍历
+*/
+func (this *AVLTree) PreOrder(current *AVLTreeNode) {
+	if current != nil {
+		fmt.Printf("%d,", current.Value)
+		this.PreOrder(current.Left)
+		this.PreOrder(current.Right)
+	}
+}
+
+/**
+后序遍历
+*/
+func (this *AVLTree) PostOrder(current *AVLTreeNode) {
+	if current != nil {
+		this.PostOrder(current.Left)
+		this.PostOrder(current.Right)
+		fmt.Printf("%d,", current.Value)
+	}
+}
+
+/**
+递归搜索
+*/
+func (this *AVLTree) Search(current *AVLTreeNode, Value int) *AVLTreeNode {
+	if current == nil {
+		return current
+	}
+	if Value < current.Value {
+		return this.Search(current.Left, Value)
+	} else if Value > current.Value {
+		return this.Search(current.Right, Value)
+	} else {
+		return current
+	}
+}
+
+/**
+非递归查找
+*/
+func (this *AVLTree) Find(data int) *AVLTreeNode {
+	if this.Root == nil {
+		return nil
+	}
+	current := this.Root
+	for current != nil {
+		if data > current.Value {
+			current = current.Right
+		} else if data < current.Value {
+			current = current.Left
+		} else {
+			return current
+		}
+	}
+	return current
+}
+
+/**
+查找最小节点
+*/
+func (this *AVLTree) FindMin(current *AVLTreeNode) *AVLTreeNode {
+	if current == nil {
+		return nil
+	}
+	for current.Left != nil {
+		current = current.Left
+	}
+	return current
+}
+
+/**
+查找最小节点
+*/
+func (this *AVLTree) FindMax(current *AVLTreeNode) *AVLTreeNode {
+	if current == nil {
+		return nil
+	}
+	for current.Right != nil {
+		current = current.Right
+	}
+	return current
+}
+
+/**
+LL：左左对应的情况(左单旋转)。
+返回值：旋转后的根节点
+*/
+func (this *AVLTree) LeftLeftRotation(k2 *AVLTreeNode) *AVLTreeNode {
+	k1 := k2.Left
+	k2.Left = k1.Right
+	k1.Right = k2
+	k2.Height = this.max(this.height(k2.Left), this.height(k2.Right)) + 1
+	k1.Height = this.max(this.height(k1.Left), k2.Height) + 1
+	return k1
+}
+
+/**
+LL：左左对应的情况(右单旋转)。
+返回值：旋转后的根节点
+*/
+func (this *AVLTree) RightRightRotation(k1 *AVLTreeNode) *AVLTreeNode {
+	k2 := k1.Right
+	k1.Right = k2.Left
+	k2.Left = k1
+	k1.Height = this.max(this.height(k1.Left), this.height(k1.Right)) + 1
+	k2.Height = this.max(this.height(k2.Right), k1.Height) + 1
+	return k2
+}
+
+/**
+LR的旋转
+第一次旋转是围绕"k1"进行的"RR旋转"，第二次是围绕"k3"进行的"LL旋转"。
+*/
+func (this *AVLTree) LeftRightRotation(k3 *AVLTreeNode) *AVLTreeNode {
+	k3.Left = this.RightRightRotation(k3.Left)
+	return this.LeftLeftRotation(k3)
+}
+
+/**
+RF的旋转
+第一次旋转是围绕"k3"进行的"LL旋转"，第二次是围绕"k1"进行的"RR旋转"。
+*/
+func (this *AVLTree) RightLeftRotation(k1 *AVLTreeNode) *AVLTreeNode {
+	k1.Right = this.LeftLeftRotation(k1.Right)
+	return this.RightRightRotation(k1)
+}
+
+/**
+插入数据
+*/
+func (this *AVLTree) insert(tree *AVLTreeNode, data int) *AVLTreeNode {
+
+	if tree == nil {
+		tree = &AVLTreeNode{Value: data}
+		if tree == nil {
+			fmt.Errorf("ERROR: create avltree node failed!\n")
+			return nil
+		}
+	} else if data < tree.Value { // 应该将key插入到"tree的左子树"的情况
+		tree.Left = this.insert(tree.Left, data)
+		// 插入节点后，若AVL树失去平衡，则进行相应的调节。
+		if this.height(tree.Left)-this.height(tree.Right) == 2 {
+			if data < tree.Left.Value {
+				tree = this.LeftLeftRotation(tree)
+			} else {
+				tree = this.LeftRightRotation(tree)
+			}
+		}
+	} else if data > tree.Value { // 应该将key插入到"tree的右子树"的情况
+		tree.Right = this.insert(tree.Right, data)
+		if this.height(tree.Right)-this.height(tree.Left) == 2 {
+			if data > tree.Right.Value {
+				tree = this.RightRightRotation(tree)
+			} else {
+				tree = this.RightLeftRotation(tree)
+			}
+		}
+	} else {
+		fmt.Errorf("添加失败：不允许添加相同的节点！\n")
+	}
+
+	tree.Height = this.max(this.height(tree.Left), this.height(tree.Right)) + 1
+	return tree
+}
+
+func (this *AVLTree) Add(data int) {
+	this.Root = this.insert(this.Root, data)
+}
+
+func (this *AVLTree) Del(data int) bool {
+	if z := this.Search(this.Root, data); z == nil {
+		return false
+	} else {
+		this.remove(this.Root, z)
+		return true
+	}
+
+}
+
+/**
+删除树
+*/
+func (this *AVLTree) remove(tree *AVLTreeNode, delNode *AVLTreeNode) *AVLTreeNode {
+
+	if tree == nil || delNode == nil {
+		return nil
+	}
+	if delNode.Value < tree.Value { // 待删除的节点在"tree的左子树"中
+		tree.Left = this.remove(tree.Left, delNode)
+		// 删除节点后，若AVL树失去平衡，则进行相应的调节。
+		if this.height(tree.Right)-this.height(tree.Left) == 2 {
+			rTree := tree.Right
+			if this.height(rTree.Left) > this.height(rTree.Right) {
+				tree = this.RightLeftRotation(tree)
+			} else {
+				tree = this.RightRightRotation(tree)
+			}
+		}
+	} else if delNode.Value > tree.Value { // 待删除的节点在"tree的右子树"中
+		tree.Right = this.remove(tree.Right, delNode)
+		// 删除节点后，若AVL树失去平衡，则进行相应的调节。
+		if this.height(tree.Left)-this.height(tree.Right) == 2 {
+			lTree := tree.Right
+			if this.height(lTree.Right) > this.height(lTree.Left) {
+				tree = this.LeftRightRotation(tree)
+			} else {
+				tree = this.LeftLeftRotation(tree)
+			}
+		}
+	} else { //相等的节点
+		if tree.Left != nil && tree.Right != nil {
+			if this.height(tree.Left) > this.height(tree.Right) {
+				// 如果tree的左子树比右子树高；
+				// 则(01)找出tree的左子树中的最大节点
+				//   (02)将该最大节点的值赋值给tree。
+				//   (03)删除该最大节点。
+				// 这类似于用"tree的左子树中最大节点"做"tree"的替身；
+				// 采用这种方式的好处是：删除"tree的左子树中最大节点"之后，AVL树仍然是平衡的。
+				maxNode := this.FindMax(tree.Left)
+				tree.Value = maxNode.Value
+				tree.Left = this.remove(tree.Left, maxNode)
+			} else {
+				// 如果tree的左子树不比右子树高(即它们相等，或右子树比左子树高1)
+				// 则(01)找出tree的右子树中的最小节点
+				//   (02)将该最小节点的值赋值给tree。
+				//   (03)删除该最小节点。
+				// 这类似于用"tree的右子树中最小节点"做"tree"的替身；
+				// 采用这种方式的好处是：删除"tree的右子树中最小节点"之后，AVL树仍然是平衡的。
+				minNode := this.FindMin(tree.Right)
+				tree.Value = minNode.Value
+				tree.Right = this.remove(tree.Right, minNode)
+			}
+		} else {
+			if tree.Left != nil {
+				tree = tree.Left
+			} else {
+				tree = tree.Right
+			}
+		}
+	}
+	return tree
+}
+
+func (this *AVLTree) Display() {
+	if this.Root != nil {
+		this.print(this.Root, this.Root.Value, 0)
+	}
+}
+
+/**
+递归打印
+key -- 节点的值
+direction -- 0,根节点
+			-1,父节点的坐孩子
+			1,父节点的右孩子
+*/
+func (this *AVLTree) print(tree *AVLTreeNode, key int, direction int) {
+	if tree != nil {
+		if direction == 0 {
+			fmt.Printf("%2d is root\n", tree.Value)
+		} else {
+			var post string
+			if direction == 1 {
+				post = "right"
+			} else {
+				post = "left"
+			}
+			fmt.Printf("%2d is %2d's %6s child\n", tree.Value, key, post)
+		}
+		this.print(tree.Left, tree.Value, -1)
+		this.print(tree.Right, tree.Value, 1)
+	}
+}
+
 
 ```
