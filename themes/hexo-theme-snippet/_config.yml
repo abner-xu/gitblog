@@ -141,10 +141,10 @@ toc: true
 highlightTheme:
 
 ## bootstrap配置
-bootstrap:
+bootstrap: https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css
 
 ## ICON配置
-fontAwesome:
+fontAwesome: https://cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css
 
 ## 文章过期提醒功能
 warning:
