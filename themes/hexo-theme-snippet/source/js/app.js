@@ -4,7 +4,7 @@
 //引入jquery文件
 var script=document.createElement("script");
 script.type="text/javascript";
-script.src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.min.js";
+script.src="https://cdn.jsdelivr.net/npm/jquery-slim@3.0.0/dist/jquery.slim.min.js";
 document.getElementsByTagName('head')[0].appendChild(script);
 
 window.onload = function() {
