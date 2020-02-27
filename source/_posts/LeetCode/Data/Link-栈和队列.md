@@ -91,6 +91,97 @@ for ss.Size() > 0 {
 }
 ```
 
+# 共享栈
+```
+package stack
+
+import "fmt"
+
+//共享栈
+const MaxDoubleSize = 20 //存储空间初始分配量
+type DoubleStack struct {
+	data [MaxDoubleSize]int //数组最大值
+	top1 int                //栈1栈顶指针
+	top2 int                //栈2栈顶指针
+}
+
+// 初始化一个空栈
+func (d *DoubleStack) InitStack() {
+	d.top1 = -1
+	d.top2 = MaxDoubleSize
+}
+
+// 把d置为空栈
+func (d *DoubleStack) ClearStack() {
+	d.top1 = -1
+	d.top2 = MaxDoubleSize
+}
+
+// 若栈l为空栈，则返回true 否则返回false
+func (d *DoubleStack) IsEmpty() bool {
+	if d.top1 == -1 && d.top2 == MaxDoubleSize {
+		return true
+	} else {
+		return false
+	}
+}
+
+// 返回s的元素个数，即栈的长度
+func (d *DoubleStack) Length() int {
+	return (d.top1 + 1) + (MaxDoubleSize - 1 - d.top2)
+}
+
+/**
+value 插入元素e为新的栈顶元素
+stackNum 选择插入的栈
+*/
+func (d *DoubleStack) Push(value int, stackNum int) error {
+	if d.top1+1 == d.top2 {
+		panic("stack is full")
+	}
+
+	// 栈1有元素进栈
+	if stackNum == 1 {
+		d.top1++
+		d.data[d.top1] = value
+	} else if stackNum == 2 { // 栈2有元素进栈
+		d.top2--
+		d.data[d.top2] = value
+	}
+
+	return nil
+}
+
+// 若栈不空，则删除d的栈顶元素  用e返回其值,否则返回error
+func (d *DoubleStack) Pop(stackNum int) (value int) {
+	if stackNum == 1 {
+		if d.top1 == -1 {
+			fmt.Errorf("stack is empty") //栈1为空，已溢出
+		}
+		value = d.data[d.top1]
+		d.top1--
+	} else if stackNum == 2 {
+		if d.top2 == MaxDoubleSize {
+			fmt.Errorf("stack is empty") //栈2为空，已溢出
+		}
+		value = d.data[d.top2]
+		d.top2++
+	}
+	return value
+}
+
+//遍历栈
+func (d *DoubleStack) Traverse() {
+	for i := 0; i <= d.top1; i++ {
+		fmt.Println(d.data[i])
+	}
+	for i := d.top2; i < MaxDoubleSize; i++ {
+		fmt.Println(d.data[i])
+	}
+}
+
+```
+
 # 队列实现
 队列其实和栈一样，只是队列是先进先出，那么只需要每次弹出第一个元素即可
 ```go
