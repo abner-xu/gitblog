@@ -10,6 +10,39 @@ toc: true
 abbrlink: 664b7e30
 date: 2018-08-24 15:23:09
 ---
+# MYSQL count总结
+1.  COUNT有几种用法？
+count(*),count(常数)，count(列名)
+2.  COUNT(字段名)和COUNT(*)的查询结果有什么不同？为什么《阿里巴巴Java开发手册》建议使用COUNT(*)
+count(*)是SQL92定义的标准语法，count(*)会统计值为null的行，count(列明)不会统计改列为null的行
+3.  COUNT(1)和COUNT(*)、count(列名)之间有什么不同？
+COUNT(常量) 和 COUNT(*)表示的是直接查询符合条件的数据库表的行数。而COUNT(列名)表示的是查询符合条件的列的值不为NULL的行数。
+除了查询得到结果集有区别之外，COUNT(*)相比COUNT(常量) 和 COUNT(列名)来讲，COUNT(*)是SQL92定义的标准统计行数的语法，因为他是标准语法，所以MySQL数据库对他进行过很多优化。
+4.  COUNT(1)和COUNT(*)之间的效率哪个更高？
+> InnoDB handles SELECT COUNT(*) and SELECT COUNT(1) operations in the same way. There is no performance difference.
+
+**画重点：same way , no performance difference。所以，对于COUNT(1)和COUNT(*)，MySQL的优化是完全一样的，根本不存在谁比谁快!**
+建议使用COUNT(*)！因为这个是SQL92定义的标准统计行数的语法，而且本文只是基于MySQL做了分析，关于Oracle中的这个问题，也是众说纷纭的呢。
+
+5.  MySQL的MyISAM引擎对COUNT(*)做了哪些优化？
+因为MyISAM的锁是表级锁，所以同一张表上面的操作需要串行进行，所以，MyISAM做了一个简单的优化，那就是它可以把表的总行数单独记录下来，如果从一张表中使用COUNT(*)进行查询的时候，可以直接返回这个记录下来的数值就可以了，当然，前提是不能有where条件。
+6.  MySQL的InnoDB引擎对COUNT(*)做了哪些优化？
+在InnoDB中，使用COUNT(*)查询行数的时候，不可避免的要进行扫表了，那么，就可以在扫表过程中下功夫来优化效率了。
+
+从MySQL 8.0.13开始，针对InnoDB的SELECT COUNT(*) FROM tbl_name语句，确实在扫表的过程中做了一些优化。前提是查询语句中不包含WHERE或GROUP BY等条件。
+
+我们知道，COUNT(*)的目的只是为了统计总行数，所以，他根本不关心自己查到的具体值，所以，他如果能够在扫表的过程中，选择一个成本较低的索引进行的话，那就可以大大节省时间。
+
+我们知道，InnoDB中索引分为聚簇索引（主键索引）和非聚簇索引（非主键索引），聚簇索引的叶子节点中保存的是整行记录，而非聚簇索引的叶子节点中保存的是该行记录的主键的值。
+
+所以，相比之下，非聚簇索引要比聚簇索引小很多，所以MySQL会优先选择最小的非聚簇索引来扫表。所以，当我们建表的时候，除了主键索引以外，创建一个非主键索引还是有必要的。
+
+至此，我们介绍完了MySQL数据库对于COUNT(*)的优化，这些优化的前提都是查询语句中不包含WHERE以及GROUP BY条件。
+7.  上面提到的MySQL对COUNT(*)做的优化，有一个关键的前提是什么？
+无where条件或者group by等条件
+
+
+
 # MySQL复制原理及流程
 
 ![主从复制](http://ww1.sinaimg.cn/large/0078bOVFgy1g0nbwnv9noj30g607i3zy.jpg)
