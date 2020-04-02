@@ -1,7 +1,7 @@
 ---
 title: RabbitMQ-Exchange
 categories:
-  - 工具
+  - 后端
   - RabbitMQ
 tags:
   - RabbitMQ

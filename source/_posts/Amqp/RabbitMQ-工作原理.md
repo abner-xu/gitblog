@@ -1,7 +1,7 @@
 ---
 title: RabbitMQ-工作原理
 categories:
-  - 工具
+  - 后端
   - RabbitMQ
 tags:
   - RabbitMQ

@@ -1,7 +1,7 @@
 ---
 title: RabbitMQ-基本概念
 categories:
-  - 工具
+  - 后端
   - RabbitMQ
 tags:
   - RabbitMQ
