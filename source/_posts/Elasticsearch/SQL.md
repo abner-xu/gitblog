@@ -109,9 +109,90 @@ GET /Product/cpu/_search
 ```json
 {
   "aggs": {
-    "group_tags": {
+    "demo_tags": {
       "terms": {
         "field": "tag"
+      }
+    }
+  }
+}
+```
+设置字段为true
+PUT /product/cpu/_mapping
+{
+  "properties": {
+    "tag":{
+      "type": "text",
+      "fielddata": true
+    }
+  }
+}
+## aggs 聚合分组求平均
+GET /Product/cpu/_search
+```json
+{
+  "aggs": {
+    "demo_tags": {
+      "terms": {
+        "field": "tag"
+      },
+      "aggs": {
+        "avg_demo_price": {
+          "avg": {
+            "field": "price"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## aggs 聚合分组求平均后排序
+GET /Product/cpu/_search
+```json
+{
+  "size": 0, 
+  "aggs": {
+    "demo_tags": {
+      "terms": {
+        "field": "tag",
+        "order": {
+          "avg_price": "desc"
+        }
+      },
+      "aggs": {
+        "avg_demo_price": {
+          "avg": {
+            "field": "price"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## aggs 范围区间聚合排序
+GET /Product/cpu/_search
+```json
+{
+  "size": 0, 
+  "aggs": {
+    "group_tags": {
+      "range": {
+        "field": "",
+        "ranges": [
+          {
+            "from": 50,
+            "to": 100
+          }
+        ]
+      },
+      "aggs": {
+        "NAME": {
+          "AGG_TYPE": {}
+        }
       }
     }
   }
