@@ -24,7 +24,7 @@ date: 2019-02-27 20:49:03
 1. String,Hash,List,Set,SortedSet
 1. Pub/Sub
 2. HyperLogLog(2.8.9版本新增):用来做基数统计的算法，HyperLogLog 的优点是，在输入元素的数量或者体积非常非常大时，计算基数所需的空间总是固定 的、并且是很小的。使用场景最常见的就是计算网站UV等，对数据精度要求不高
-3. GeoHash（3.2版本新增）：GEO(地理位置)的支持，主要是对经纬度一个位置计算等特性
+3. Geo（3.2版本新增）：GEO(地理位置)的支持，主要是对经纬度一个位置计算等特性
 4. BitMap
 5. BloomFilter 
 ![data-struct](http://ww1.sinaimg.cn/large/0078bOVFgy1g0n97yi9czj30a504hjri.jpg)
