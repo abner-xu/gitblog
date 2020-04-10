@@ -25,7 +25,7 @@ Sapi：Sapi全称是Server Application Programming Interface，也就是服务�
 
 
 # PHP执行的几个阶段
-![阶段](http://ws3.sinaimg.cn/large/0078bOVFgy1g0whssv186j30u01ev0w1.jpg)
+![阶段](http://ww1.sinaimg.cn/large/0078bOVFgy1g0whssv186j30u01ev0w1.jpg)
 
 > PHP 是一门托管型语言，在 PHP 编程中，程序员不需要手工处理内存资源的分配与释放（使用 C 编写 PHP 或 Zend 扩展除外），这就意味着 PHP 本身实现了垃圾回收机制（Garbage Collection）。在[PHP官方网站](http://php.net/manual/zh/features.gc.php)可以看到对垃圾回收机制的介绍。
  

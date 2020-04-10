@@ -20,15 +20,15 @@ date: 2019-02-27 20:49:03
 
 --------------------
 
-# Redis数据类型({% post_link 单线程的redis为什么快 %})
+# Redis数据类型({% post_link 单线程的redis为什么快 [底层结构] %})
 1. String,Hash,List,Set,SortedSet
 1. Pub/Sub
 2. HyperLogLog(2.8.9版本新增):用来做基数统计的算法，HyperLogLog 的优点是，在输入元素的数量或者体积非常非常大时，计算基数所需的空间总是固定 的、并且是很小的。使用场景最常见的就是计算网站UV等，对数据精度要求不高
 3. GeoHash（3.2版本新增）：GEO(地理位置)的支持，主要是对经纬度一个位置计算等特性
 4. BitMap
 5. BloomFilter 
-![data-struct](http://ws2.sinaimg.cn/large/0078bOVFgy1g0n97yi9czj30a504hjri.jpg)
-![data-struct](http://ws4.sinaimg.cn/large/0078bOVFgy1g0n991tb0hj30rp0cqmyi.jpg)
+![data-struct](http://ww1.sinaimg.cn/large/0078bOVFgy1g0n97yi9czj30a504hjri.jpg)
+![data-struct](http://ww1.sinaimg.cn/large/0078bOVFgy1g0n991tb0hj30rp0cqmyi.jpg)
 
 --------------------
 
@@ -75,13 +75,13 @@ Redis采用的是定期删除+惰性删策略工作机制。
       3.  当子进程完成写RDB文件，用新文件替换老文件。
       4.  bgsave的原理是什么？你给出两个词汇就可以了，fork和cow。fork是指redis通过创建子进程来进行bgsave操作，cow指的是copy on write，子进程创建后，父子进程共享数据段，父进程继续提供读写服务，写脏的页面数据会逐渐和子进程分离开来。
 
-    ![fork](http://ws4.sinaimg.cn/large/0078bOVFgy1g0mlshrku0j30gn053gm7.jpg)
+    ![fork](http://ww1.sinaimg.cn/large/0078bOVFgy1g0mlshrku0j30gn053gm7.jpg)
 
 2.  AOF（特点：AOF增量持久化）
 
     AOF持久化以日志的形式记录服务器所处理的每一个写、删除操作，查询操作不会记录，以文本的方式记录，可以打开文件看到详细的操作记录。 
 
-    ![aof](http://ws3.sinaimg.cn/large/0078bOVFgy1g0mltf2mfsj30hj037aan.jpg)
+    ![aof](http://ww1.sinaimg.cn/large/0078bOVFgy1g0mltf2mfsj30hj037aan.jpg)
 
 --------------------
 
@@ -91,7 +91,7 @@ Redis采用的是定期删除+惰性删策略工作机制。
     2.	如果这是slave node重现链接master，master会将缺少的数据发送给slave，如果是第一次链接master，则会触发一次full resynchronization,开始 full resynchronization的时候，master启动一个后台线程，先将现有数据生成一个零时的rdb文件，生成文件后，master会将这个rdb文件发送给slave，slave会先把这个rdb文件存放到本地磁盘，然后在加载到内存，然后master会将生成rdb这段时间内接收到的在内存中的数据发送给slave，slave也会接收这份数据。
     3.	slave如果跟master网络故障，断开了，当重新连接上以后，master发现有多个slave都来重新连接，master会生成一个rdb文件，将这个文件同时发送个多个slave node
     
-![full_sync](http://ws3.sinaimg.cn/large/0078bOVFgy1g0mm2zwx3qj30mn0dzjrv.jpg)
+![full_sync](http://ww1.sinaimg.cn/large/0078bOVFgy1g0mm2zwx3qj30mn0dzjrv.jpg)
     
 2.  主从复制的断点续传
     1.	redis从2.8开始就支持断点续传功能，即当slave与master断开后，重新连接时，会继续从上一次断开的点继续传送数据，而不是full resynchronization。
@@ -107,7 +107,7 @@ Redis采用的是定期删除+惰性删策略工作机制。
 --------------------
 
 # Redis-Cluster集群
-<div align=center><img src="http://ws4.sinaimg.cn/large/0078bOVFgy1g0natm1efxj30dr0fut9k.jpg" width=256 height=256 /></div>
+<div align=center><img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0natm1efxj30dr0fut9k.jpg" width=256 height=256 /></div>
 
 1.  所有的redis节点彼此互联(PING-PONG机制),内部使用二进制协议优化传输速度和带宽。
 2.  节点的fail是通过集群中超过半数的节点检测失效时才生效。
@@ -119,11 +119,11 @@ Redis采用的是定期删除+惰性删策略工作机制。
 
 #  Redis哨兵
 <div align=center>
-<img src="http://ws3.sinaimg.cn/large/0078bOVFgy1g0y43vh0ilj30ay07g3z3.jpg" />
+<img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y43vh0ilj30ay07g3z3.jpg" />
 
 在Server1 掉线后：
 
-<img src="http://ws3.sinaimg.cn/large/0078bOVFgy1g0y43vh0ilj30ay07g3z3.jpg" />
+<img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y43vh0ilj30ay07g3z3.jpg" />
 
 升级Server2 为新的主服务器：
 

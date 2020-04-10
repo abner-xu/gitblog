@@ -146,7 +146,7 @@ typedef struct zskiplist {
  } zskiplist;
 ```
 <div align="center">
-<img src="http://ws2.sinaimg.cn/large/0078bOVFgy1g0y2zae71yj30e8064405.jpg"/>
+<img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y2zae71yj30e8064405.jpg"/>
 </div>
 
 前进指针：用于从表头向表尾方向遍历。
