@@ -20,7 +20,8 @@ date: 2019-02-27 20:49:03
 
 --------------------
 
-# Redis数据类型({% post_link 单线程的redis为什么快 [底层结构] %})
+# Redis数据类型({% post_link Redis/单线程的redis为什么快 [底层数据]%})
+
 1. String,Hash,List,Set,SortedSet
 1. Pub/Sub
 2. HyperLogLog(2.8.9版本新增):用来做基数统计的算法，HyperLogLog 的优点是，在输入元素的数量或者体积非常非常大时，计算基数所需的空间总是固定 的、并且是很小的。使用场景最常见的就是计算网站UV等，对数据精度要求不高
