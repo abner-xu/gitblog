@@ -10,7 +10,7 @@ toc: true
 abbrlink: 9e2bc58b
 date: 2019-03-10 15:26:21
 ---
-# 1. 基本概念
+# 基本概念
 Redis性能如此高的原因，我总结了如下几点：
 
 1.  纯内存操作
@@ -31,54 +31,46 @@ Redis性能如此高的原因，我总结了如下几点：
 
 ![2.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gdop1n2k6zj30hs0djju6.jpg)
 
+---
 
 # 内部数据结构
-1.  基础数据结构图解
-
+redis的底层数据结构有以下7种，包括`简单动态字符串(SDS)，链表、字典、跳跃表、整数集合、压缩列表、对象`。
 ![1.jpeg](http://ww1.sinaimg.cn/large/007lnJOlgy1gdooy0gmemj30hs08ct8x.jpg)
-![3.jpeg](http://ww1.sinaimg.cn/large/007lnJOlgy1gdop8bya7xj30u00h3774.jpg)
 
--------------------
 
-# 2. 字符串(重点掌握)
+---
+
+# 简单动态字符串(SDS)
 
 Redis 是用 C 语言开发完成的，但在 Redis 字符串中，并没有使用 C 语言中的字符串，而是用一种称为 SDS（Simple Dynamic String）的结构体来保存字符串。
+在redis数据库里，包含字符串值的键值对在底层都是由SDS实现的。除了用来保存数据库中的字符串值之外，sds还被用来作缓冲区（buffer）：AOF（一种持久化策略）模块中的AOF缓冲区，以及客户端状态中的输入缓冲区，都是由SDS实现的。
 
-<div align=center>
-
-<img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0xzlkq5x1j309w06iaag.jpg"/>
-
-</div>
+<div align=center><img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0xzlkq5x1j309w06iaag.jpg"/></div>
 
 ```c++
-struct sdshdr {
-    int len;
-    int free;
-    char buf[];
-}
+struct __attribute__ ((__packed__)) sdshdr64 {
+    uint64_t len; /*  记录buff数组中已使用字节的数量 */   
+    uint64_t free; /* 记录未使用字节数量*/
+    char buf[]; /*存储实际内容*/
+};
 ```
-SDS 的结构如上图：
-
-    len：用于记录 buf 中已使用空间的长度。
-    free：buf 中空闲空间的长度。
-    buf[]：存储实际内容。
 
 例如：执行命令 set key value，key 和 value 都是一个 SDS 类型的结构存储在内存中。
-## 2.1 SDS 与 C 字符串的区别
-### 2.1.1 常数时间内获得字符串长度
-C 字符串本身不记录长度信息，每次获取长度信息都需要遍历整个字符串，复杂度为 O(n)；C 字符串遍历时遇到'\0‘ 时结束。
+## SDS 与 C 字符串的区别
+-   常数时间内获得字符串长度:
+    C 字符串本身不记录长度信息，每次获取长度信息都需要遍历整个字符串，复杂度为 O(n)；C 字符串遍历时遇到'\0‘ 时结束。
+    SDS 中 len 字段保存着字符串的长度，所以总能在常数时间内获取字符串长度，复杂度是 O(1)。
 
-SDS 中 len 字段保存着字符串的长度，所以总能在常数时间内获取字符串长度，复杂度是 O(1)。
+-   避免缓冲区溢出
+    假设在内存中有两个紧挨着的两个字符串，s1="xxxxx"和 s2="yyyyy"  
+    由于在内存上紧紧相连，当我们对 s1 进行扩充的时候，将 s1=“xxxxxzzzzz”后，由于没有进行相应的内存重新分配，导致 s1 把 s2 覆盖掉，导致 s2 被莫名其妙的修改。  
+    但 SDS 的 API 对 zfc 修改时首先会检查空间是否足够，若不充足则会分配新空间，避免了缓冲区溢出问题。
 
-### 2.1.2 避免缓冲区溢出
-假设在内存中有两个紧挨着的两个字符串，s1="xxxxx"和 s2="yyyyy"  
-由于在内存上紧紧相连，当我们对 s1 进行扩充的时候，将 s1=“xxxxxzzzzz”后，由于没有进行相应的内存重新分配，导致 s1 把 s2 覆盖掉，导致 s2 被莫名其妙的修改。  
-但 SDS 的 API 对 zfc 修改时首先会检查空间是否足够，若不充足则会分配新空间，避免了缓冲区溢出问题。
+##  减少字符串修改时带来的内存重新分配的次数
 
-### 2.1.3 减少字符串修改时带来的内存重新分配的次数
 由于C语言修改字符需要重新分配空间  
 而SDS实现了预分配和惰性释放  
-预分配规则：SDS空间进行扩充时，会分配足够的内存空间还会分配额外未使用的空间。<font color=red>如果对 SDS 修改后，len 的长度小于 1M，那么程序将分配和 len 相同长度的未使用空间。举个例子，如果 len=10，重新分配后，buf 的实际长度会变为 10(已使用空间)+10(额外空间)+1(空字符)=21。如果对 SDS 修改后 len 长度大于 1M，那么程序将分配 1M 的未使用空间。</font>
+预分配规则：SDS空间进行扩充时，会分配足够的内存空间还会分配额外未使用的空间。如果对 SDS 修改后，len 的长度小于 1M，那么程序将分配和 len 相同长度的未使用空间。举个例子，如果 len=10，重新分配后，buf 的实际长度会变为 10(已使用空间)+10(额外空间)+1(空字符)=21。如果对 SDS 修改后 len 长度大于 1M，那么程序将分配 1M 的未使用空间。
 
 惰性空间释放：当对 SDS 进行缩短操作时，程序并不会回收多余的内存空间，而是使用 free 字段将这些字节数量记录下来不释放，后面如果需要 append 操作，则直接使用 free 中未使用的空间，减少了内存的分配。
 
@@ -107,7 +99,7 @@ typedef struct dictht{
 }
 ```
 重要的两个字段是 dictht 和 trehashidx
-## 3.1 Rehash
+## Rehash
 > Rehash解释：随着操作的不断执行， 哈希表保存的键值对会逐渐地增多或者减少， 为了让哈希表的负载因子（load factor）维持在一个合理的范围之内， 当哈希表保存的键值对数量太多或者太少时， 程序需要对哈希表的大小进行相应的扩展或者收缩。扩展和收缩哈希表的工作可以通过执行 rehash （重新散列）操作来完成
 
 由上段代码，我们可知 dict 中存储了一个 dictht 的数组，长度为 2，表明这个数据结构中实际存储着两个哈希表 ht[0] 和 ht[1]，为什么要存储两张 hash 表呢？   
@@ -116,7 +108,7 @@ typedef struct dictht{
 - 将 ht[0] 中的键值 Rehash 到 ht[1] 中。
 - 当 ht[0] 全部迁移到 ht[1] 中后，释放 ht[0]，将 ht[1] 置为 ht[0]，并为 ht[1] 创建一张新表，为下次 Rehash 做准备。
 
-## 3.2 渐进式 Rehash
+## 渐进式 Rehash
 上面提到的如果ht[0]全部移动到ht[1]中，如果数据量小很快，如果数据量很大则会有影响使用
 所以redis采用了分多次、渐进式的迁移策略
 - 为 ht[1] 分配空间，让字典同时拥有 ht[0] 和 ht[1] 两个哈希表。
@@ -168,20 +160,18 @@ typedef struct zskiplist {
 
 -------------------
 
-# 5. 压缩列表
+# 压缩列表
 压缩列表 ziplist 是为 Redis 节约内存而开发的，是列表键和字典键的底层实现之一。
 
 当元素个数较少时，Redis 用 ziplist 来存储数据，当元素个数超过某个值时，链表键中会把 ziplist 转化为 linkedlist，字典键中会把 ziplist 转化为 hashtable。
 
 ziplist 是由一系列特殊编码的连续内存块组成的顺序型的数据结构，ziplist 中可以包含多个 entry 节点，每个节点可以存放整数或者字符串。
 
-<div align=center>
-<img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y37uuzoqj30u00dcwnf.jpg"/>
-</div>
+<div align=center><img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y37uuzoqj30u00dcwnf.jpg"/></div>
 
 -------------------
 
-# 6. 编码转化（掌握）
+# 编码转化
 Redis 使用对象（redisObject）来表示数据库中的键值，当我们在 Redis 中创建一个键值对时，至少创建两个对象，一个对象是用做键值对的键对象，另一个是键值对的值对象。
 
 例如我们执行 SET MSG XXX 时，键值对的键是一个包含了字符串“MSG“的对象，键值对的值对象是包含字符串”XXX”的对象。
@@ -201,12 +191,10 @@ typedef struct redisObject{
 其中 type 字段记录了对象的类型，包含字符串对象、列表对象、哈希对象、集合对象、有序集合对象。  
 ptr 指针字段指向对象底层实现的数据结构，而这些数据结构是由 encoding 字段决定的，每种对象至少有两种数据编码：
 
-<div align=center>
-<img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y3ppam19j30u00h37ct.jpg">
-</div>
+<div align=center><img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y3ppam19j30u00h37ct.jpg"></div>
 可以通过 object encoding key 来查看对象所使用
 
-## 6.1 String 对象的编码转化
+## String 对象的编码转化
 String 对象的编码可以是 int 或 raw，对于 String 类型的键值，如果我们存储的是纯数字，Redis 底层采用的是 int 类型的编码，如果其中包括非数字，则会立即转为 raw 编码：
 ```shell
 127.0.0.1:6379> set str 1
@@ -220,7 +208,7 @@ OK
 127.0.0.1:6379>
 ```
 
-## 6.2 List 对象的编码转化
+## List 对象的编码转化
 List 对象的编码可以是ziplist 或 linkedlist，对于 List 类型的键值，当列表对象同时满足以下两个条件时，采用 ziplist 编码：
 - 列表对象保存的所有字符串元素的长度都小于 64 字节。
 - 列表对象保存的元素个数小于 512 个。
@@ -230,7 +218,7 @@ list-max-ziplist-entries 512
 list-max-ziplist-value 64
 ```
 
-## 6.3 Set 类型的编码转化
+## Set 类型的编码转化
 Set 对象的编码可以是 intset 或 hashtable，intset 编码的结构对象使用整数集合作为底层实现，把所有元素都保存在一个整数集合里面。
 ```shell
 127.0.0.1:6379> sadd set 1 2 3
@@ -259,7 +247,7 @@ Set 对象的编码可以是 intset 或 hashtable，intset 编码的结构对象
 set-max-intset-entries 512
 ```
 
-## 6.4 Hash 对象的编码转化
+## Hash 对象的编码转化
 Hash 对象的编码可以是 ziplist 或 hashtable，当 Hash 以 ziplist 编码存储的时候，保存同一键值对的两个节点总是紧挨在一起，键节点在前，值节点在后：
 当 Hash 对象同时满足以下两个条件时，Hash 对象采用 ziplist 编码：
 - Hash 对象保存的所有键值对的键和值的字符串长度均小于 64 字节。
@@ -269,7 +257,7 @@ Hash 对象的编码可以是 ziplist 或 hashtable，当 Hash 以 ziplist 编�
 hash-max-ziplist-entries 512
 hash-max-ziplist-value 64
 ```
-## 6.5 Zset 对象的编码转化
+## Zset 对象的编码转化
 Zset 对象的编码可以是 ziplist 或 zkiplist，当采用 ziplist 编码存储时，每个集合元素使用两个紧挨在一起的压缩列表来存储。
 
 第一个节点存储元素的成员，第二个节点存储元素的分值，并且按分值大小从小到大有序排列。
