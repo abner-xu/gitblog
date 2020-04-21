@@ -63,10 +63,19 @@ date: 2018-08-24 15:23:09
 # 索引
 
 1.  聚集索引
+通常来说 ：就是数据表的pk主键
 
 2.  非聚集索引
+如果表没有定义PK，则第一个not NULL unique列是聚集索引
 
 3.  联合索引
+多个字段从左到右的索引，所以该索引也有最左匹配原则
+
+举个说明，不妨设有表：`t(id PK, name KEY, sex, flag);` 画外音：id是聚集索引，name是普通索引。
+
+
+
+
 
 
 4.  mysql的索引方法btree和hash的区别
@@ -107,6 +116,60 @@ date: 2018-08-24 15:23:09
 
 **树被作为实现索引的数据结构被创造出来，是因为它能够完美的利用“局部性原理”。**
 
+7. 什么是回表查询？
+    -   InnoDB聚集索引和普通索引有什么差异？
+        InnoDB聚集索引的叶子节点存储行记录，因此， InnoDB必须要有，且只有一个聚集索引：
+        1.  如果表定义了PK，则PK就是聚集索引；
+        2.  如果表没有定义PK，则第一个not NULL unique列是聚集索引；
+        3.  否则，InnoDB会创建一个隐藏的row-id作为聚集索引；
+        ***所以PK查询非常快，直接定位行记录。***
+        
+    -   InnoDB普通索引的叶子节点存储主键值。
+        ***注意，不是存储行记录头指针，MyISAM的索引叶子节点存储记录指针。***
+
+    -   回表查询过程
+        举个栗子，不妨设有表：t(id PK, name KEY, sex, flag);
+        表中有四条记录：
+        ```sql
+            1, shenjian, m, A
+            3, zhangsan, m, A
+            5, lisi, m, A
+            9, wangwu, f, B
+        ```
+        ![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge196wtglcj309z06t0tw.jpg)
+        
+        两个B+树索引分别如上图：
+    　　（1）id为PK，聚集索引，叶子节点存储行记录；
+    　　（2）name为KEY，普通索引，叶子节点存储PK值，即id；
+        既然从普通索引无法直接定位行记录，那普通索引的查询过程是怎么样的呢？
+        通常情况下，需要扫码两遍索引树。
+        例如：
+        ```sql 
+        select * from t where name='lisi';　 
+        ```
+        ![2.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge199ptq6ej30bp06pwg0.jpg)
+        
+        如红色路径，需要扫码两遍索引树：
+        （1）先通过普通索引定位到主键值id=5；
+        （2）在通过聚集索引定位到行记录；
+        这就是`回表查询` 
+
+8.  索引覆盖(Covering index)？
+    1. 什么事索引覆盖
+        - MySQL官网，类似的说法出现在explain查询计划优化章节，即`explain的输出结果Extra字段为Using index时，能够触发索引覆盖`。
+        - 不管是SQL-Server官网，还是MySQL官网，都表达了：`只需要在一棵索引树上就能获取SQL所需的所有列数据，无需回表，速度更快`。
+    2.  如何实现索引覆盖？
+       ![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge1ef4ql42j30u006u0x7.jpg)
+       能够命中name索引，索引叶子节点存储了主键id，通过name的索引树即可获取id和name，无需回表，符合索引覆盖，效率较高。
+       
+       ![2.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge1ef3ij5lj30u006s795.jpg)
+       能够命中name索引，索引叶子节点存储了主键id，但sex字段必须回表查询才能获取到，不符合索引覆盖，需要再次通过id值扫码聚集索引获取sex字段，效率会降低。
+       
+       如果把(name)单列索引升级为`联合索引(name, sex)`就不同了。
+       ![3.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge1ef3ka10j30u006v7av.jpg)
+       `都能够命中索引覆盖，无需回表`。
+
+            
 --- 
 
 # 事物
