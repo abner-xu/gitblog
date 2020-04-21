@@ -168,7 +168,10 @@ date: 2018-08-24 15:23:09
        如果把(name)单列索引升级为`联合索引(name, sex)`就不同了。
        ![3.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge1ef3ka10j30u006v7av.jpg)
        `都能够命中索引覆盖，无需回表`。
-
+    3.  哪些场景可以利用索引覆盖来优化SQL？
+        1.  全表count查询优化
+        ![4.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge1enuwk83j30re096q9d.jpg)
+        2.  场景2：列查询回表优化(同上面的例子)
             
 --- 
 
