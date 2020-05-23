@@ -119,6 +119,7 @@ GET /Product/cpu/_search
 ```
 设置字段为true
 PUT /product/cpu/_mapping
+```json
 {
   "properties": {
     "tag":{
@@ -127,6 +128,7 @@ PUT /product/cpu/_mapping
     }
   }
 }
+```
 ## aggs 聚合分组求平均
 GET /Product/cpu/_search
 ```json

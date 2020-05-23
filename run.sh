@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "请输入参数:"
-echo "The #1 init object"
-echo "The #2 param is clean&start up"
-echo "The #3 param is clean&deploy git"
+echo "The #1 param is >> init object"
+echo "The #2 param is >> clean&start up"
+echo "The #3 param is >> clean&deploy git"
 read -t 30 -p "please input NO:" no
 option=$no
 case $option in
