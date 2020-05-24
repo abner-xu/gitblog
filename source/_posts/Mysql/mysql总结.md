@@ -308,6 +308,32 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
         - 数据多版本，可以实现读写并发
 --- 
 
+---
+# 锁
+![1.jpg](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3o1zpt8dj30fw07x3z8.jpg)
+1.  行锁详解
+![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3o4h6kdkj327a0oqn8f.jpg)
+2.  当前读与快照读
+    - 当前读
+    使用当前读的操作主要包括：显式加锁的读操作与插入/更新/删除等写操作，如下所示：
+    ```sql
+    select * from table where ? lock in share mode;
+    select * from table where ? for update;
+    insert into table values (…);
+    update table set ? where ?;
+    delete from table where ?;
+    ```
+    - 快照读
+    即不加锁读，读取记录的快照版本而非最新版本，通过MVCC实现；
+
+3. 锁算法
+    |行锁算法|锁定内容|
+    |---|---|
+    |Record Lock| 纪录锁,锁定一条纪录|
+    |Gap Lock| 间隙锁,锁定一个区间|
+    |Next-key Lock| 间隙锁,锁定一个区间|
+    
+
 
 # 网络
 1. 主从复制原理
@@ -327,27 +353,6 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
         3）就是把，一台从服务器当度作为备份使用，而不提供查询，那边他的负载下来了，执行relaylog里面的SQL效率自然就高了。
         4）增加从服务器喽，这个目的还是分散读的压力，从而降低服务器负载。 
         
----
-# 锁
-1. 锁类型
-    1.  读锁(S锁)：也叫共享锁、S锁，读取数据时加S锁,读读可以并行
-    2.  写锁(X锁)：又称排他锁、X锁。修改数据时加X锁,写读，写写不可以并行
-    3.  表锁：操作对象是数据表。Mysql大多数锁策略都支持(常见mysql innodb)，是系统开销最低但并发性最低的一个锁策略。事务t对整个表加读锁，则其他事务可读不可写，若加写锁，则其他事务增删改都不行。
-    4.  行级锁：操作对象是数据表中的一行。是MVCC技术用的比较多的，但在MYISAM用不了，行级锁用mysql的储存引擎实现而不是mysql服务器。但行级锁对系统开销较大，处理高并发较好。
-
-
-2.  MySQL中InnoDB引擎的行锁是通过加在什么上完成(或称实现)的？为什么是这样子的？
-InnoDB是基于索引来完成行锁  
-`select * from tab_with_index where id = 1 for update;  `
-`or update `可以根据条件来完成行锁锁定,并且 id 是有索引键的列,  
-如果 id 不是索引键那么InnoDB将完成表锁,,并发将无从谈起
-坑：InnoDB的行锁是实现在索引上的，而不是锁在物理行记录上。潜台词是，如果访问没有命中索引，也无法使用行锁，将要退化为表锁。InnoDB务必建好索引，否则锁粒度较大，会影响并发。
-
-3.  悲观锁和乐观锁
-- 乐观锁（Optimistic Concurrency Control，OCC）：假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。  
-典型的例子就是表锁
-- 悲观锁（Pessimistic Concurrency Control，PCC）：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。  
-典型的例子就是行锁   select * from LostUpdate where id =1 for update
 
 ---
 # 压力测试
