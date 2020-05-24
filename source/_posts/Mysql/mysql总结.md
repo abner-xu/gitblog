@@ -340,7 +340,7 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
     |---|---|
     |Record Lock| 纪录锁,锁定一条纪录|
     |Gap Lock| 间隙锁,锁定一个区间|
-    |Next-key Lock| 间隙锁,锁定一个区间|
+    |Next-key Lock| 纪录+间隙锁,锁定一个区间+纪录行|
     
 
 
@@ -368,8 +368,9 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
 
 > https://imysql.com/tag/%E5%8E%8B%E6%B5%8B
 比较常用的MySQL基准压力测试工具有 tpcc-mysql、sysbench、mysqlslap 等几个。
+
 ![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gcy9jer66rj30o90i9q47.jpg)
->
+
 ---
 
 # 延伸知识点
