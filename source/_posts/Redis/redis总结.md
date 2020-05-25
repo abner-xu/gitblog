@@ -89,7 +89,7 @@ Redis采用的是定期删除+惰性删策略工作机制。
 # Redis主从复制(3.0开始支持)原理
 1.  全量同步
     1.	当启动一个slave node的时候，它会发送一个PSYNC命令给master
-    2.	如果这是slave node重现链接master，master会将缺少的数据发送给slave，如果是第一次链接master，则会触发一次full resynchronization,开始 full resynchronization的时候，master启动一个后台线程，先将现有数据生成一个零时的rdb文件，生成文件后，master会将这个rdb文件发送给slave，slave会先把这个rdb文件存放到本地磁盘，然后在加载到内存，然后master会将生成rdb这段时间内接收到的在内存中的数据发送给slave，slave也会接收这份数据。
+    2.	如果这是slave node重新链接master，master会将缺少的数据发送给slave，如果是第一次链接master，则会触发一次full resynchronization,开始 full resynchronization的时候，master启动一个后台线程，先将现有数据生成一个零时的rdb文件，生成文件后，master会将这个rdb文件发送给slave，slave会先把这个rdb文件存放到本地磁盘，然后在加载到内存，然后master会将生成rdb这段时间内接收到的在内存中的数据发送给slave，slave也会接收这份数据。
     3.	slave如果跟master网络故障，断开了，当重新连接上以后，master发现有多个slave都来重新连接，master会生成一个rdb文件，将这个文件同时发送个多个slave node
     
 ![full_sync](http://ww1.sinaimg.cn/large/0078bOVFgy1g0mm2zwx3qj30mn0dzjrv.jpg)
