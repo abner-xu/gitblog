@@ -52,7 +52,9 @@ date: 2020-04-11 17:07:55
     -   work stealing 机制：当本线程无可运行的 G 时，尝试从其他线程绑定的 P 偷取 G，而不是销毁线程。
     -   hand off 机制：​ 当本线程因为 G 进行系统调用阻塞时，线程释放绑定的 P，把 P 转移给其他空闲的线程执行。
 2.  利用并行：`GOMAXPROCS` 设置 P 的数量，最多有 `GOMAXPROCS` 个线程分布在多个 CPU 上同时运行。`GOMAXPROCS` 也限制了并发的程度，比如 `GOMAXPROCS= 核数/2`，则最多利用了一半的 CPU 核进行并行。
-3.  抢占：在 coroutine 中要等待一个协程主动让出 CPU 才执行下一个协程，`在 Go 中，一个 goroutine 最多占用 CPU 10ms，防止其他 goroutine 被饿死，这就是 goroutine 不同于 coroutine 的一个地方`。
+3.  抢占：在 coroutine 中要等待一个协程主动让出 CPU 才执行下一个协程，
+`在 Go 中，一个 goroutine 最多占用 CPU 10ms，
+防止其他 goroutine 被饿死，这就是 goroutine 不同于 coroutine 的一个地方`。
 
 4.  全局 G 队列：在新的调度器中依然有全局 G 队列，但功能已经被弱化了，当 M 执行 work stealing 从其他 P 偷不到 G 时，它可以从全局 G 队列获取 G。
 
