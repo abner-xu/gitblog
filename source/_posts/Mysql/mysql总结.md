@@ -315,6 +315,8 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
     1.  悲观锁：利用了数据库内部提供的锁机制；在并发过程中一旦有一个事务持有了数据库记录的锁，其他线程就不能再对数据库进行更新
     2.  乐观锁：乐观锁是一种不会阻塞其它线程并发的机制，它不会使用数据库的锁进行实现。所以就不会引起线程的频繁挂起和恢复，这样效率就提高了。它的实现关键在于CAS算法或者版本号机制。
         - 版本号机制：
+            1.  先读task表的数据（实际上这个表只有一条记录），得到version的值为versionValue
+            2.  update task set value = newValue,version =  versionValue + 1   where version = versionValue;
         - CAS算法：
 1.  锁粒度
     1.  行锁详解
