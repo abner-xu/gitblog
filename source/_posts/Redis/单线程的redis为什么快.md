@@ -120,54 +120,46 @@ typedef struct dictht{
 
 -------------------
 
-# 4. 跳跃表(Zset 有序集合)
-Zset 是一个有序的链表结构，其底层的数据结构是跳跃表 skiplist，其结构如下：
-```c++
-typedef struct zskiplistNode {
-    //成员对象
-   robj *obj;
-    //分值
-   double score;
-    //后退指针
-   struct zskiplistNode *backward;
-    //层
-   struct zskiplistLevel {
-        struct zskiplistNode *forward;//前进指针
-        unsigned int span;//跨度
-   } level[];
- } zskiplistNode;
+# 4. Zset底层
+zset底层的存储结构包括ziplist或skiplist，在同时满足以下两个条件的时候使用ziplist，其他时候使用skiplist，两个条件如下：
+- 有序集合保存的元素数量小于128个
+- 有序集合保存的所有元素的长度小于64字节
 
-typedef struct zskiplist {
-    //表头节点和表尾节点
-   struct zskiplistNode *header, *tail;
-    //表中节点的的数量
-   unsigned long length;
-    //表中层数最大的节点层数
-   int level;
- } zskiplist;
+当ziplist作为zset的底层存储结构时候，每个集合元素使用两个紧挨在一起的压缩列表节点来保存，第一个节点保存元素的成员，第二个元素保存元素的分值。
+
+当skiplist作为zset的底层存储结构的时候，使用skiplist按序保存元素及分值，使用dict来保存元素和分值的映射关系。
+
+ziplist数据结构
+![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf4hntkfa6j30ym0dgwgk.jpg)
+
+skiplist数据结构
+ skiplist作为zset的存储结构，整体存储结构如下图，核心点主要是包括一个dict对象和一个skiplist对象。dict保存key/value，key为元素，value为分值；skiplist保存的有序的元素列表，每个元素包括元素和分值。两种数据结构下的元素指向相同的位置。
+
+![2.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf4hop6qq9j30wx0k3dhq.jpg)
+
+
+
+# 5. Set底层
+set的底层存储intset和hashtable是存在编码转换的，使用intset存储必须满足下面两个条件，否则使用hashtable，条件如下：
+- 结合对象保存的所有元素都是整数值
+- 集合对象保存的元素数量不超过512个
+
+```c  
+typedef struct intset {
+    // 编码方式
+    uint32_t encoding;
+    // 集合包含的元素数量
+    uint32_t length;
+    // 保存元素的数组
+    int8_t contents[];
+} intset;
 ```
-<div align="center">
-<img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y2zae71yj30e8064405.jpg"/>
-</div>
+set的单个元素的添加过程，首先如果已经是hashtable的编码，那么我们就走正常的hashtable的元素添加，如果原来是intset的情况，那么我们就需要进行如下判断：
 
-前进指针：用于从表头向表尾方向遍历。
+- 如果能够转成int的对象（isObjectRepresentableAsLongLong），那么就用intset保存。
+- 如果用intset保存的时候，如果长度超过512（REDIS_SET_MAX_INTSET_ENTRIES）就转为hashtable编码。
 
-后退指针：用于从表尾向表头方向回退一个节点，和前进指针不同的是，前进指针可以一次性跳跃多个节点，后退指针每次只能后退到上一个节点。
 
-跨度：表示当前节点和下一个节点的距离，跨度越大，两个节点中间相隔的元素越多。
-
-在查询过程中跳跃着前进。由于存在后退指针，如果查询时超出了范围，通过后退指针回退到上一个节点后仍可以继续向前遍历。
-
--------------------
-
-# 压缩列表
-压缩列表 ziplist 是为 Redis 节约内存而开发的，是列表键和字典键的底层实现之一。
-
-当元素个数较少时，Redis 用 ziplist 来存储数据，当元素个数超过某个值时，链表键中会把 ziplist 转化为 linkedlist，字典键中会把 ziplist 转化为 hashtable。
-
-ziplist 是由一系列特殊编码的连续内存块组成的顺序型的数据结构，ziplist 中可以包含多个 entry 节点，每个节点可以存放整数或者字符串。
-
-<div align=center><img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y37uuzoqj30u00dcwnf.jpg"/></div>
 
 -------------------
 
