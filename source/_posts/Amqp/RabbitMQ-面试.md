@@ -34,7 +34,18 @@ date: 2019-09-04 22:48:46
 
 -   高可用场景
     - 集群
-    - 镜像队列：镜像队列主要有两种类型：master和slave。master和slave节点位于同一个集群中。master只要一个节点，slave可以有多个节点。生产者发送到主节点消息会同时被发往各个slave节点，除了发送消息，其他动作只会发给master，然后通过master广播给其他slave。master挂掉以后，根据slave加入的时间顺序排列，时间长的提升为master。
+        - RabbitMQ集群处理新增节点：
+            -   有新节点加入，RabbitMQ不会同步之前的历史数据，新节点只会复制该节点加入到集群之后新增的消息。
+            -   既然master节点退出集群会选一个slave作为master，那么如果不幸选中了一个刚刚加入集群的节点怎么办？那消息不就丢了吗？这里您可以把心放到肚子里，RabbitMQ集群内部会维护节点的状态是否已经同步，使用rabbitmqctl的synchronised_slave_pids参数，就可以查看状态。如果slave_pids和synchronised_slave_pids里面的节点是一致的，那说明全都同步了；如果不一致很容易比较出来哪些还没有同步，集群只会在“最老”的slave节点之间选一个出来作为新的master节点。另外对于node节点的重启也是按照新节点来处理的。
+            
+    - 镜像队列（集群模式可启用）：    
+![1.jpg](http://ww1.sinaimg.cn/large/007lnJOlgy1gf4p4x7b4mj30sm0o0acg.jpg)
+            
+       -   在镜像队列集群模式中，对某个queue来说，只有master对外提供服务，而其他slave只提供备份服务，在master所在节点不可用时，选出一个slave作为新的master继续对外提供服务。通常是加入时间最长的选中为新的master
+       -   镜像队列不能作为负载均衡使用，因为每个声明和消息操作都要在所有节点复制一遍。
+       -   每当一个节点加入或者重新加入镜像队列，之前保存的队列内容会被清空。
+       -   对于镜像队列，客户端basic.publish操作会同步到所有节点；而其他操作则是通过master中转，再由master将操作作用于salve。
+        
         
     
 
