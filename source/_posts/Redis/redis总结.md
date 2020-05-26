@@ -53,7 +53,7 @@ Redis采用的是定期删除+惰性删策略工作机制。
 2.  Redis(3.0版本)6种缓存淘汰机制
     1.  no-enviction(驱逐)：禁止驱逐数据（不删除数据策略，达到最大的内存限制时，如果有更多的数据写入，返回错误给客户端）
     2.  allkeys-lru：所有key通用，优先删除最少使用的key（less recently used,LRU算法）
-    3，  allkeys-random ：素有key通用，随机删除一部分key
+    3.  allkeys-random ：素有key通用，随机删除一部分key
     4.  volatile-lru：只限于设置了expire的部分，优先删除最少使用的key（less recently used,LRU算法）
     5.  volatile-random：只限于设置了 expire 的部分; 随机删除一部分key
     6.  volatile-ttl：只限于设置了 expire 的部分; 优先删除剩余时间(time to live,TTL) 短的key。
