@@ -3,10 +3,12 @@ title: Go-channel总结
 categories:
   - 后端
   - Golang
+tags:
+  - go基础
 comments: true
 toc: true
 abbrlink: a9a93a3c
-date: 2019-11-06 15:28:28
+date: 2019-08-28 15:28:28
 ---
 
 

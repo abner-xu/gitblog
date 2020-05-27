@@ -1,15 +1,16 @@
 ---
-title: Go读书笔记
+title: Go-基础类型
 categories:
   - 后端
   - Golang
 tags:
-  - book
+  - go基础
 comments: true
 toc: true
-abbrlink: d56d6105
-date: 2019-04-12 13:18:41
+abbrlink: cd8dc0fe
+date: 2018-01-27 22:00:39
 ---
+
 #   内建类型种类
 -   bool：布尔类型,可选 true|false,默认初始化零值 false
 
@@ -47,9 +48,3 @@ date: 2019-04-12 13:18:41
 -   类型转换只有显示转换,不存在任何形式的隐式类型转换
 -   虽然提供指针类型,但指针本身不能进行任何形式的计算
 -   变量声明后有默认初始化零值,变量零值视具体类型而定
-
----
-
-# 内建容器
-## 数据和切片
-## Map
