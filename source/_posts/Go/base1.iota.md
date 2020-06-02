@@ -1,5 +1,5 @@
 ---
-title: Go-iota使用技巧
+title: Go基础-iota
 categories:
   - 后端
   - Golang
@@ -7,7 +7,7 @@ tags:
   - go基础
 comments: true
 toc: true
-abbrlink: a8701b1b
+abbrlink: 15af66ed
 date: 2019-01-27 22:00:40
 ---
 

@@ -1,11 +1,11 @@
 ---
-title: Go-字符串高效拼
+title: Go基础-字符串高效拼
 categories:
   - 后端
   - Golang
 comments: true
 toc: true
-abbrlink: 6de18f0c
+abbrlink: bbd01dfe
 date: 2019-01-27 22:19:39
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Go-基础概念
+title: Go基础-基本类型
 categories:
   - 后端
   - Golang
@@ -7,7 +7,7 @@ tags:
   - go基础
 comments: true
 toc: true
-abbrlink: cd8dc0fe
+abbrlink: 73a70f80
 date: 2018-01-27 22:00:39
 ---
 
@@ -64,4 +64,5 @@ date: 2018-01-27 22:00:39
    -    引入包，不可出现死循坏。即 A import B,B import A，这种情况编译失败；
    ![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf7dbyzjyvj30qc0bnmyu.jpg)
 
-    
+# .(type)的使用
+类型选择，类型选择的语法形如：i.(type)，其中 i 是接口，type 是固定关键字，需要注意的是，`只有接口类型才可以使用类型选择`   
