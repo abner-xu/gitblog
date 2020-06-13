@@ -175,3 +175,37 @@ value of s is {5 4}
 ```
 上面的代码，创建了自定义的字符串类型 MyString 、结构体 Rect 和 explain() 函数。explain() 函数的形参是空接口，所以可以接收任意类型的值。
 
+
+# 实现多个接口
+```go
+type Shape interface {
+	Area() float32
+}
+ 
+type Object interface {
+	Perimeter() float32
+}
+
+type Circle struct {
+	radius float32
+}
+
+func (c Circle) Area() float32 {
+    return math.Pi * (c.radius * c.radius)
+}
+
+func (c Circle) Perimeter() float32 {
+   return 2 * math.Pi * c.radius
+}
+
+func main() {
+    c := Circle{3}
+    var s Shape = c
+    var p Object = c
+    fmt.Println("area: ", s.Area())
+    fmt.Println("perimeter: ", p.Perimeter())
+}
+//output
+area:  28.274334
+perimeter:  18.849556
+```
