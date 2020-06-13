@@ -8,7 +8,7 @@ tags:
 comments: true
 toc: true
 abbrlink: 15af66ed
-date: 2019-01-27 22:00:40
+date: 2019-01-16 22:00:40
 ---
 
 `iota-go语言中的常量计数器，只能在常量表达式中使用`
