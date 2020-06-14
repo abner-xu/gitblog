@@ -8,6 +8,9 @@ toc: true
 abbrlink: 8ec4b9d8
 date: 2019-08-28 17:02:04
 ---
+
+# 执行顺序 
+
 偶然间发现了一个有意思的地方：在使用`defer`时，匿名返回值的函数和命名返回值的函数的返回结果是不一样的。具体见如下代码:
 ```go
 func f1() (r int) {
@@ -109,3 +112,21 @@ func f3() (r int) {
 - return对返回变量赋值，如果是匿名返回值就先声明再赋值；
 - 执行defer函数；
 - return携带返回值返回。
+
+# return 之后的 defer
+```go
+var a bool = true
+func main() {
+    defer func(){
+        fmt.Println("1")
+    }()
+    if a == true {
+        fmt.Println("2")
+        return
+    }
+    defer func(){
+        fmt.Println("3")
+    }()
+}
+```
+*defer 关键字后面的函数或者方法想要执行必须先注册，return 之后的 defer 是不能注册的， 也就不能执行后面的函数或方法。*

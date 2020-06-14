@@ -5,6 +5,7 @@ categories:
   - Golang
 comments: true
 toc: true
+abbrlink: b03a5799
 date: 2019-08-28 17:02:04
 ---
 # defer nil函数
