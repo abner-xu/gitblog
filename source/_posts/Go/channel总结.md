@@ -28,10 +28,12 @@ channel 存在3种状态
 1.  nil,未初始化，刚刚申明或者手动复制为nil
 2.  active，正常运行中的可读可写
 3.  closed,关闭时，**千万不要认为关闭以后，channel的值是nil**
+
 channel 可进行3种操作
 1.  读
 2.  写
 3.  关闭
+
 3种状态存在9种情况
 
 操作 | nil的channel |  正常channel  |  已关闭channel  
