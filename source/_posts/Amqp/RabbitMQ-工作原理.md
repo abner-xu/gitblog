@@ -35,7 +35,7 @@ date: 2019-09-04 22:48:46
 - RoutingKey（路由键）：用于把生成者的数据分配到交换器上；
 - BindingKey（绑定键）：用于把交换器的消息绑定到队列上；
 
-![rabbit-producer.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gcz3m1jf2gj30mi07zgna.jpg)
+![rabbit-producer.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gcz3m1jf2gj30mi07zgna.jpg)
 
 
 ## 消息持久化

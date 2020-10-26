@@ -13,13 +13,13 @@ date: 2018-11-21 17:45:14
 # 示意图
 
 - 双向链表：只有一个指针指向最开始的结点。
-![1](http://ww1.sinaimg.cn/large/aaba1596gy1g963ldolkbj20rg05p74h.jpg)
+![1](http://ww2.sinaimg.cn/large/aaba1596gy1g963ldolkbj20rg05p74h.jpg)
 
 - 双端(双向)链表：有两个指针分别指向两端的节点。
-![1](http://ww1.sinaimg.cn/large/aaba1596gy1g963ldnn1kj20rg05pjro.jpg)
+![1](http://ww2.sinaimg.cn/large/aaba1596gy1g963ldnn1kj20rg05pjro.jpg)
 
 - 循环(双向)链表：指向形成一个闭环。：有两个指针分别指向两端的节点。
-![1](http://ww1.sinaimg.cn/large/aaba1596gy1g963ldlx5cj20tg05pwer.jpg)
+![1](http://ww2.sinaimg.cn/large/aaba1596gy1g963ldlx5cj20tg05pwer.jpg)
 
 # 完整代码
 ```go

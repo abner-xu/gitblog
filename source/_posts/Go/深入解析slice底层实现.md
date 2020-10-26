@@ -141,11 +141,11 @@ type slice struct {
 	cap   int
 }
 ```
-![slice_内存模型](http://ww1.sinaimg.cn/large/aaba1596gy1g8o3m19euej20ro0cqt8k.jpg)
+![slice_内存模型](http://ww2.sinaimg.cn/large/aaba1596gy1g8o3m19euej20ro0cqt8k.jpg)
 
 切片的结构体由3部分构成，Pointer 是指向一个数组的指针，len 代表当前切片的长度，cap 是当前切片的容量。cap 总是大于等于 len 的。
 
-![57_3.png](http://ww1.sinaimg.cn/large/aaba1596gy1g8o3rgael9j217e0k0t8p.jpg)
+![57_3.png](http://ww2.sinaimg.cn/large/aaba1596gy1g8o3rgael9j217e0k0t8p.jpg)
 
 如果想从 slice 中得到一块内存地址，可以这样做：
 ```go
@@ -198,17 +198,17 @@ func makeslice(et *_type, len, cap int) slice {
 
 ```
 
-![57_4.png](http://ww1.sinaimg.cn/large/aaba1596gy1g8o3wii6ltj217e0k03yl.jpg)
+![57_4.png](http://ww2.sinaimg.cn/large/aaba1596gy1g8o3wii6ltj217e0k03yl.jpg)
 
 上图是用 make 函数创建的一个 len = 4， cap = 6 的切片。内存空间申请了6个 int 类型的内存大小。由于 len = 4，所以后面2个暂时访问不到，但是容量还是在的。这时候数组里面每个变量都是0 。
 
 除了 make 函数可以创建切片以外，字面量也可以创建切片。
 
-![57_5.png](http://ww1.sinaimg.cn/large/aaba1596gy1g8o3x7mtm1j217e0k0q32.jpg)
+![57_5.png](http://ww2.sinaimg.cn/large/aaba1596gy1g8o3x7mtm1j217e0k0q32.jpg)
 
 这里是用字面量创建的一个 len = 6，cap = 6 的切片，这时候数组里面每个元素的值都初始化完成了。**需要注意的是 [ ] 里面不要写数组的容量，因为如果写了个数以后就是数组了，而不是切片了。**
 
-![57_6.png](http://ww1.sinaimg.cn/large/aaba1596gy1g8o40epr1zj219e0ru3yu.jpg)
+![57_6.png](http://ww2.sinaimg.cn/large/aaba1596gy1g8o40epr1zj219e0ru3yu.jpg)
 
 还有一种简单的字面量创建切片的方法。如上图。上图就 Slice A 创建出了一个 len = 3，cap = 3 的切片。从原数组的第二位元素(0是第一位)开始切，一直切到第四位为止(不包括第五位)。同理，Slice B 创建出了一个 len = 2，cap = 4 的切片。
 
@@ -218,7 +218,7 @@ nil 切片和空切片也是常用的。
 var slice []int
 ```
 
-![57_7.png](http://ww1.sinaimg.cn/large/aaba1596gy1g8o44aw90ij20sb0ecmx1.jpg)
+![57_7.png](http://ww2.sinaimg.cn/large/aaba1596gy1g8o44aw90ij20sb0ecmx1.jpg)
 
 nil 切片被用在很多标准库和内置函数中，描述一个不存在的切片的时候，就需要用到 nil 切片。比如函数在发生异常的时候，返回的切片就是 nil 切片。nil 切片的指针指向 nil。
 
@@ -229,7 +229,7 @@ silce := make( []int , 0 )
 slice := []int{ }
 ```
 
-![57_8.png](http://ww1.sinaimg.cn/large/aaba1596gy1g8o459ot2qj20sb0ecjrd.jpg)
+![57_8.png](http://ww2.sinaimg.cn/large/aaba1596gy1g8o459ot2qj20sb0ecjrd.jpg)
 
 空切片和 nil 切片的区别在于，空切片指向的地址不是nil，指向的是一个内存地址，但是它没有分配任何内存空间，即底层元素包含0个元素。
 
@@ -354,7 +354,7 @@ After newSlice = [10 30 30 40 50], Pointer = 0xc4200b0180, len = 5, cap = 8
 
 用图表示
 
-![57_9.png](http://ww1.sinaimg.cn/large/aaba1596gy1g8o4b8ea2jj21kn1463zk.jpg)
+![57_9.png](http://ww2.sinaimg.cn/large/aaba1596gy1g8o4b8ea2jj21kn1463zk.jpg)
 
 从图上我们可以很容易的看出，新的切片和之前的切片已经不同了，因为新的切片更改了一个值，并没有影响到原来的数组，新切片指向的数组是一个全新的数组。并且 cap 容量也发生了变化。这之间究竟发生了什么呢？
 
@@ -395,7 +395,7 @@ After array = [10 30 50 40]
 
 把上述过程用图表示出来，如下图。
 
-![57_10.png](http://ww1.sinaimg.cn/large/aaba1596gy1g8o5m322u9j21kn0yn3zp.jpg)
+![57_10.png](http://ww2.sinaimg.cn/large/aaba1596gy1g8o5m322u9j21kn0yn3zp.jpg)
 
 通过打印的结果，我们可以看到，在这种情况下，扩容以后并没有新建一个新的数组，扩容前后的数组都是同一个，这也就导致了新的切片修改了一个值，也影响到了老的切片了。并且 append() 操作也改变了原来数组里面的值。一个 append() 操作影响了这么多地方，如果原数组上有多个切片，那么这些切片都会被影响！无意间就产生了莫名的 bug！
 
@@ -474,7 +474,7 @@ func slicecopy(to, fm slice, width uintptr) int {
 ```
 在这个方法中，slicecopy 方法会把源切片值(即 fm Slice )中的元素复制到目标切片(即 to Slice )中，并返回被复制的元素个数，copy 的两个类型必须一致。slicecopy 方法最终的复制结果取决于较短的那个切片，当较短的切片复制完成，整个复制过程就全部完成了。
 
-![57_11.png](http://ww1.sinaimg.cn/large/aaba1596gy1g8o5skfe5gj21kn11omy3.jpg)
+![57_11.png](http://ww2.sinaimg.cn/large/aaba1596gy1g8o5skfe5gj21kn11omy3.jpg)
 
 说到拷贝，切片中有一个需要注意的问题。
 ```go
@@ -492,6 +492,6 @@ value = 40 , value-addr = c4200aedf8 , slice-addr = c4200b0338
 
 ```
 
-![57_12.png](http://ww1.sinaimg.cn/large/aaba1596gy1g8o5wpipcjj21ai0yndgm.jpg)
+![57_12.png](http://ww2.sinaimg.cn/large/aaba1596gy1g8o5wpipcjj21ai0yndgm.jpg)
 
 由于 Value 是值拷贝的，并非引用传递，所以直接改 Value 是达不到更改原切片值的目的的，需要通过 &slice[index] 获取真实的地址。

@@ -11,7 +11,7 @@ abbrlink: b42a8d36
 date: 2018-11-21 17:45:14
 ---
 # 操作流程示意图
-![1183379-529d87f81914f457.jpg](http://ww1.sinaimg.cn/large/aaba1596gy1g95t1z9d7yj20se0jm0tv.jpg)
+![1183379-529d87f81914f457.jpg](http://ww2.sinaimg.cn/large/aaba1596gy1g95t1z9d7yj20se0jm0tv.jpg)
 # 完整代码
 ```go
 
@@ -162,7 +162,7 @@ func (this *SingleLinkedList) remove(data int) {
 - head.getNext()：是当前结点的指针域（PS：当前结点的指针域指向下一结点）
 - reHead：是反转后新链表的头结点（即原来单链表的尾结点）
 
-![2.jpg](http://ww1.sinaimg.cn/large/aaba1596gy1g95t43dr22j20b50byjrp.jpg)
+![2.jpg](http://ww2.sinaimg.cn/large/aaba1596gy1g95t43dr22j20b50byjrp.jpg)
 
 ```go
 func (this *SingleLinkedList) reverse(head *Node) *Node {

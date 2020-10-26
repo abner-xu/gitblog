@@ -11,7 +11,7 @@ abbrlink: 664b7e30
 date: 2018-08-24 15:23:09
 ---
 # 宏观了解
-![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gdm7aidmy0j30ug0hnjzk.jpg)
+![1.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gdm7aidmy0j30ug0hnjzk.jpg)
 
 ---
 
@@ -98,12 +98,12 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
 6.  数据库索引为什么使用B+树？
     - [B+树了解](#B+树)
     - 二叉搜索树
-        ![二叉搜索树](http://ww1.sinaimg.cn/large/0078bOVFgy1g0obvlcqw9j307h05gjr6.jpg)  
+        ![二叉搜索树](http://ww2.sinaimg.cn/large/0078bOVFgy1g0obvlcqw9j307h05gjr6.jpg)  
         二叉搜索树，如上图，是最为大家所熟知的一种数据结构，就不展开介绍了，它为什么不适合用作数据库索引？  
         (1)当数据量大的时候，树的高度会比较高，数据量大的时候，查询会比较慢；  
         (2)每个节点只存储一个记录，可能导致一次查询有很多次磁盘IO；
     - B树
-        ![B树](http://ww1.sinaimg.cn/large/0078bOVFgy1g0obx5x6lsj30hx05ia9y.jpg)  
+        ![B树](http://ww2.sinaimg.cn/large/0078bOVFgy1g0obx5x6lsj30hx05ia9y.jpg)  
         B树，如上图，它的特点是：  
         (1)不再是二叉搜索，而是m叉搜索；  
         (2)叶子节点，非叶子节点，都存储数据；  
@@ -131,7 +131,7 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
             5, lisi, m, A
             9, wangwu, f, B
         ```
-        ![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge196wtglcj309z06t0tw.jpg)
+        ![1.png](http://ww2.sinaimg.cn/large/007lnJOlgy1ge196wtglcj309z06t0tw.jpg)
         
         两个B+树索引分别如上图：
     　　（1）id为PK，聚集索引，叶子节点存储行记录；
@@ -142,7 +142,7 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
         ```sql 
         select * from t where name='lisi';　 
         ```
-        ![2.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge199ptq6ej30bp06pwg0.jpg)
+        ![2.png](http://ww2.sinaimg.cn/large/007lnJOlgy1ge199ptq6ej30bp06pwg0.jpg)
         
         如红色路径，需要扫码两遍索引树：
         （1）先通过普通索引定位到主键值id=5；
@@ -154,18 +154,18 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
         - MySQL官网，类似的说法出现在explain查询计划优化章节，即`explain的输出结果Extra字段为Using index时，能够触发索引覆盖`。
         - 不管是SQL-Server官网，还是MySQL官网，都表达了：`只需要在一棵索引树上就能获取SQL所需的所有列数据，无需回表，速度更快`。
     2.  如何实现索引覆盖？
-       ![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge1ef4ql42j30u006u0x7.jpg)
+       ![1.png](http://ww2.sinaimg.cn/large/007lnJOlgy1ge1ef4ql42j30u006u0x7.jpg)
        能够命中name索引，索引叶子节点存储了主键id，通过name的索引树即可获取id和name，无需回表，符合索引覆盖，效率较高。
        
-       ![2.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge1ef3ij5lj30u006s795.jpg)
+       ![2.png](http://ww2.sinaimg.cn/large/007lnJOlgy1ge1ef3ij5lj30u006s795.jpg)
        能够命中name索引，索引叶子节点存储了主键id，但sex字段必须回表查询才能获取到，不符合索引覆盖，需要再次通过id值扫码聚集索引获取sex字段，效率会降低。
        
        如果把(name)单列索引升级为`联合索引(name, sex)`就不同了。
-       ![3.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge1ef3ka10j30u006v7av.jpg)
+       ![3.png](http://ww2.sinaimg.cn/large/007lnJOlgy1ge1ef3ka10j30u006v7av.jpg)
        `都能够命中索引覆盖，无需回表`。
     3.  哪些场景可以利用索引覆盖来优化SQL？
         1.  全表count查询优化
-        ![4.png](http://ww1.sinaimg.cn/large/007lnJOlgy1ge1enuwk83j30re096q9d.jpg)
+        ![4.png](http://ww2.sinaimg.cn/large/007lnJOlgy1ge1enuwk83j30re096q9d.jpg)
         2.  场景2：列查询回表优化(同上面的例子)
 
 9.  非常隐蔽的全表扫描，不能命中索引
@@ -182,7 +182,7 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
 
 11. like查询一定不命中索引吗？
     mysql在使用like查询，%在最前面不会用到索引，中间或最后是会用到索引的，只是越靠前扫描的行数越多
-    ![2.jpg](http://ww1.sinaimg.cn/large/007lnJOlgy1ge1fk94ciqj31og0p479x.jpg)
+    ![2.jpg](http://ww2.sinaimg.cn/large/007lnJOlgy1ge1fk94ciqj31og0p479x.jpg)
    
 12. 索引下推
     > 例如对于user_table表，我们现在有（username,age）联合索引，如果现在有一个需求，查出名称中以“张”开头且年龄小于等于10的用户信息，语句如下："select * from user_table where username like '张%' and age > 10".
@@ -240,7 +240,7 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
     4.  持久性：即一旦提交结果永久保存
 
 2. 事物是如何通过日志实现的
-    ![1.jpeg](http://ww1.sinaimg.cn/large/007lnJOlgy1gf2srbcrexj30kc0aoq3h.jpg)
+    ![1.jpeg](http://ww2.sinaimg.cn/large/007lnJOlgy1gf2srbcrexj30kc0aoq3h.jpg)
     > redo_log 实现持久化和原子性，而undo_log实现一致性，二种日志均可以视为一种恢复操作，redo_log是恢复提交事务修改的页操作，而undo_log是回滚行记录到特定版本。二者记录的内容也不同，redo_log是物理日志，记录页的物理修改操作，而undo_log是逻辑日志，根据每行记录进行记录。
 
     1.  事务日志是通过redo(重做日志)和innodb的存储引擎日志缓冲（Innodb log buffer）来实现的，
@@ -295,7 +295,7 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
         (1) 写任务发生时，将数据克隆一份，以版本号区分；
         (2) 写任务操作新克隆的数据，直至提交；
         (3) 并发读任务可以继续读取旧版本的数据，不至于阻塞；
-        ![640.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3b392gmtj309705q3yh.jpg)
+        ![640.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3b392gmtj309705q3yh.jpg)
         如上图：
         1. 最开始数据的版本是V0；
         2. T1时刻发起了一个写任务，这是把数据clone了一份，进行修改，版本变为V1，但任务还未完成；
@@ -310,7 +310,7 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
 
 ---
 # 锁
-![1.jpg](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3o1zpt8dj30fw07x3z8.jpg)
+![1.jpg](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3o1zpt8dj30fw07x3z8.jpg)
 1.  锁机制
     1.  悲观锁：利用了数据库内部提供的锁机制；在并发过程中一旦有一个事务持有了数据库记录的锁，其他线程就不能再对数据库进行更新
     2.  乐观锁：乐观锁是一种不会阻塞其它线程并发的机制，它不会使用数据库的锁进行实现。所以就不会引起线程的频繁挂起和恢复，这样效率就提高了。它的实现关键在于CAS算法或者版本号机制。
@@ -320,7 +320,7 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
         - CAS算法：
 1.  锁粒度
     1.  行锁详解
-    ![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3o4h6kdkj327a0oqn8f.jpg)
+    ![1.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3o4h6kdkj327a0oqn8f.jpg)
     2.  表锁详解
     3.  页锁详解
 
@@ -348,7 +348,7 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
 
 # 网络
 1. 主从复制原理
-    ![主从复制](http://ww1.sinaimg.cn/large/0078bOVFgy1g0nbwnv9noj30g607i3zy.jpg)
+    ![主从复制](http://ww2.sinaimg.cn/large/0078bOVFgy1g0nbwnv9noj30g607i3zy.jpg)
     1.  mysql启动以后会存在2个进程，一个是sqlThred进程一个IOThred进程
     2.  在Slave 服务器上执行sart slave命令开启主从复制开关，开始进行主从复制
     3.  Slave服务器的IO线程会通过在master上已经授权的复制用户权限请求连接master服务器，并请求从执行binlog日志文件的指定位置之后开始发送binlog日志内容
@@ -371,7 +371,7 @@ MyISAM的索引与行记录是分开存储的，叫做非聚集索引（UnCluste
 > https://imysql.com/tag/%E5%8E%8B%E6%B5%8B
 比较常用的MySQL基准压力测试工具有 tpcc-mysql、sysbench、mysqlslap 等几个。
 
-![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gcy9jer66rj30o90i9q47.jpg)
+![1.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gcy9jer66rj30o90i9q47.jpg)
 
 ---
 
@@ -419,10 +419,10 @@ COUNT(常量) 和 COUNT(*)表示的是直接查询符合条件的数据库表的
 2.  每个节点可以存储j个记录，如果将节点大小设置为页大小，例如4K，能够充分的利用预读的特性，极大减少磁盘IO；
 
 ## <a id="B+树">B+树</a>
-![B+树](http://ww1.sinaimg.cn/large/0078bOVFgy1g0oc9sjwr8j30ox052mx3.jpg)
+![B+树](http://ww2.sinaimg.cn/large/0078bOVFgy1g0oc9sjwr8j30ox052mx3.jpg)
 B树的插入及平衡化操作和2-3树很相似，这里就不介绍了。下面是往B树中依次插入
 `6 10 4 14 5 11 15 3 2 12 1 7 8 8 6 3 6 21 5 15 15 6 32 23 45 65 7 8 6 5 4`
-![动画演示](http://ww1.sinaimg.cn/large/0078bOVFgy1g0r4g7fuy3g30qm06d4qq.gif)
+![动画演示](http://ww2.sinaimg.cn/large/0078bOVFgy1g0r4g7fuy3g30qm06d4qq.gif)
 B+树，如上图，仍是m叉搜索树，在B树的基础上，做了一些改进：
 1.  非叶子节点不再存储数据，数据只存储在同一层的叶子节点上；（画外音：B+树中根到每一个节点的路径长度一样，而B树不是这样。）
 2.  叶子之间，增加了链表，获取所有节点，不再需要中序遍历；

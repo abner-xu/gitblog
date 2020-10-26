@@ -19,7 +19,7 @@ date: 2018-11-23 19:45:14
 
 　这里以羽毛球筒为例，羽毛球筒就是一个栈，刚开始羽毛球筒是空的，也就是空栈，然后我们一个一个放入羽毛球，也就是一个一个push进栈，当我们需要使用羽毛球的时候，从筒里面拿，也就是pop出栈，但是第一个拿到的羽毛球是我们最后放进去的。
 # 操作流程示意图
-![1120165-20171129201940386-674535319.png](http://ww1.sinaimg.cn/large/007lnJOlgy1g9epdmrj20j30b70bigll.jpg)
+![1120165-20171129201940386-674535319.png](http://ww2.sinaimg.cn/large/007lnJOlgy1g9epdmrj20j30b70bigll.jpg)
 # 完整代码
 ```go
 type Stack struct {

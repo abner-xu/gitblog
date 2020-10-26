@@ -29,13 +29,13 @@ Redis性能如此高的原因，我总结了如下几点：
 6.  HyperLogLog: 网站UV,独立IP计算等，主要也是一些去重计算，对数据精度要求不高，主要由于计算数据空间是固定的
 7.  Geo：GEO(地理位置)的支持，主要是对经纬度一个位置计算等特性
 
-![2.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gdop1n2k6zj30hs0djju6.jpg)
+![2.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gdop1n2k6zj30hs0djju6.jpg)
 
 ---
 
 # 内部数据结构
 redis的底层数据结构有以下7种，包括`简单动态字符串(SDS)，链表、字典、跳跃表、整数集合、压缩列表、对象`。
-![1.jpeg](http://ww1.sinaimg.cn/large/007lnJOlgy1gdooy0gmemj30hs08ct8x.jpg)
+![1.jpeg](http://ww2.sinaimg.cn/large/007lnJOlgy1gdooy0gmemj30hs08ct8x.jpg)
 
 
 ---
@@ -45,7 +45,7 @@ redis的底层数据结构有以下7种，包括`简单动态字符串(SDS)，�
 Redis 是用 C 语言开发完成的，但在 Redis 字符串中，并没有使用 C 语言中的字符串，而是用一种称为 SDS（Simple Dynamic String）的结构体来保存字符串。
 在redis数据库里，包含字符串值的键值对在底层都是由SDS实现的。除了用来保存数据库中的字符串值之外，sds还被用来作缓冲区（buffer）：AOF（一种持久化策略）模块中的AOF缓冲区，以及客户端状态中的输入缓冲区，都是由SDS实现的。
 
-<div align=center><img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0xzlkq5x1j309w06iaag.jpg"/></div>
+<div align=center><img src="http://ww2.sinaimg.cn/large/0078bOVFgy1g0xzlkq5x1j309w06iaag.jpg"/></div>
 
 ```c++
 struct __attribute__ ((__packed__)) sdshdr64 {
@@ -130,12 +130,12 @@ zset底层的存储结构包括ziplist或skiplist，在同时满足以下两个�
 当skiplist作为zset的底层存储结构的时候，使用skiplist按序保存元素及分值，使用dict来保存元素和分值的映射关系。
 
 ziplist数据结构
-![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf4hntkfa6j30ym0dgwgk.jpg)
+![1.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gf4hntkfa6j30ym0dgwgk.jpg)
 
 skiplist数据结构
  skiplist作为zset的存储结构，整体存储结构如下图，核心点主要是包括一个dict对象和一个skiplist对象。dict保存key/value，key为元素，value为分值；skiplist保存的有序的元素列表，每个元素包括元素和分值。两种数据结构下的元素指向相同的位置。
 
-![2.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf4hop6qq9j30wx0k3dhq.jpg)
+![2.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gf4hop6qq9j30wx0k3dhq.jpg)
 
 ---
 
@@ -192,7 +192,7 @@ typedef struct redisObject{
 其中 type 字段记录了对象的类型，包含字符串对象、列表对象、哈希对象、集合对象、有序集合对象。  
 ptr 指针字段指向对象底层实现的数据结构，而这些数据结构是由 encoding 字段决定的，每种对象至少有两种数据编码：
 
-<div align=center><img src="http://ww1.sinaimg.cn/large/0078bOVFgy1g0y3ppam19j30u00h37ct.jpg"></div>
+<div align=center><img src="http://ww2.sinaimg.cn/large/0078bOVFgy1g0y3ppam19j30u00h37ct.jpg"></div>
 可以通过 object encoding key 来查看对象所使用
 
 ## String 对象的编码转化

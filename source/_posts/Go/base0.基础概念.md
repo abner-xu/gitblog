@@ -62,7 +62,7 @@ date: 2019-01-15 22:00:39
    -    init() 函数在代码中不能被显示调用、不能被引用（赋值给函数变量），否则出现编译错误;
    -    一个包被引用多次，如 A import B,C import B,A import C，B 被引用多次，但 B 包只会初始化一次；
    -    引入包，不可出现死循坏。即 A import B,B import A，这种情况编译失败；
-   ![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf7dbyzjyvj30qc0bnmyu.jpg)
+   ![1.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gf7dbyzjyvj30qc0bnmyu.jpg)
 
 # .(type)的使用
 类型选择，类型选择的语法形如：i.(type)，其中 i 是接口，type 是固定关键字，需要注意的是，`只有接口类型才可以使用类型选择`   

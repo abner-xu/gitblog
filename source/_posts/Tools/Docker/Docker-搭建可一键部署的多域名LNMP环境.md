@@ -86,7 +86,7 @@ docker-compose up -d
 
 ## 6 如果是windows下基于virtualbox挂载目录到linux
 ### 6.1  安装增强工具(centos7版本)
-![增强工具](http://ww1.sinaimg.cn/large/aaba1596gy1g74n03vgqfj20ma08hdg3.jpg)
+![增强工具](http://ww2.sinaimg.cn/large/aaba1596gy1g74n03vgqfj20ma08hdg3.jpg)
 ```json
 yum install -y gcc gcc-devel gcc-c++ gcc-c++-devel make kernel kernel-devel bzip2 vim wget  
 sudo reboot  #重启

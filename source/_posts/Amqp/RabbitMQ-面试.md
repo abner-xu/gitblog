@@ -17,7 +17,7 @@ date: 2019-09-04 22:48:46
 
 -   顺序消息问题
     问题场景1：业务上产生三条消息，分别是对数据的增加、修改、删除，而如果没有保证顺序消费，结果可能是删除、修改、增加，本来数据最终要删除，最后结果变成增加
-![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf4n8253kpj31wm0ietcm.jpg)
+![1.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gf4n8253kpj31wm0ietcm.jpg)
 
     解决方案,需要保证以下几点:
     -   发送的顺序消息，必须保证在投递到同一个队列，且这个消费者只能有一个（独占模式）
@@ -39,7 +39,7 @@ date: 2019-09-04 22:48:46
             -   既然master节点退出集群会选一个slave作为master，那么如果不幸选中了一个刚刚加入集群的节点怎么办？那消息不就丢了吗？这里您可以把心放到肚子里，RabbitMQ集群内部会维护节点的状态是否已经同步，使用rabbitmqctl的synchronised_slave_pids参数，就可以查看状态。如果slave_pids和synchronised_slave_pids里面的节点是一致的，那说明全都同步了；如果不一致很容易比较出来哪些还没有同步，集群只会在“最老”的slave节点之间选一个出来作为新的master节点。另外对于node节点的重启也是按照新节点来处理的。
             
     - 镜像队列（集群模式可启用）：    
-![1.jpg](http://ww1.sinaimg.cn/large/007lnJOlgy1gf4p4x7b4mj30sm0o0acg.jpg)
+![1.jpg](http://ww2.sinaimg.cn/large/007lnJOlgy1gf4p4x7b4mj30sm0o0acg.jpg)
             
        -   在镜像队列集群模式中，对某个queue来说，只有master对外提供服务，而其他slave只提供备份服务，在master所在节点不可用时，选出一个slave作为新的master继续对外提供服务。通常是加入时间最长的选中为新的master
        -   镜像队列不能作为负载均衡使用，因为每个声明和消息操作都要在所有节点复制一遍。

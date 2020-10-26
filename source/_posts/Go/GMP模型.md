@@ -15,7 +15,7 @@ date: 2020-04-11 17:07:55
 
 # GMP 模型
 
-![1.jpeg](http://ww1.sinaimg.cn/large/007lnJOlgy1gdq6pczx1xj30sg0lcdhj.jpg)
+![1.jpeg](http://ww2.sinaimg.cn/large/007lnJOlgy1gdq6pczx1xj30sg0lcdhj.jpg)
 
 **G= Goroutine 协程，P=Processor 处理器， M=Thread 线程**
 
@@ -61,7 +61,7 @@ date: 2020-04-11 17:07:55
 --- 
 
 # go func () 调度流程
-![2.jpg](http://ww1.sinaimg.cn/large/007lnJOlgy1gdq7eb6xmxj30yg0jeq4b.jpg)
+![2.jpg](http://ww2.sinaimg.cn/large/007lnJOlgy1gdq7eb6xmxj30yg0jeq4b.jpg)
 
 1.  我们通过 go func () 来创建一个 goroutine；
 2.  有两个存储 G 的队列，一个是局部调度器 P 的本地队列、一个是全局 G 队列。新创建的 G 会先保存在 P 的本地队列中，如果 P 的本地队列已经满了就会保存在全局的队列中；
@@ -73,7 +73,7 @@ date: 2020-04-11 17:07:55
 ---
 
 # 调度器的生命周期
-![2.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gdqskyqbo1j30c70o83yq.jpg)
+![2.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gdqskyqbo1j30c70o83yq.jpg)
 
 ---
 
