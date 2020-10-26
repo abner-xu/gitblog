@@ -58,5 +58,7 @@ date: 2017-12-25 21:49:58
     ![6.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gk306sxhsyj30jg0csabw.jpg)
 5.  登录虚拟机， `./install` 根据提示 输入 2，完成步骤2安装,重启虚拟机    
     
-    
+## 启动docker
+1.  `docker-composer up -d`容器启动
+2.  host配置`www.site1.com`，查看phpinfo()输出正常即可    
 
