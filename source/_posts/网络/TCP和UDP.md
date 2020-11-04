@@ -22,9 +22,9 @@ date: 2020-05-24 02:28:12
 
 
 # UDP 、TCP 首部格式
-![1.jpeg](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3cj1zx0rj30e3055jrf.jpg)
+![1.jpeg](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3cj1zx0rj30e3055jrf.jpg)
 UDP 首部字段只有 8 个字节，包括源端口、目的端口、长度、检验和。12 字节的伪首部是为了计算检验和临时添加的。
-![2.jpeg](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3cj67cktj30dw095jrv.jpg)
+![2.jpeg](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3cj67cktj30dw095jrv.jpg)
 TCP 首部格式比 UDP 复杂。
 - 序号：用于对字节流进行编号，例如序号为 301，表示第一个字节的编号为 301，如果携带的数据长度为 100 字节，那么下一个报文段的序号应为 401。
 - 确认号：期望收到的下一个报文段的序号。例如 B 正确收到 A 发送来的一个报文段，序号为 501，携带的数据长度为 200 字节，因此 B 期望下一个报文段的序号为 701，B 发送给 A 的确认报文段中确认号就为 701。
@@ -48,7 +48,7 @@ TCP 首部格式比 UDP 复杂。
 ---
 
 # TCP 的三次握手（为什么三次？）
-![3.jpeg](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3e64xaifj30i40bd0tc.jpg)
+![3.jpeg](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3e64xaifj30i40bd0tc.jpg)
 1.  客户端发送一个SYN段，并指明客户端的初始序列号，即ISN(c).
 2.  服务端发送自己的SYN段作为应答，同样指明自己的ISN(s)。为了确认客户端的SYN，将ISN(c)+1作为ACK数值。这样，每发送一个SYN，序列号就会加1. 如果有丢失的情况，则会重传。
 3.  为了确认服务器端的SYN，客户端将ISN(s)+1作为返回的ACK数值。
@@ -67,7 +67,7 @@ TCP 首部格式比 UDP 复杂。
 ---
 
 # TCP 的四次挥手（为什么四次？）
-![4.jpeg](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3eeohxpuj30ik0cvgmp.jpg)
+![4.jpeg](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3eeohxpuj30ik0cvgmp.jpg)
 1.  客户端发送一个FIN段，并包含一个希望接收者看到的自己当前的序列号u. 同时还包含一个ACK表示确认对方最近一次发过来的数据。 
 2.  服务端将u值加1作为ack序号值，表明收到了上一个包。这时上层的应用程序会被告知另一端发起了关闭操作，通常这将引起应用程序发起自己的关闭操作。 
 3.  服务端发起自己的FIN段和ACK码，ack=u+1, seq=w
@@ -109,12 +109,12 @@ TCP 首部格式比 UDP 复杂。
 2. 什么是粘包、拆包？
 假设 Client 向 Server 连续发送了两个数据包，用 packet1 和 packet2 来表示，那么服务端收到的数据可以分为三种情况，现列举如下：
 - 第一种情况，接收端正常收到两个数据包，即没有发生拆包和粘包的现象。
-![1.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3j1berjkj30fd02hjrl.jpg)
+![1.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3j1berjkj30fd02hjrl.jpg)
 - 第二种情况，接收端只收到一个数据包，但是这一个数据包中包含了发送端发送的两个数据包的信息，这种现象即为粘包。这种情况由于接收端不知道这两个数据包的界限，所以对于接收端来说很难处理。
-![2.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3j1ceww9j30f102hq34.jpg)
+![2.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3j1ceww9j30f102hq34.jpg)
 - 第三种情况，这种情况有两种表现形式，如下图。接收端收到了两个数据包，但是这两个数据包要么是不完整的，要么就是多出来一块，这种情况即发生了拆包和粘包。这两种情况如果不加特殊处理，对于接收端同样是不好处理的。
-![3.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3j1bbw2ej30fa02jglv.jpg)
-![4.png](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3j1bdbxdj30f902jt8z.jpg)
+![3.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3j1bbw2ej30fa02jglv.jpg)
+![4.png](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3j1bdbxdj30f902jt8z.jpg)
 
 3. 为什么会发生 TCP 粘包、拆包？
 - 要发送的数据大于 TCP 发送缓冲区剩余空间大小，将会发生拆包。
@@ -142,7 +142,7 @@ TCP 首部格式比 UDP 复杂。
 
 接收窗口只会对窗口内最后一个按序到达的字节进行确认，例如接收窗口已经收到的字节为 {31, 34, 35}，其中 {31} 按序到达，而 {34, 35} 就不是，因此只对字节 31 进行确认。发送方得到一个字节的确认之后，就知道这个字节之前的所有字节都已经被接收。
 
-![5.jpeg](http://ww1.sinaimg.cn/large/007lnJOlgy1gf3jf4imr3j30tb0bswgj.jpg)
+![5.jpeg](http://ww2.sinaimg.cn/large/007lnJOlgy1gf3jf4imr3j30tb0bswgj.jpg)
 
 ---
 

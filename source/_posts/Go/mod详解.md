@@ -163,7 +163,7 @@ go mod init [module]可以创建一个go.mod，只有一行信息module。
 ---
 
 # goland支持go mod
-![go mode](http://ww1.sinaimg.cn/large/aaba1596ly1g39dvp55v3j20li09f0tq.jpg)
+![go mode](http://ww2.sinaimg.cn/large/aaba1596ly1g39dvp55v3j20li09f0tq.jpg)
 
 ---
 
