@@ -56,6 +56,7 @@ date: 2018-02-26 13:49:56
     git checkout -b <new_branch> <branch> # 基于branch创建新的new_branch
     git checkout $id # 把某次历史提交记录checkout出来，但无分支信息，切换到其他分支会自动删除
     git checkout $id -b <new_branch> # 把某次历史提交记录checkout出来，创建成一个分支
+    git checkout develop --patch 文件路径 #合并单个文件到当前分支
     git branch -d <branch> # 删除某个分支
     git branch -D <branch> # 强制删除某个分支 (未被合并的分支被删除的时候需要强制)
 ### 分支合并和rebase
