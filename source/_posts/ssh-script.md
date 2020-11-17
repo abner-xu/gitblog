@@ -1,5 +1,5 @@
 ---
-title: ssh-script《ssh连接脚本》
+title: ssh常用脚本
 categories:
   - 工具
   - shell
@@ -8,7 +8,8 @@ toc: true
 abbrlink: '92032e60'
 date: 2019-05-28 22:15:11
 ---
-# main.sh
+# ssh登陆脚本
+## 1.main.sh
 ```shell
 #!/bin/bash
 
@@ -88,7 +89,7 @@ copyright
 main
 ```
 
-# login.exp
+## 2.login.exp
 ```shell
 #!/usr/bin/expect -f
 set TARGET [lindex $argv 0]
@@ -105,8 +106,13 @@ expect {
 interact
 ```
 
-# config.lst
+## 3.config.lst
 ```shell
 {1序号}:{2服务器ip}:{3端口号}:{4用户名}:{5密码}：{6标签}
 1:ip_address:port:username:password:tag_name
+```
+
+# 查询日志访问topN的请求
+```shell
+awk '{urls[$7]++} END{for (i in urls){print i,urls[i]}}' ccbhd.kerlala.com_access.log | sort -k2rn | head -30
 ```
