@@ -1,10 +1,11 @@
 ---
-title: go-validator
+title: gi_validator
 categories:
   - 后端
   - Golang
 comments: true
 toc: true
+abbrlink: 423b2d10
 date: 2021-04-12 15:06:03
 ---
 
