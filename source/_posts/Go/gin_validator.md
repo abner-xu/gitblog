@@ -1,5 +1,5 @@
 ---
-title: gi_validator
+title: gin_validator
 categories:
   - 后端
   - Golang
