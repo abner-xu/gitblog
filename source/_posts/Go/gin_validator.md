@@ -25,7 +25,7 @@ date: 2021-04-12 15:06:03
 
 |  标记   | 标记说明  | 例 | 
 |  ----  | ----  | ----  |
-required | 必填 | Field或Struct validate:"required"
+required | 必填 | Field或Struct validate:"required",如果int,0作为特殊可通过*int判断
 omitempty | 空时忽略 | Field或Struct validate:"omitempty"
 len | 长度 | Field validate:"len=0"
 eq | 等于 | Field validate:"eq=0"
