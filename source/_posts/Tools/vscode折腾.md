@@ -24,7 +24,15 @@ date: 2017-12-25 21:49:58
 # go环境
 1. 设置代理  set GOPROXY="https://goproxy.cn"
 2. vscode添加go插件
-3. 用Delve调试Go项目 
+3. 安装go-tools，command+shift+p，输入 go:install 选择 install/update tools
+4. 设置常用代码片段，command+shift+p，选择go语言
+```json
+    "print":{
+            "prefix": "pln",
+            "body": "fmt.Println($0)"
+        }
+```
+4. 用Delve调试Go项目 
     1.  go get -u go-delve/delve/delve
     2.  launch.json 
     ```json
@@ -45,3 +53,4 @@ date: 2017-12-25 21:49:58
             }
         ]
     ```
+    
