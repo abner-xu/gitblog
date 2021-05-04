@@ -38,8 +38,8 @@ date: 2017-12-25 21:49:58
                 "host": "127.0.0.1",
                 "program": "${fileDirname}",
                 "env": {
-                    "GOPATH":"D:/gowork/mygo",
-                    "GOROOT":"D:/GO",
+                    "GOPATH":"/User/abner/go",
+                    "GOROOT":"/usr/local/go",
                 },
                 "args": []
             }
