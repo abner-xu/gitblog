@@ -18,7 +18,7 @@ date: 2017-12-25 21:49:58
 4. Git History  - 显示提交历史记录的美丽图表等等 
 
 # PHP环境
-1. php intelepjense，代码提示插件
+1. php intelephense，代码提示插件
 2. PHP DocBlocker，注释插件  
 
 # go环境
