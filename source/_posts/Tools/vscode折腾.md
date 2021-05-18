@@ -18,8 +18,11 @@ date: 2017-12-25 21:49:58
 4. Git History  - 显示提交历史记录的美丽图表等等 
 
 # PHP环境
-1. php intelephense，代码提示插件
-2. PHP DocBlocker，注释插件  
+1.  php intelephense，PHP 的代码提示、补全、跳转定义、格式化插件，功能强大，无需配置；优秀，必装。
+2.  PHP DocBlocker，注释插件
+3.  PHP Snippets from PHPStrom,使用和 PHPStrom 一样的快捷代码片段，pubf + tab？
+4.  PHP Namespace Resolver,PHP 命名空间解析器；可以导入和扩展类；还可以排序。优秀，必装。
+5.  Better Align,可以实现变量和数组的等号对齐。优秀，必装。
 
 # go环境
 1. 设置代理  set GOPROXY="https://goproxy.cn"
