@@ -23,6 +23,11 @@ date: 2017-12-25 21:49:58
 3.  PHP Snippets from PHPStrom,使用和 PHPStrom 一样的快捷代码片段，pubf + tab？
 4.  PHP Namespace Resolver,PHP 命名空间解析器；可以导入和扩展类；还可以排序。优秀，必装。
 5.  Better Align,可以实现变量和数组的等号对齐。优秀，必装。
+6.  php.validate.executablepath,配置成docker 容器中的php路径，办法
+    1. 新建文件 Create a file named php in `你自己的路径`
+    2. 写入内容`#!/bin/bash docker exec -i --user=1000:1000 php7-vscode php "$@"`
+    3. 修改可执行`sudo chmod +x php`
+    4. php.validate.executablepath=`你自己的路径`/php
 
 # go环境
 1. 设置代理  set GOPROXY="https://goproxy.cn"
