@@ -44,6 +44,23 @@ const (
 //可以类似调用枚举类一样调用
 println(Weekday(Saturday))   
 
+
+func (d Weekday) String() string {
+    return [...]string{"Sunday", "Monday", "Tuesday", "Wednesday"}[d]
+}
+
+
+var d Weekday = Monday
+fmt.Print(d)
+switch d {
+case Sunday:
+    fmt.Println(" goes up.")
+case Monday:
+    fmt.Println(" goes down.")
+default:
+    fmt.Println(" stays put.")
+}
+
 ```
 
 ## 可跳过的值
